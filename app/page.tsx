@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect } from "react"
-import { useLoanReviewStore, tryResumeJob } from "@/store/loan-review"
+import { Suspense, useEffect } from "react"
+import { useQueryState } from "nuqs"
+import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
 import { UploadStep } from "@/components/upload-step"
@@ -10,6 +11,16 @@ import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
 
 export default function Page() {
+  return (
+    <Suspense>
+      <LoanReviewWizard />
+    </Suspense>
+  )
+}
+
+function LoanReviewWizard() {
+  const [urlJobId, setUrlJobId] = useQueryState("jobId")
+
   const {
     step,
     applicationFile,
@@ -26,13 +37,22 @@ export default function Page() {
     resumeJob,
   } = useLoanReviewStore()
 
-  // Resume from sessionStorage on mount
+  // Sync URL → store on mount (resume from query string)
   useEffect(() => {
-    const savedJobId = tryResumeJob()
-    if (savedJobId) {
-      resumeJob(savedJobId)
+    if (urlJobId && !jobId) {
+      resumeJob(urlJobId)
     }
-  }, [resumeJob])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sync store → URL when jobId changes
+  useEffect(() => {
+    if (jobId && jobId !== urlJobId) {
+      setUrlJobId(jobId)
+    }
+    if (!jobId && urlJobId) {
+      setUrlJobId(null)
+    }
+  }, [jobId, urlJobId, setUrlJobId])
 
   const handleBack = () => {
     if (step === 2) setStep(1)
@@ -46,14 +66,13 @@ export default function Page() {
   }
 
   const handleRetry = () => {
-    // Reset job state but keep files
     useLoanReviewStore.setState({
       jobId: null,
       error: null,
       result: null,
       step: 2,
     })
-    sessionStorage.removeItem("loan-review-job-id")
+    setUrlJobId(null)
   }
 
   const canGoNext =

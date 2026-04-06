@@ -2,7 +2,6 @@ import { create } from "zustand"
 import type { ReviewResult } from "@/types/review"
 import { parseResponse } from "@/lib/parse-response"
 
-const SESSION_KEY = "loan-review-job-id"
 const POLL_INTERVAL_MS = 10_000
 const MAX_POLL_MS = 30 * 60 * 1000
 
@@ -65,7 +64,6 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       }
 
       const { jobId: newJobId } = await res.json()
-      sessionStorage.setItem(SESSION_KEY, newJobId)
 
       set({ jobId: newJobId, step: 3, isSubmitting: false })
 
@@ -80,10 +78,6 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   },
 
   reset: () => {
-    const { jobId } = get()
-    if (jobId) {
-      sessionStorage.removeItem(SESSION_KEY)
-    }
     set({
       step: 1,
       applicationFile: null,
@@ -145,11 +139,9 @@ function pollUntilComplete(
 
       if (data.status === "complete") {
         clearInterval(interval)
-        sessionStorage.removeItem(SESSION_KEY)
         set({ result: parseResponse(data.result), step: 4 })
       } else if (data.status === "error") {
         clearInterval(interval)
-        sessionStorage.removeItem(SESSION_KEY)
         set({
           error: data.error ?? "Review failed. Please try again.",
           step: 3,
@@ -165,10 +157,4 @@ function pollUntilComplete(
       }
     }
   }, POLL_INTERVAL_MS)
-}
-
-// Helper to resume from sessionStorage on page load
-export function tryResumeJob(): string | null {
-  if (typeof window === "undefined") return null
-  return sessionStorage.getItem(SESSION_KEY)
 }
