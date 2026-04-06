@@ -233,11 +233,25 @@ types/
   review.ts                             # ReviewResult, Finding, Job types
 ```
 
+## Responsive Design
+
+The app must work on mobile, tablet, and desktop.
+
+- **Mobile (< 640px)**: Single column, full-width content area, stacked layout for risk score + summary, touch-friendly file upload and buttons
+- **Tablet (640px–1024px)**: Same single column with more padding, risk score and summary can sit side by side
+- **Desktop (> 1024px)**: `max-w-2xl` centered content, risk score and summary side by side, full wizard layout as designed
+
+Key responsive considerations:
+
+- Step indicator collapses labels on mobile (shows dots only), expands with labels on larger screens
+- File upload zone uses full width on all sizes
+- Findings cards stack vertically on all sizes (they're a list, not a grid)
+- Wizard footer buttons stretch to full width on mobile, side-by-side on desktop
+
 ## Out of Scope
 
 - Authentication / authorization
 - Database or persistent storage
-- Mobile / responsive layout (desktop demo)
 - Dark mode customization (uses default theme)
 - Multi-language / i18n
 - Rate limiting
