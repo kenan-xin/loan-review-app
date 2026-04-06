@@ -1,6 +1,6 @@
 import type { ReviewResult } from "@/types/review"
 
-export function parseResponse(raw: unknown): ReviewResult {
+export function parseResponse(_raw: unknown): ReviewResult {
   // TODO: Replace with actual parsing when API contract is known
   return {
     summary:

@@ -1,16 +1,16 @@
 "use client"
 
-import type { ReviewResult, Finding } from "@/types/review"
+import type { ReviewResult } from "@/types/review"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react"
 
 interface ResultsStepProps {
-  result: ReviewResult
-  onStartNew: () => void
+  readonly result: ReviewResult
+  readonly onStartNew: () => void
 }
 
-const severityOrder: Record<Finding["severity"], number> = {
+const severityOrder: { critical: 0; warning: 1; info: 2 } = {
   critical: 0,
   warning: 1,
   info: 2,
@@ -128,12 +128,12 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
             Findings
           </p>
           <ul className="space-y-3">
-            {sortedFindings.map((finding, i) => {
+            {sortedFindings.map((finding) => {
               const config = severityConfig[finding.severity]
               const Icon = config.icon
               return (
                 <li
-                  key={i}
+                  key={`${finding.severity}-${finding.category}-${finding.title}`}
                   className={cn("rounded-lg border p-4", config.className)}
                 >
                   <div className="flex items-start gap-3">
@@ -174,8 +174,8 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
             Recommendations
           </p>
           <ol className="list-inside list-decimal space-y-2">
-            {result.recommendations.map((rec, i) => (
-              <li key={i} className="text-sm leading-relaxed">
+            {result.recommendations.map((rec) => (
+              <li key={rec} className="text-sm leading-relaxed">
                 {rec}
               </li>
             ))}
