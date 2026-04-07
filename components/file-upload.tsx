@@ -65,7 +65,7 @@ export function FileUpload({
         onFilesChange(fileArray.slice(0, 1))
       }
     },
-    [files, onFilesChange, multiple]
+    [files, onFilesChange, multiple, maxFileSize]
   )
 
   const handleDragOver = (e: React.DragEvent) => {
