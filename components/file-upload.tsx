@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils"
 import { Upload, FileText, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ACCEPTED_TYPE = "application/pdf"
 
 interface FileUploadProps {
   multiple?: boolean
+  maxFileSize?: number
   files: File[]
   onFilesChange: (files: File[]) => void
   label: string
@@ -18,6 +18,7 @@ interface FileUploadProps {
 
 export function FileUpload({
   multiple = false,
+  maxFileSize = 10 * 1024 * 1024,
   files,
   onFilesChange,
   label,
@@ -34,8 +35,8 @@ export function FileUpload({
     ) {
       return `"${file.name}" is not a PDF. Only PDF files are accepted.`
     }
-    if (file.size > MAX_FILE_SIZE) {
-      return `"${file.name}" exceeds the 10MB size limit.`
+    if (file.size > maxFileSize) {
+      return `"${file.name}" exceeds the ${Math.round(maxFileSize / 1024 / 1024)}MB size limit.`
     }
     return null
   }
