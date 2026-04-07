@@ -6,7 +6,6 @@ import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
 import { UploadStep } from "@/components/upload-step"
-import { ExamplesStep } from "@/components/examples-step"
 import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
 
@@ -24,14 +23,11 @@ function LoanReviewWizard() {
   const {
     step,
     applicationFile,
-    exampleFiles,
     jobId,
     result,
     error,
     isSubmitting,
-    setStep,
     setApplicationFile,
-    setExampleFiles,
     submit,
     reset,
     resumeJob,
@@ -54,15 +50,8 @@ function LoanReviewWizard() {
     }
   }, [jobId, urlJobId, setUrlJobId])
 
-  const handleBack = () => {
-    if (step === 2) setStep(1)
-  }
-
   const handleNext = () => {
-    if (step === 1 && applicationFile) setStep(2)
-    if (step === 2 && exampleFiles.length > 0) {
-      submit()
-    }
+    if (step === 1 && applicationFile) submit()
   }
 
   const handleRetry = () => {
@@ -70,13 +59,12 @@ function LoanReviewWizard() {
       jobId: null,
       error: null,
       result: null,
-      step: 2,
+      step: 1,
     })
     setUrlJobId(null)
   }
 
-  const canGoNext =
-    (step === 1 && !!applicationFile) || (step === 2 && exampleFiles.length > 0)
+  const canGoNext = step === 1 && !!applicationFile
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -97,31 +85,23 @@ function LoanReviewWizard() {
             />
           )}
           {step === 2 && (
-            <ExamplesStep
-              files={exampleFiles}
-              onFilesChange={setExampleFiles}
-            />
-          )}
-          {step === 3 && (
             <ProcessingStep
               isSubmitting={isSubmitting}
               error={error}
               onRetry={handleRetry}
             />
           )}
-          {step === 4 && result && (
+          {step === 3 && result && (
             <ResultsStep result={result} onStartNew={reset} />
           )}
         </div>
 
-        {step !== 4 && (
+        {step === 1 && (
           <div className="mt-8 border-t pt-4">
             <WizardFooter
-              onBack={step === 2 ? handleBack : undefined}
-              onNext={step <= 2 ? handleNext : undefined}
-              nextLabel={step === 2 ? "Submit for Review" : "Next"}
+              onNext={handleNext}
+              nextLabel="Submit for Review"
               nextDisabled={!canGoNext}
-              backDisabled={step === 3 && !!jobId}
               nextLoading={isSubmitting}
             />
           </div>

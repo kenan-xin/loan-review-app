@@ -13,7 +13,6 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const formData = await request.formData()
     const application = formData.get("application") as File | null
-    const examples = formData.getAll("examples") as File[]
 
     if (!application) {
       logger.warn(context, "Missing application file")
@@ -29,7 +28,6 @@ export async function POST(request: Request): Promise<NextResponse> {
     logger.info(context, "New job started", {
       jobId,
       applicationFile: application.name,
-      exampleFiles: examples.length,
     })
 
     // Forward to external API in the background
