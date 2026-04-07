@@ -5,13 +5,12 @@ import { Check } from "lucide-react"
 
 const steps = [
   { number: 1, label: "Upload" },
-  { number: 2, label: "Examples" },
-  { number: 3, label: "Review" },
-  { number: 4, label: "Results" },
+  { number: 2, label: "Review" },
+  { number: 3, label: "Results" },
 ] as const
 
 interface StepIndicatorProps {
-  currentStep: 1 | 2 | 3 | 4
+  currentStep: 1 | 2 | 3
 }
 
 export function StepIndicator({ currentStep }: StepIndicatorProps) {
