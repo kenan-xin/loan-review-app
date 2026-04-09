@@ -1,91 +1,382 @@
 "use client"
 
-import { useState } from "react"
 import { FileUpload } from "@/components/file-upload"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { useUploadExamplesStore } from "@/store/upload-examples"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { cn } from "@/lib/utils"
+import type { FileEntry } from "@/types/upload"
+import { useState } from "react"
+import {
+  Clock,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  FileText,
+} from "lucide-react"
+
+function formatSize(bytes: number) {
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+}
+
+const statusConfig = {
+  pending: { icon: Clock, color: "text-muted-foreground", label: "Pending" },
+  uploading: { icon: Loader2, color: "text-blue-500", label: "Uploading" },
+  success: { icon: CheckCircle2, color: "text-green-600", label: "Success" },
+  failed: { icon: XCircle, color: "text-destructive", label: "Failed" },
+} as const
 
 export default function AdminPage() {
-  const [files, setFiles] = useState<File[]>([])
-  const [isUploading, setIsUploading] = useState(false)
-  const [message, setMessage] = useState<{
-    type: "success" | "error"
-    text: string
-  } | null>(null)
+  const { phase, files, isUploading, setFiles, uploadAll, retryFailed, reset } =
+    useUploadExamplesStore()
 
-  const handleSubmit = async () => {
-    setIsUploading(true)
-    setMessage(null)
+  const [selectedFile, setSelectedFile] = useState<number | null>(null)
 
-    const formData = new FormData()
-    for (const file of files) {
-      formData.append("files", file)
-    }
+  const selectedFiles = files.map((e) => e.file)
 
-    try {
-      const res = await fetch("/api/risk-learning", {
-        method: "POST",
-        body: formData,
-      })
+  const successCount = files.filter((e) => e.status === "success").length
+  const failedCount = files.filter((e) => e.status === "failed").length
 
-      if (!res.ok) {
-        throw new Error("Upload failed")
-      }
+  if (phase === "idle") {
+    return (
+      <div className="flex min-h-svh flex-col">
+        <header className="flex items-center justify-between border-b px-6 py-4">
+          <h1 className="text-lg font-semibold">Loan Review Admin</h1>
+          <ThemeToggle />
+        </header>
 
-      setMessage({ type: "success", text: "Examples uploaded successfully." })
-      setFiles([])
-    } catch {
-      setMessage({ type: "error", text: "Upload failed. Please try again." })
-    } finally {
-      setIsUploading(false)
-    }
+        <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6">
+          <h2 className="text-xl font-semibold">Upload Credit Notes</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Upload credit notes and lessons learnt documents. The system will
+            extract checklist rules from these documents to use when reviewing
+            loan applications.
+          </p>
+
+          <div className="mt-6">
+            <FileUpload
+              multiple
+              files={selectedFiles}
+              onFilesChange={setFiles}
+              label="Drop PDFs here or click to browse"
+              description="One or more PDFs, up to 50MB each"
+              maxFileSize={50 * 1024 * 1024}
+            />
+          </div>
+
+          <div className="mt-8 border-t pt-4">
+            <Button
+              onClick={uploadAll}
+              disabled={files.length === 0 || isUploading}
+            >
+              Upload Credit Notes
+            </Button>
+          </div>
+        </main>
+      </div>
+    )
   }
 
+  // Phase: uploading | done
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="border-b px-6 py-4">
+      <header className="flex items-center justify-between border-b px-6 py-4">
         <h1 className="text-lg font-semibold">Loan Review Admin</h1>
+        <ThemeToggle />
       </header>
 
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-6 sm:px-6">
-        <h2 className="text-xl font-semibold">Bad Loan Examples</h2>
+        <h2 className="text-xl font-semibold">Uploading Credit Notes</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Upload PDFs of bad loan applications to improve the risk model. These
-          examples will be used to train the system to recognize similar patterns.
+          {phase === "uploading"
+            ? "Processing documents one at a time..."
+            : `${successCount}/${files.length} documents processed successfully.`}
         </p>
 
-        <div className="mt-6">
-          <FileUpload
-            multiple
-            files={files}
-            onFilesChange={setFiles}
-            label="Drop PDFs here or click to browse"
-            description="One or more PDFs, up to 50MB each"
-            maxFileSize={50 * 1024 * 1024}
-          />
-        </div>
+        <ul className="mt-6 space-y-2">
+          {files.map((entry, i) => {
+            const config = statusConfig[entry.status]
+            const Icon = config.icon
+            const spinning = entry.status === "uploading"
+            const clickable = entry.status === "success" && entry.response
 
-        {message && (
-          <p
-            className={`mt-4 text-sm ${
-              message.type === "success"
-                ? "text-green-600"
-                : "text-destructive"
-            }`}
-            role="alert"
-          >
-            {message.text}
+            return (
+              <li
+                key={`${entry.file.name}-${i}`}
+                className={cn(
+                  "flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2",
+                  clickable && "cursor-pointer hover:bg-muted",
+                )}
+                onClick={clickable ? () => setSelectedFile(i) : undefined}
+              >
+                <FileText className="size-4 shrink-0 text-muted-foreground" />
+                <span className="truncate text-sm flex-1">
+                  {entry.file.name}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  {formatSize(entry.file.size)}
+                </span>
+                {entry.retries > 0 && entry.status !== "success" && (
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    (attempt {entry.retries}/{3})
+                  </span>
+                )}
+                <span
+                  className={`flex shrink-0 items-center gap-1 text-xs font-medium ${config.color}`}
+                >
+                  <Icon
+                    className={`size-3.5 ${spinning ? "animate-spin" : ""}`}
+                  />
+                  {config.label}
+                </span>
+              </li>
+            )
+          })}
+        </ul>
+
+        {phase === "done" && (
+          <div className="mt-8 space-y-3 border-t pt-4">
+            {failedCount > 0 && (
+              <p className="text-sm text-destructive">
+                {failedCount} file{failedCount !== 1 ? "s" : ""} failed to
+                upload.
+              </p>
+            )}
+            <div className="flex gap-3">
+              {failedCount > 0 && (
+                <Button onClick={retryFailed} disabled={isUploading}>
+                  Retry Failed
+                </Button>
+              )}
+              <Button variant="outline" onClick={reset}>
+                Start Over
+              </Button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      <ResponseDialog
+        entry={selectedFile !== null ? files[selectedFile] : null}
+        onClose={() => setSelectedFile(null)}
+      />
+    </div>
+  )
+}
+
+interface Rule {
+  title?: string
+  description?: string
+  category_5c?: string
+  applicable_scenario?: string | null
+  required_fields?: string[]
+  validation_logic?: string
+  risk_level?: string
+  action_if_fail?: string
+  action_if_warning?: string
+  action_if_missing?: string
+  source_evidence?: string[]
+}
+
+type RiskLevel = "High" | "Medium" | "Low"
+
+const riskConfig: Record<RiskLevel, { bg: string; badge: string; label: string }> = {
+  High: {
+    bg: "bg-red-500/[0.05] dark:bg-red-500/[0.08]",
+    badge: "bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400",
+    label: "High Risk",
+  },
+  Medium: {
+    bg: "bg-amber-500/[0.05] dark:bg-amber-500/[0.08]",
+    badge: "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400",
+    label: "Medium Risk",
+  },
+  Low: {
+    bg: "bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08]",
+    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400",
+    label: "Low Risk",
+  },
+}
+
+function ResponseDialog({
+  entry,
+  onClose,
+}: {
+  entry: FileEntry | null
+  onClose: () => void
+}) {
+  const open = entry !== null && entry.status === "success" && !!entry.response
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-h-[85vh] max-w-2xl flex flex-col p-0 gap-0 overflow-hidden">
+        <DialogHeader className="px-6 pt-5 pb-4 shrink-0 border-b">
+          <DialogTitle className="text-base font-semibold truncate pr-8">{entry?.file.name ?? "Response"}</DialogTitle>
+          <DialogDescription className="sr-only">Extracted checklist rules</DialogDescription>
+        </DialogHeader>
+        <div className="overflow-y-auto flex-1 px-6 py-4">
+          {entry?.response && <ResponseContent data={entry.response} />}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const riskOrder: Record<string, number> = { High: 0, Medium: 1, Low: 2 }
+
+function ResponseContent({ data }: { data: Record<string, unknown> }) {
+  const rawRules = Array.isArray(data.rules) ? (data.rules as Rule[]) : null
+  const rules = rawRules
+    ? [...rawRules].sort(
+        (a, b) =>
+          (riskOrder[a.risk_level ?? ""] ?? 3) - (riskOrder[b.risk_level ?? ""] ?? 3),
+      )
+    : null
+  const rowsAffected = typeof data.rowsAffected === "number" ? data.rowsAffected : null
+
+  return (
+    <div className="space-y-3">
+      {rowsAffected !== null && (
+        <p className="text-xs text-muted-foreground pb-3">
+          {rowsAffected} checklist rule{rowsAffected !== 1 ? "s" : ""} added to database
+        </p>
+      )}
+      {rules && rules.length > 0 && (
+        <div className="space-y-3">
+          {rules.map((rule, i) => (
+            <RuleCard key={i} rule={rule} index={i} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RuleCard({ rule, index }: { rule: Rule; index: number }) {
+
+  const rc = rule.risk_level ? riskConfig[rule.risk_level as RiskLevel] : undefined
+
+  const actions = [
+    rule.action_if_fail && rule.action_if_fail !== "N/A"
+      ? { label: "FAIL", text: rule.action_if_fail, labelCls: "text-red-600 dark:text-red-400" }
+      : null,
+    rule.action_if_warning && rule.action_if_warning !== "N/A"
+      ? { label: "WARN", text: rule.action_if_warning, labelCls: "text-amber-600 dark:text-amber-400" }
+      : null,
+    rule.action_if_missing && rule.action_if_missing !== "N/A"
+      ? { label: "MISSING", text: rule.action_if_missing, labelCls: "text-sky-600 dark:text-sky-400" }
+      : null,
+  ].filter(Boolean)
+
+  const hasTechnical =
+    !!rule.validation_logic || (rule.required_fields && rule.required_fields.length > 0)
+
+  return (
+    <div className={cn("rounded-xl overflow-hidden", rc?.bg ?? "bg-muted/30")}>
+      {/* — Header ————————————————————————————————————————— */}
+      <div className="px-5 pt-4 pb-3">
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {rc && (
+              <span className={cn("rounded text-[10px] font-semibold tracking-wide px-1.5 py-px", rc.badge)}>
+                {rc.label}
+              </span>
+            )}
+            {rule.category_5c && (
+              <span className="rounded text-[10px] font-medium px-1.5 py-px bg-black/[0.06] dark:bg-white/[0.08] text-muted-foreground">
+                {rule.category_5c}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] font-mono text-muted-foreground/35 shrink-0 mt-px">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+        {rule.title && (
+          <p className="text-[13px] font-semibold leading-snug text-foreground">
+            {rule.title}
           </p>
         )}
+      </div>
 
-        <div className="mt-8 border-t pt-4">
-          <Button
-            onClick={handleSubmit}
-            disabled={files.length === 0 || isUploading}
-          >
-            {isUploading ? "Uploading..." : "Upload Examples"}
-          </Button>
+      {/* — Description ———————————————————————————————————— */}
+      {rule.description && (
+        <div className="px-5 pb-4">
+          <p className="text-xs leading-[1.7] text-muted-foreground">
+            {rule.description}
+          </p>
         </div>
-      </main>
+      )}
+
+      {/* — Actions ———————————————————————————————————————— */}
+      {actions.length > 0 && (
+        <div className="px-5 pb-4">
+          <div className="h-px bg-foreground/[0.12] mb-3" />
+          <div className="space-y-1.5">
+            {actions.map((action) =>
+              action ? (
+                <div key={action.label} className="flex gap-3 items-baseline">
+                  <span className={cn("shrink-0 font-bold text-[10px] tracking-widest w-[52px]", action.labelCls)}>
+                    {action.label}
+                  </span>
+                  <span className="text-xs leading-relaxed text-muted-foreground">{action.text}</span>
+                </div>
+              ) : null,
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* — Technical ————————————————————————————————————————— */}
+      {hasTechnical && (
+        <div className="px-5 py-3 space-y-3 bg-black/[0.03] dark:bg-white/[0.03]">
+          {rule.validation_logic && (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50 mb-1.5">
+                Validation Logic
+              </p>
+              <pre className="text-[11px] font-mono leading-relaxed text-muted-foreground whitespace-pre-wrap break-words rounded-lg bg-background/60 px-3 py-2.5">
+                {rule.validation_logic}
+              </pre>
+            </div>
+          )}
+          {rule.required_fields && rule.required_fields.length > 0 && (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50 mb-1.5">
+                Required Fields
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {rule.required_fields.map((field, fi) => (
+                  <code
+                    key={fi}
+                    className="rounded-md bg-background/60 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground"
+                  >
+                    {field}
+                  </code>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* — Source ————————————————————————————————————————— */}
+      {rule.source_evidence && rule.source_evidence.length > 0 && (
+        <div className="px-5 py-3 bg-black/[0.02] dark:bg-white/[0.02] space-y-0.5">
+          {rule.source_evidence.map((src, si) => (
+            <p key={si} className="text-[10px] text-muted-foreground/70 leading-snug truncate" title={src}>
+              {src}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

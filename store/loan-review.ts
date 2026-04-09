@@ -1,21 +1,24 @@
 import { create } from "zustand"
-import type { ReviewResult } from "@/types/review"
-import { parseResponse } from "@/lib/parse-response"
+import type { SimulationResult } from "@/types/review"
+import {
+  loadSimulationData,
+  transformToReviewResult,
+} from "@/lib/simulate-review"
 
-const POLL_INTERVAL_MS = 10_000
-const MAX_POLL_MS = 30 * 60 * 1000
+const SIMULATION_DELAY_MS = 120_000
 
 interface LoanReviewState {
   step: 1 | 2 | 3
   applicationFile: File | null
   jobId: string | null
-  result: ReviewResult | null
+  result: SimulationResult | null
   error: string | null
   isSubmitting: boolean
+  processingProgress: number
 
   setStep: (step: 1 | 2 | 3) => void
   setApplicationFile: (file: File | null) => void
-  submit: () => Promise<void>
+  submit: () => void
   reset: () => void
   resumeJob: (jobId: string) => void
 }
@@ -27,46 +30,55 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   result: null,
   error: null,
   isSubmitting: false,
+  processingProgress: 0,
 
   setStep: (step) => set({ step }),
 
   setApplicationFile: (file) => set({ applicationFile: file }),
 
-  submit: async () => {
+  submit: () => {
     const { applicationFile, jobId, isSubmitting } = get()
 
     if (jobId || isSubmitting) return
     if (!applicationFile) return
 
-    set({ isSubmitting: true, error: null })
+    set({ isSubmitting: true, error: null, step: 2, processingProgress: 0 })
 
-    try {
-      const formData = new FormData()
-      formData.append("application", applicationFile)
+    const startTime = Date.now()
+    const endTime = startTime + SIMULATION_DELAY_MS
 
-      const res = await fetch("/api/loan-review", {
-        method: "POST",
-        body: formData,
-      })
+    const progressInterval = setInterval(() => {
+      const now = Date.now()
+      const remaining = Math.max(0, endTime - now)
+      const progress = Math.min(
+        99,
+        ((SIMULATION_DELAY_MS - remaining) / SIMULATION_DELAY_MS) * 100
+      )
+      set({ processingProgress: progress })
+    }, 1000)
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: "Request failed" }))
-        set({ isSubmitting: false, error: data.error ?? "Submission failed" })
-        return
+    setTimeout(() => {
+      clearInterval(progressInterval)
+
+      try {
+        const { caData, evaluationResults, evaluationSummary, evaluationDecision } = loadSimulationData()
+        const result = transformToReviewResult(caData, evaluationResults, evaluationSummary, evaluationDecision)
+
+        set({
+          result,
+          step: 3,
+          isSubmitting: false,
+          processingProgress: 100,
+          jobId: `sim-${Date.now()}`,
+        })
+      } catch (err) {
+        set({
+          isSubmitting: false,
+          error: `Simulation failed: ${err instanceof Error ? err.message : String(err)}`,
+          processingProgress: 0,
+        })
       }
-
-      const { jobId: newJobId } = await res.json()
-
-      set({ jobId: newJobId, step: 2, isSubmitting: false })
-
-      // Start polling
-      pollUntilComplete(newJobId, set, get)
-    } catch (err) {
-      set({
-        isSubmitting: false,
-        error: `Submission failed: ${err instanceof Error ? err.message : String(err)}`,
-      })
-    }
+    }, SIMULATION_DELAY_MS)
   },
 
   reset: () => {
@@ -77,75 +89,11 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       result: null,
       error: null,
       isSubmitting: false,
+      processingProgress: 0,
     })
   },
 
   resumeJob: (jobId) => {
     set({ jobId, step: 2, isSubmitting: false })
-    pollUntilComplete(jobId, set, get)
   },
 }))
-
-function pollUntilComplete(
-  jobId: string,
-  set: (partial: Partial<LoanReviewState>) => void,
-  get: () => LoanReviewState
-) {
-  const startTime = Date.now()
-  let consecutiveFailures = 0
-
-  const interval = setInterval(async () => {
-    const state = get()
-
-    // Stop if job was reset
-    if (state.jobId !== jobId) {
-      clearInterval(interval)
-      return
-    }
-
-    // Timeout check
-    if (Date.now() - startTime > MAX_POLL_MS) {
-      clearInterval(interval)
-      set({
-        error: "Review timed out after 30 minutes. Please try again.",
-        step: 2,
-      })
-      return
-    }
-
-    try {
-      const res = await fetch(`/api/loan-review/status?jobId=${jobId}`)
-
-      if (!res.ok) {
-        consecutiveFailures++
-        if (consecutiveFailures >= 3) {
-          clearInterval(interval)
-          set({ error: "Lost connection to server. Please try again." })
-        }
-        return
-      }
-
-      consecutiveFailures = 0
-      const data = await res.json()
-
-      if (data.status === "complete") {
-        clearInterval(interval)
-        set({ result: parseResponse(data.result), step: 3 })
-      } else if (data.status === "error") {
-        clearInterval(interval)
-        set({
-          error: data.error ?? "Review failed. Please try again.",
-          step: 2,
-        })
-      }
-    } catch {
-      consecutiveFailures++
-      if (consecutiveFailures >= 3) {
-        clearInterval(interval)
-        set({
-          error: "Network error. Please check your connection and try again.",
-        })
-      }
-    }
-  }, POLL_INTERVAL_MS)
-}

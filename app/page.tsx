@@ -28,20 +28,19 @@ function LoanReviewWizard() {
     result,
     error,
     isSubmitting,
+    processingProgress,
     setApplicationFile,
     submit,
     reset,
     resumeJob,
   } = useLoanReviewStore()
 
-  // Sync URL → store on mount (resume from query string)
   useEffect(() => {
     if (urlJobId && !jobId) {
       resumeJob(urlJobId)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // Sync store → URL when jobId changes
   useEffect(() => {
     if (jobId && jobId !== urlJobId) {
       setUrlJobId(jobId)
@@ -61,6 +60,7 @@ function LoanReviewWizard() {
       error: null,
       result: null,
       step: 1,
+      processingProgress: 0,
     })
     setUrlJobId(null)
   }
@@ -74,12 +74,12 @@ function LoanReviewWizard() {
         <ThemeToggle />
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-6 sm:px-6">
-        <div className="mb-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6">
+        <div className="mb-6">
           <StepIndicator currentStep={step} />
         </div>
 
-        <div className="flex-1">
+        <div className="min-h-0 flex-1">
           {step === 1 && (
             <UploadStep
               file={applicationFile}
@@ -90,6 +90,7 @@ function LoanReviewWizard() {
             <ProcessingStep
               isSubmitting={isSubmitting}
               error={error}
+              processingProgress={processingProgress}
               onRetry={handleRetry}
             />
           )}

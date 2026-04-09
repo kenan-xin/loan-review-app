@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react"
 
 interface WizardFooterProps {
   onBack?: () => void
@@ -41,10 +41,18 @@ export function WizardFooter({
         <Button
           onClick={onNext}
           disabled={nextDisabled || nextLoading}
-          data-icon="inline-end"
         >
-          {nextLoading ? "Submitting..." : nextLabel}
-          {!nextLoading && <ArrowRight className="size-4" />}
+          {nextLoading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              {nextLabel}
+              <ArrowRight className="size-4" />
+            </>
+          )}
         </Button>
       )}
     </div>

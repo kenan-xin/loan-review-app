@@ -8,23 +8,24 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   try {
     const formData = await request.formData()
-    const files = formData.getAll("files")
+    const doc = formData.get("doc")
 
-    if (!files || files.length === 0) {
-      logger.warn(context, "No files provided")
+    if (!doc || !(doc instanceof File)) {
+      logger.warn(context, "No file provided")
       return NextResponse.json(
-        { error: "At least one file is required" },
+        { success: false, error: "A file is required" },
         { status: 400 }
       )
     }
 
-    logger.info(context, "Forwarding to external API", {
-      fileCount: files.length,
-    })
+    logger.info(context, "Forwarding to external API", { file: doc.name })
+
+    const outgoing = new FormData()
+    outgoing.append("doc", doc)
 
     const response = await fetch(EXTERNAL_API_URL, {
       method: "POST",
-      body: formData,
+      body: outgoing,
     })
 
     if (!response.ok) {
@@ -34,7 +35,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         body,
       })
       return NextResponse.json(
-        { error: "External API request failed" },
+        { success: false, error: `External API returned ${response.status}` },
         { status: 502 }
       )
     }
@@ -42,12 +43,13 @@ export async function POST(request: Request): Promise<NextResponse> {
     const result = await response.json()
     logger.info(context, "External API responded", {
       status: response.status,
+      body: JSON.stringify(result).slice(0, 2000),
     })
-    return NextResponse.json(result)
+    return NextResponse.json({ success: true, ...result })
   } catch (err) {
     logger.error(context, "Failed to process request", { error: String(err) })
     return NextResponse.json(
-      { error: "External API request failed" },
+      { success: false, error: "External API request failed" },
       { status: 502 }
     )
   }

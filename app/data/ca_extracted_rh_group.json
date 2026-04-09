@@ -1,0 +1,752 @@
+{
+  "A_basic_information": {
+    "group_name": "RH Group",
+    "borrower_names": [
+      "M RH Sdn. Bhd."
+    ],
+    "application_type": "Review",
+    "ca_reference_no": "GAPP21985",
+    "ca_date": "2026-01-02",
+    "business_centre": "CMB Credit Application",
+    "arm_name": null,
+    "gam_name": null,
+    "relationship_since": "2003",
+    "relationship_strategy": "Maintain",
+    "account_status": "Performing",
+    "default_currency": "MYR",
+    "bnm_funding": false,
+    "cgc_sjpp_guarantee": false,
+    "last_review_expiry": "2025-12-31",
+    "next_review_expiry": "2026-12-31"
+  },
+  "B_borrower_profile": {
+    "principal_activity": "Manufacture and distribute all kinds of reinforced rubber hose, hydraulic components and related products",
+    "year_commenced": 2002,
+    "industry_sector": "Manufacturing - Rubber Products",
+    "is_sme": false,
+    "crr_existing": "C+",
+    "crr_proposed": "C+",
+    "esg_rating_existing": "Medium",
+    "esg_rating_proposed": "Medium",
+    "environmental_rating_existing": "Low",
+    "environmental_rating_proposed": "Low",
+    "social_rating_existing": "High with Mitigation",
+    "social_rating_proposed": "High with Mitigation",
+    "bnm_classification_existing": "C5B",
+    "bnm_classification_proposed": "C5B"
+  },
+  "C_key_persons": [
+    {
+      "name": "FP",
+      "roles": [
+        "Key Management"
+      ],
+      "age": 39,
+      "shareholding_pct": null,
+      "indirect_shareholding_pct": null,
+      "indirect_via": null,
+      "is_key_management": true,
+      "experience_description": ">10 years in rubber mixing hydraulics industry",
+      "estimated_pnw_rm": null,
+      "is_vip_customer": null,
+      "pfs_relationship": null
+    }
+  ],
+  "D_shareholding_changes": null,
+  "I_financial_summaries": [
+    {
+      "entity_name": "M RH Sdn. Bhd.",
+      "entity_role": "Borrower",
+      "periods": [
+        {
+          "fye_date": "31/12/2023",
+          "period_months": 12,
+          "account_status": "Audited Unqualified",
+          "auditor": "Deloitte PLT",
+          "revenue_rm": 144898,
+          "pbt_rm": 15980,
+          "pat_rm": 14183,
+          "ebitda_rm": 25204,
+          "paid_up_capital_rm": 14474,
+          "tangible_net_worth_rm": 65532,
+          "total_assets_rm": 128671,
+          "total_debt_rm": 22734,
+          "gearing_times": 0.35,
+          "net_cashflow_ops_rm": null,
+          "interest_cover_times": 7.42,
+          "dscr_times": 2.62,
+          "cash_equivalent_rm": 8360,
+          "days_trade_debtors": 85,
+          "days_inventory": 55,
+          "days_trade_creditors": 53,
+          "working_capital_cycle": 87,
+          "current_ratio": 1.28,
+          "advances_from_related_rm": 16876,
+          "remarks": null
+        },
+        {
+          "fye_date": "31/12/2024",
+          "period_months": 12,
+          "account_status": "Audited Unqualified",
+          "auditor": "Deloitte PLT",
+          "revenue_rm": 140150,
+          "pbt_rm": 1083,
+          "pat_rm": 21,
+          "ebitda_rm": 13041,
+          "paid_up_capital_rm": 14474,
+          "tangible_net_worth_rm": 65552,
+          "total_assets_rm": 159100,
+          "total_debt_rm": 34466,
+          "gearing_times": 0.53,
+          "net_cashflow_ops_rm": 13131,
+          "interest_cover_times": 3.68,
+          "dscr_times": 1.18,
+          "cash_equivalent_rm": 1974,
+          "days_trade_debtors": 101,
+          "days_inventory": 73,
+          "days_trade_creditors": 73,
+          "working_capital_cycle": 101,
+          "current_ratio": null,
+          "advances_from_related_rm": 27223,
+          "remarks": null
+        },
+        {
+          "fye_date": "30/11/2025",
+          "period_months": 11,
+          "account_status": "Management",
+          "auditor": null,
+          "revenue_rm": 130041,
+          "pbt_rm": -3666,
+          "pat_rm": -4755,
+          "ebitda_rm": 10067,
+          "paid_up_capital_rm": 14474,
+          "tangible_net_worth_rm": 58904,
+          "total_assets_rm": 149530,
+          "total_debt_rm": 34920,
+          "gearing_times": 0.59,
+          "net_cashflow_ops_rm": 8599,
+          "interest_cover_times": 3.19,
+          "dscr_times": 1.03,
+          "cash_equivalent_rm": 1034,
+          "days_trade_debtors": 121,
+          "days_inventory": 45,
+          "days_trade_creditors": 101,
+          "working_capital_cycle": 65,
+          "current_ratio": 0.87,
+          "advances_from_related_rm": 37076,
+          "remarks": "11-month management account"
+        }
+      ]
+    },
+    {
+      "entity_name": "M R",
+      "entity_role": "CG",
+      "periods": [
+        {
+          "fye_date": "31/12/2022",
+          "period_months": 12,
+          "account_status": "Audited Unqualified",
+          "auditor": "Deloitte And Touche SPA",
+          "revenue_rm": 2749621,
+          "pbt_rm": 256575,
+          "pat_rm": 180499,
+          "ebitda_rm": 375478,
+          "paid_up_capital_rm": 22993,
+          "tangible_net_worth_rm": 566346,
+          "total_assets_rm": null,
+          "total_debt_rm": 1206367,
+          "gearing_times": 2.13,
+          "net_cashflow_ops_rm": null,
+          "interest_cover_times": 14.61,
+          "dscr_times": 1.77,
+          "cash_equivalent_rm": 178309,
+          "days_trade_debtors": 73,
+          "days_inventory": 247,
+          "days_trade_creditors": 93,
+          "working_capital_cycle": 227,
+          "current_ratio": 2.26,
+          "advances_from_related_rm": null,
+          "remarks": "EUR consolidated accounts"
+        },
+        {
+          "fye_date": "31/12/2023",
+          "period_months": 12,
+          "account_status": "Audited Unqualified",
+          "auditor": "Deloitte And Touche SPA",
+          "revenue_rm": 2620931,
+          "pbt_rm": 247268,
+          "pat_rm": 174506,
+          "ebitda_rm": 388399,
+          "paid_up_capital_rm": 22993,
+          "tangible_net_worth_rm": 653881,
+          "total_assets_rm": null,
+          "total_debt_rm": 1174123,
+          "gearing_times": 1.8,
+          "net_cashflow_ops_rm": 407098,
+          "interest_cover_times": 6.38,
+          "dscr_times": 2.3,
+          "cash_equivalent_rm": 372435,
+          "days_trade_debtors": 63,
+          "days_inventory": 226,
+          "days_trade_creditors": 80,
+          "working_capital_cycle": 209,
+          "current_ratio": 2.25,
+          "advances_from_related_rm": null,
+          "remarks": null
+        },
+        {
+          "fye_date": "31/12/2024",
+          "period_months": 12,
+          "account_status": "Audited Unqualified",
+          "auditor": "Deloitte And Touche SPA",
+          "revenue_rm": 2380531,
+          "pbt_rm": 111636,
+          "pat_rm": 73949,
+          "ebitda_rm": 275068,
+          "paid_up_capital_rm": 22993,
+          "tangible_net_worth_rm": 649102,
+          "total_assets_rm": null,
+          "total_debt_rm": 1114997,
+          "gearing_times": 1.72,
+          "net_cashflow_ops_rm": 78792,
+          "interest_cover_times": 3.91,
+          "dscr_times": 1.2,
+          "cash_equivalent_rm": 182951,
+          "days_trade_debtors": 69,
+          "days_inventory": 299,
+          "days_trade_creditors": 95,
+          "working_capital_cycle": 273,
+          "current_ratio": 2.35,
+          "advances_from_related_rm": null,
+          "remarks": null
+        }
+      ]
+    }
+  ],
+  "N_mcc_decision": {
+    "decision": "Approved",
+    "decision_date": null,
+    "mcc_paper_no": null,
+    "conditions": null,
+    "matters_arising": null,
+    "decision_remarks": "Approved"
+  },
+  "O_application_requests": [
+    {
+      "request_number": 1,
+      "description": "12 months renewal until 31/12/2026 with AVP extension for TL4 (undrawn RM2,011K) and Blanket USD TL 2 (undrawn USD45K)",
+      "request_type": "Amendment"
+    },
+    {
+      "request_number": 2,
+      "description": "Charge single fee RM5,000 instead of standard scale fee RM17,500",
+      "request_type": "Waiver"
+    }
+  ],
+  "E_facilities": {
+    "facility_items": [
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "Cashline",
+        "facility_label": "Cashline-i",
+        "existing_limit_rm": null,
+        "change_amount_rm": 2000,
+        "total_limit_rm": 2000,
+        "outstanding_rm": 0,
+        "original_limit_rm": null,
+        "pricing": "IFR + 0.75%",
+        "grace_period": null,
+        "tenor": "60 Months",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Working Capital",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": "Converted from OD"
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "RC",
+        "facility_label": "RC-i (USD1M)",
+        "existing_limit_rm": 4500,
+        "change_amount_rm": 0,
+        "total_limit_rm": 4500,
+        "outstanding_rm": 4500,
+        "original_limit_rm": null,
+        "pricing": "USD ICOF(6mth) + 0.75%",
+        "grace_period": null,
+        "tenor": "6 Months",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Working Capital",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": null
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "Trade",
+        "facility_label": "Trade 1 (RM)",
+        "existing_limit_rm": 2000,
+        "change_amount_rm": 0,
+        "total_limit_rm": 2000,
+        "outstanding_rm": 304,
+        "original_limit_rm": null,
+        "pricing": "Comm 0.1% p.m",
+        "grace_period": null,
+        "tenor": "120 Days",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Working Capital",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": null
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "Trade",
+        "facility_label": "OFCL Trade 2 (USD2M)",
+        "existing_limit_rm": 9000,
+        "change_amount_rm": 0,
+        "total_limit_rm": 9000,
+        "outstanding_rm": 0,
+        "original_limit_rm": null,
+        "pricing": "FC ECOF + 1.25%",
+        "grace_period": null,
+        "tenor": "120 Days",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Working Capital",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": null
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "TL",
+        "facility_label": "TL 3",
+        "existing_limit_rm": 1811,
+        "change_amount_rm": 0,
+        "total_limit_rm": 1811,
+        "outstanding_rm": 1811,
+        "original_limit_rm": 3000,
+        "pricing": "ECOF(1mth) + 1.25%",
+        "grace_period": null,
+        "tenor": "180 Months",
+        "maturity_date": null,
+        "repayment_frequency": "Monthly",
+        "repayment_type": "P only",
+        "repayment_amount_rm": 16.667,
+        "purpose": "Land",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": null
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "TL",
+        "facility_label": "TL 4 (OL RM18.5M)",
+        "existing_limit_rm": 14845,
+        "change_amount_rm": 0,
+        "total_limit_rm": 14845,
+        "outstanding_rm": 14845,
+        "original_limit_rm": 18500,
+        "pricing": "ECOF(1mth) + 0.75%",
+        "grace_period": null,
+        "tenor": "180 Months",
+        "maturity_date": null,
+        "repayment_frequency": "Monthly",
+        "repayment_type": "P only",
+        "repayment_amount_rm": 102.778,
+        "purpose": "Construction",
+        "release_conditions": "Progressive release against Architect/Engineer Certificate",
+        "scheme": null,
+        "remarks": "AVP extended to 31/12/2026"
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "TL",
+        "facility_label": "Blanket USD TL 1 (USD3.7M)",
+        "existing_limit_rm": 10561,
+        "change_amount_rm": 0,
+        "total_limit_rm": 10561,
+        "outstanding_rm": 10561,
+        "original_limit_rm": null,
+        "pricing": "USD ECOF(1mth) + 1.25%",
+        "grace_period": null,
+        "tenor": "96 Months per drawdown",
+        "maturity_date": null,
+        "repayment_frequency": "Monthly",
+        "repayment_type": "P only",
+        "repayment_amount_rm": null,
+        "purpose": "Plant & Equipment",
+        "release_conditions": "85% of invoice value",
+        "scheme": null,
+        "remarks": "Multiple drawdowns. Undrawn USD45K"
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "TL",
+        "facility_label": "Blanket USD TL 2 (USD2.5M)",
+        "existing_limit_rm": 8662,
+        "change_amount_rm": 0,
+        "total_limit_rm": 8662,
+        "outstanding_rm": 8662,
+        "original_limit_rm": null,
+        "pricing": "USD ECOF(1mth) + 1.25%",
+        "grace_period": null,
+        "tenor": "96 Months per drawdown",
+        "maturity_date": null,
+        "repayment_frequency": "Monthly",
+        "repayment_type": "P only",
+        "repayment_amount_rm": null,
+        "purpose": "Plant & Equipment",
+        "release_conditions": "85% of invoice value",
+        "scheme": null,
+        "remarks": "AVP extended to 31/12/2026"
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "FEC",
+        "facility_label": "FEC 1+2",
+        "existing_limit_rm": 410,
+        "change_amount_rm": 0,
+        "total_limit_rm": 410,
+        "outstanding_rm": 0,
+        "original_limit_rm": null,
+        "pricing": "FCR",
+        "grace_period": null,
+        "tenor": "6 Months",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Hedging",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": null
+      },
+      {
+        "borrower_name": "M RH Sdn. Bhd.",
+        "facility_type": "IRS",
+        "facility_label": "IRS (RM22M)",
+        "existing_limit_rm": 3300,
+        "change_amount_rm": 0,
+        "total_limit_rm": 3300,
+        "outstanding_rm": 0,
+        "original_limit_rm": null,
+        "pricing": "IRS Rate",
+        "grace_period": null,
+        "tenor": "180 Months",
+        "maturity_date": null,
+        "repayment_frequency": null,
+        "repayment_type": null,
+        "repayment_amount_rm": null,
+        "purpose": "Hedging",
+        "release_conditions": null,
+        "scheme": null,
+        "remarks": "Pending drawdown"
+      }
+    ],
+    "total_existing_rm": 50427,
+    "total_change_rm": -2000,
+    "total_proposed_rm": 48427,
+    "total_outstanding_rm": 32374,
+    "total_unsecured_rm": 32992,
+    "fee_per_scale_rm": 17500,
+    "fee_to_be_waived_rm": 12500,
+    "fee_to_be_charged_rm": 5000
+  },
+  "F_securities": {
+    "security_items": [
+      {
+        "security_status": "Existing - To Remain",
+        "security_type": "Debenture",
+        "charge_type": null,
+        "charge_amount_rm": null,
+        "description": "Specific debenture over machineries",
+        "secured_against_facility": "ALL (TL facilities)",
+        "property_details": null,
+        "valuation": {
+          "market_value_rm": 15435,
+          "replacement_value_rm": null,
+          "liquidation_value_rm": null,
+          "forced_sale_value_rm": null,
+          "valuer_name": null,
+          "valuation_date": null
+        },
+        "guarantee_details": null,
+        "fd_amount_rm": null
+      },
+      {
+        "security_status": "Existing - To Remain",
+        "security_type": "Guarantee",
+        "charge_type": null,
+        "charge_amount_rm": null,
+        "description": "CG by M R",
+        "secured_against_facility": "ALL",
+        "property_details": null,
+        "valuation": null,
+        "guarantee_details": {
+          "guarantee_type": "CG",
+          "guarantor_names": [
+            "M R"
+          ],
+          "guarantee_amount_rm": 60060,
+          "guarantor_tnw_rm": null,
+          "guarantor_puc_rm": null,
+          "coverage_pct": null
+        },
+        "fd_amount_rm": null
+      },
+      {
+        "security_status": "Existing - To Remain",
+        "security_type": "Debenture",
+        "charge_type": null,
+        "charge_amount_rm": null,
+        "description": "Fixed and floating charge over Borrower's present and future assets",
+        "secured_against_facility": "ALL",
+        "property_details": null,
+        "valuation": null,
+        "guarantee_details": null,
+        "fd_amount_rm": null
+      }
+    ],
+    "total_security_value_rm": 15435,
+    "total_unsecured_exposure_rm": 32992,
+    "moa_pct": 314,
+    "security_cover_ratio": 0.32
+  },
+  "G_group_exposure": {
+    "total_unadvised_rm": 0,
+    "total_advised_rm": 44717,
+    "total_fec_ccs_irs_rm": 3710,
+    "total_dfbep_rm": 0,
+    "other_exposures_rm": 0,
+    "pfs_exposure_rm": 0,
+    "overseas_branches_rm": 0,
+    "related_parties_rm": 0,
+    "global_market_rm": 0,
+    "grand_total_rm": 48427,
+    "secured_exposure_rm": 15435,
+    "unsecured_exposure_rm": 32992
+  },
+  "H_profitability_profile": {
+    "bcb_profitability": {
+      "previous_achieved": {
+        "date": "2024-11-30",
+        "loan_interest_income_rm": 415,
+        "deposit_interest_income_rm": 83,
+        "ba_income_rm": 0,
+        "fx_income_rm": 203,
+        "other_fee_income_rm": 37,
+        "total_net_income_rm": 738,
+        "rora_pct": 1.76
+      },
+      "previous_target": {
+        "date": "2025-12-31",
+        "loan_interest_income_rm": 512,
+        "deposit_interest_income_rm": 106,
+        "ba_income_rm": 0,
+        "fx_income_rm": 203,
+        "other_fee_income_rm": 37,
+        "total_net_income_rm": 858,
+        "rora_pct": 2.01
+      },
+      "achieved": {
+        "date": "2025-11-30",
+        "loan_interest_income_rm": 904,
+        "deposit_interest_income_rm": 45,
+        "ba_income_rm": 1,
+        "fx_income_rm": 237,
+        "other_fee_income_rm": 137,
+        "total_net_income_rm": 1325,
+        "rora_pct": 1.82
+      },
+      "projected": {
+        "date": "2026-12-31",
+        "loan_interest_income_rm": 697,
+        "deposit_interest_income_rm": 165,
+        "ba_income_rm": 15,
+        "fx_income_rm": 248,
+        "other_fee_income_rm": 76,
+        "total_net_income_rm": 1201,
+        "rora_pct": 1.65
+      }
+    },
+    "pfs_profitability": {
+      "mg_income_rm": null,
+      "hp_income_rm": null,
+      "cc_income_rm": null,
+      "deposit_income_rm": null,
+      "other_income_rm": null,
+      "total_pfs_rm": 26
+    },
+    "total_bcb_plus_pfs_rm": 1351,
+    "meets_previous_target": "Below",
+    "related_individuals_count": null,
+    "pfs_product_individuals_count": null,
+    "pfs_casa_balance_rm": null,
+    "pfs_fd_balance_rm": null,
+    "cross_selling_notes": "Sole banker for MRH. Main banker BNP Paribas for USD. Deposit wallet share 83%, Loan wallet share 82%."
+  },
+  "J_business_background": {
+    "year_established": 2002,
+    "business_description": "Wholly-owned subsidiary and manufacturing arm of ASP (est. 1946). Manufacturing and trading of reinforced hydraulic rubber hose under brand 'R'. M R took over in 2020 holding 100% shares (NRCC). Group owned by M family (Italian nationals).",
+    "key_achievements": null,
+    "ongoing_contracts": null,
+    "upcoming_contracts": null,
+    "tender_pipeline": null,
+    "existing_bankers": [
+      {
+        "bank_name": "BNP Paribas",
+        "facility_types": "USD incoming TT",
+        "limit_rm": null,
+        "outstanding_rm": null,
+        "security": null
+      }
+    ],
+    "why_hlbb": "Banking relationship since 2003",
+    "related_companies_notes": "M R (CG) - Italian group est. 1935. Revenue EUR519.5M, PBT EUR24.4M, TNW EUR141.7M (FYE2024)."
+  },
+  "K_key_credit_issues": [
+    {
+      "issue_number": 1,
+      "issue_title": "Declining Profitability Trend",
+      "description": "Annualized revenue RM141.9M mirrors FYE2024 but LBT RM3.7M. PBT trend: RM16M→RM1.1M→LBT RM3.7M. DSCR marginal 1.03x.",
+      "risk_area": "Repayment Risk",
+      "mitigant": "Excluding depreciation PBT RM6.2M. Net CFO RM8.6M. Gearing 0.59x. TNW RM58.9M strong. CG M R financials strong (EUR519.5M revenue, EUR24.4M PBT, EUR141.7M TNW)."
+    },
+    {
+      "issue_number": 2,
+      "issue_title": "Non-compliance USD Proceeds T&C",
+      "description": "60% of USD proceeds and FX to be channelled to HLB but only <3% channelled since Nov2024.",
+      "risk_area": "Compliance Risk",
+      "mitigant": "FX volume increasing year-on-year. Customer promised improvement. RORA 1.82% exceeds minimum 1.50%. CED recommending higher fee RM8.8K."
+    },
+    {
+      "issue_number": 3,
+      "issue_title": "Fully Unsecured Working Capital Lines",
+      "description": "WCL on fully unsecured basis. Total unsecured RM32.99M. MOA 314%.",
+      "risk_area": "Security Risk",
+      "mitigant": "Post-acquisition new management refused securities to mirror foreign banks. Comfort from strong CG M R financial and background (est. 1935). Debenture over machineries retained."
+    }
+  ],
+  "L_recommendations": {
+    "business_recommendations": [
+      {
+        "recommender_role": "GAM",
+        "recommender_name": null,
+        "date": "2026-01-02",
+        "recommendation": "12 months renewal with AVP extension",
+        "decision": "Recommended"
+      },
+      {
+        "recommender_role": "BCM",
+        "recommender_name": null,
+        "date": "2026-01-02",
+        "recommendation": "Recommended for approval",
+        "decision": "Recommended"
+      },
+      {
+        "recommender_role": "Senior Regional Head",
+        "recommender_name": null,
+        "date": "2026-01-02",
+        "recommendation": "Recommended",
+        "decision": "Recommended"
+      }
+    ],
+    "credit_recommendations": [
+      {
+        "recommender_role": "CED Manager",
+        "recommender_name": null,
+        "date": "2026-01-05",
+        "recommendation": "Recommended with higher fee RM8.8K",
+        "key_issues_noted": "Declining PBT trend, USD proceeds non-compliance, RORA below target",
+        "additional_tc": "Follow up USD proceeds, submit audited FY2025 by 31Aug2026, conversation on bottom line"
+      },
+      {
+        "recommender_role": "CED Team Head",
+        "recommender_name": null,
+        "date": "2026-01-05",
+        "recommendation": "Recommended per CED premised on decent balance sheet strength of client and CG",
+        "key_issues_noted": null,
+        "additional_tc": null
+      }
+    ]
+  },
+  "M_terms_and_conditions": {
+    "existing_pre_drawdown": [
+      {
+        "condition": "Blanket USD TL 2: Drawdown against 85% invoice value with documentary evidence",
+        "status": "Complied",
+        "applicable_facility": "Blanket USD TL 2"
+      },
+      {
+        "condition": "TL 4: Progressive release up to RM18.5M against Architect/Engineer Certificate",
+        "status": "Pending",
+        "applicable_facility": "TL 4"
+      },
+      {
+        "condition": "TL 4: AVP extended to 31/12/2026",
+        "status": "Pending",
+        "applicable_facility": "TL 4"
+      }
+    ],
+    "existing_post_drawdown": [
+      {
+        "condition": "Pari passu position with other lenders on security and guarantee",
+        "status": "Complied",
+        "applicable_facility": "ALL"
+      },
+      {
+        "condition": "Blanket USD TL 1: MOF 85% of purchase price or USD3.7M whichever lower",
+        "status": "Complied",
+        "applicable_facility": "Blanket USD TL 1"
+      },
+      {
+        "condition": "RH SB to remain subsidiary of ASP or M Rubber Industries",
+        "status": "Complied",
+        "applicable_facility": "ALL"
+      },
+      {
+        "condition": "No non-trade advances to related/holding company",
+        "status": "Complied",
+        "applicable_facility": "ALL"
+      },
+      {
+        "condition": "If Property 2 sold, TL 3 and TL 4 to be fully settled",
+        "status": "Pending",
+        "applicable_facility": "TL 3, TL 4"
+      },
+      {
+        "condition": "Financial covenants: NFP/EBITDA <3.5x and NFP/Net Equity <2.0x",
+        "status": "Breached",
+        "applicable_facility": "ALL"
+      },
+      {
+        "condition": "Submission of audited FYE2024 by 31Aug2025",
+        "status": "Complied",
+        "applicable_facility": "ALL"
+      }
+    ],
+    "new_pre_drawdown": null,
+    "new_post_drawdown": null,
+    "internal_conditions": [
+      {
+        "condition": "60% of borrower's USD proceeds and FX to be channelled to HLBB",
+        "status": "Breached",
+        "applicable_facility": "ALL"
+      }
+    ],
+    "policy_exceptions": null
+  }
+}

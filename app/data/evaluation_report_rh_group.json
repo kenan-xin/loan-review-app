@@ -1,0 +1,3036 @@
+{
+  "report_metadata": {
+    "ca_reference_no": "GAPP21985",
+    "group_name": "RH Group",
+    "borrower_names": [
+      "M RH Sdn. Bhd."
+    ],
+    "application_type": "Review",
+    "evaluation_date": "2026-04-09",
+    "checklist_version": "1.0.0",
+    "source_document": "3. RH GROUP.pdf"
+  },
+  "evaluation_results": [
+    {
+      "rule_title": "Commodity Price Impact - Stock Holding and Debt Level Vigilance",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "days_trade_debtors": 121,
+        "days_trade_debtors_prev": 101,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "Gearing 0.59x <= 3.0x",
+      "action": null
+    },
+    {
+      "rule_title": "New Venture Without Alternative Cashflow Sources",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "BC to provide detailed explanation of alternative cashflow sources and demonstrate adequacy of existing business to support new venture."
+    },
+    {
+      "rule_title": "Revolving Facility Re-utilization Covenant Check",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Return CA to BC. Re-drawing covenants and approving authority must be clearly stated for revolving facilities."
+    },
+    {
+      "rule_title": "Blanket TL/IHP Minimum Drawdown Covenant",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Return CA to BC. Minimum drawdown sum covenant must be imposed for blanket TL/IHP structures."
+    },
+    {
+      "rule_title": "Parental CRR Adoption Requires Corporate Guarantee",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_proposed": "C+",
+        "crr_existing": "C+",
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "Policy Exception Tagging Completeness",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {},
+      "explanation": "No policy exceptions",
+      "action": null
+    },
+    {
+      "rule_title": "SCEL Aggregation for Common Guarantors",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "Data present: ['grand_total_rm', 'guarantee_details']",
+      "action": null
+    },
+    {
+      "rule_title": "Bridging Loan Redemption Coverage Ratio",
+      "category_5c": "Collateral",
+      "result": "PASS",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "Data present: ['purpose']",
+      "action": null
+    },
+    {
+      "rule_title": "Debtor and Creditor Aging Consistency with Operations",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "days_trade_debtors": 121,
+        "days_trade_debtors_prev": 101,
+        "days_trade_creditors": 101,
+        "days_trade_creditors_prev": 73,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Debtor days 121 elevated",
+      "action": "Relate changes to business operations. Verify logic/reasoning provided for significant changes."
+    },
+    {
+      "rule_title": "SME Status Verification for NTB Customers",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "application_type": "Review",
+        "is_sme": false,
+        "year_commenced": 2002
+      },
+      "explanation": "Data present: ['application_type', 'is_sme', 'year_commenced']",
+      "action": null
+    },
+    {
+      "rule_title": "Contract Financing - Financial Strength of Awarders Assessment",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "Conduct sensitivity analysis on projected cashflow. Verify financial capability to meet commitments."
+    },
+    {
+      "rule_title": "Unsecured Exposure Within Group Exposure",
+      "category_5c": "Collateral",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Reconcile group exposure figures. Ensure cancelled limits and corresponding security values are correctly excluded per Credit Note format requirements."
+    },
+    {
+      "rule_title": "CCRIS High Credit Card Utilization Assessment",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "is_key_management": [
+          true
+        ],
+        "shareholding_pct": []
+      },
+      "explanation": "Age not available",
+      "action": "Key person data required. Request shareholder and management details."
+    },
+    {
+      "rule_title": "Bridging Loan and Land Financing Package Consistency",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "Data present: ['purpose', 'tenor']",
+      "action": null
+    },
+    {
+      "rule_title": "Shareholding Changes - New Key Person KYC Requirement",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "estimated_pnw_rm": []
+      },
+      "explanation": "Age not available",
+      "action": "Shareholding change data required when there are changes in ownership. Request current vs previous shareholding details."
+    },
+    {
+      "rule_title": "Revenue Sustainability Post-Industry Boom Assessment",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "Evaluate whether revenue decline has stabilized. Assess business prospects going forward to justify proposed facilities."
+    },
+    {
+      "rule_title": "Debt Level and Multiple Project Assessment for Project Financing",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "Gather information on borrower's other ongoing projects. Analyze combined debt obligations."
+    },
+    {
+      "rule_title": "Diversification into Non-Core Business Risk",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "total_proposed_rm": 48427
+      },
+      "explanation": "Net CFO RM8599K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Short-Term Borrowings Increase Without Revenue Growth",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "working_capital_cycle": 65,
+        "working_capital_cycle_prev": 101,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "Obtain explanation for disproportionate debt growth. Verify business justification."
+    },
+    {
+      "rule_title": "RORA Achieved vs Spread Consistency Check",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "RORA Below Spread - Rate Shaving Detection",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "CRR Appropriateness Review",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "crr_existing": "C+",
+        "crr_proposed": "C+"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "CRR upgrade attempted with mixed financial signals. Provide detailed justification for upgrade."
+    },
+    {
+      "rule_title": "ESG Due Diligence Completeness for All LOBs",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "esg_rating_existing": "Medium",
+        "esg_rating_proposed": "Medium",
+        "environmental_rating_existing": "Low",
+        "environmental_rating_proposed": "Low",
+        "social_rating_existing": "High with Mitigation",
+        "social_rating_proposed": "High with Mitigation"
+      },
+      "explanation": "High with Mitigation: ['Medium', 'Low', 'High with Mitigation']",
+      "action": "ESG assessment is partially complete. Ensure all sub-components (environmental, social) are assessed."
+    },
+    {
+      "rule_title": "Shareholding Divestment Impact on Security Enforceability",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Shareholding change data required when CG/guarantee is from a related holding company."
+    },
+    {
+      "rule_title": "Financial Spread Error Check Warning",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "interest_cover_times": 3.19,
+        "interest_cover_times_prev": 3.68,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Current Liabilities Exceeding Current Assets - Working Capital Deficiency",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "working_capital_cycle": 65,
+        "working_capital_cycle_prev": 101,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "WCC 65 days",
+      "action": null
+    },
+    {
+      "rule_title": "Large Exposure with Low Income - Account Plan Required",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below"
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "Significant exposure (>RM20M) with below-target RORA. Document cross-selling initiatives and projected income improvement timeline."
+    },
+    {
+      "rule_title": "Security Stamping Verification",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Stamping status must be confirmed for all security items. Request verification from documentation team."
+    },
+    {
+      "rule_title": "RORA Achieved vs Utilization and Spread Consistency",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "Staleness of Audited Financial Statements",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Financial period end dates must be provided. Request financial summaries from BC."
+    },
+    {
+      "rule_title": "CRR Upgrade Validation Against Financial Trend",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "account_status": "Performing",
+        "account_status_prev": "Audited Unqualified",
+        "crr_existing": "C+",
+        "crr_proposed": "C+",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "N/A"
+    },
+    {
+      "rule_title": "Fragmented Shareholding Red Flag",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "indirect_shareholding_pct": []
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Shareholding percentages for all key persons must be populated."
+    },
+    {
+      "rule_title": "Collective JSG Net Worth Coverage Check",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "estimated_pnw_rm": [],
+        "total_unsecured_exposure_rm": 32992
+      },
+      "explanation": "T&C statuses not available",
+      "action": "PNW for each JSG party is mandatory. Request BC to derive and provide PNW breakdown for all JSG parties."
+    },
+    {
+      "rule_title": "Financial Summary Input Accuracy Check",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Corporate Guarantor Name in Security Table",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "If Corporate Guarantee is part of the security arrangement, guarantee details including guarantor name must be populated."
+    },
+    {
+      "rule_title": "CCRIS Credit History Anomaly Check for Borrower and Keyman",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "bnm_classification_existing": "C5B",
+        "bnm_classification_proposed": "C5B",
+        "total_proposed_rm": 48427,
+        "total_unsecured_rm": 32992
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Request BNM classification data and CCRIS report for borrower and keyman before proceeding."
+    },
+    {
+      "rule_title": "Facility Purpose Clarity and Accuracy Check",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Purpose field is mandatory. Request ARM/BC to populate purpose for all facility items before CA submission."
+    },
+    {
+      "rule_title": "Timely Revert on Post-Drawdown Conditions (PDCs)",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Do not proceed with new/incremental proposals until overdue PDCs are addressed. Implement appropriate action plans if early warning signals are detected. No extension of time without approval of respective approving authority."
+    },
+    {
+      "rule_title": "Unresolved Concerns Block for Group Obligors",
+      "category_5c": "Character",
+      "result": "FAIL",
+      "extracted_values": {
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "application_type": "Review",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Block submission of new/incremental proposals until all earlier concerns over the main obligor are addressed and mitigated."
+    },
+    {
+      "rule_title": "Substantial Equity Stake Disposal by UBOs/Major Shareholders",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {},
+      "explanation": "T&C statuses not available",
+      "action": "If shareholding changes section is empty or not provided, request confirmation of whether any shareholding changes have occurred since last review."
+    },
+    {
+      "rule_title": "Key Person Age and Estimated PNW Assessment",
+      "category_5c": "Capital",
+      "result": "MISSING",
+      "extracted_values": {
+        "estimated_pnw_rm": [],
+        "shareholding_pct": [],
+        "total_unsecured_rm": 32992
+      },
+      "explanation": "T&C statuses not available",
+      "action": "PNW data for key persons is mandatory when JSG/personal guarantee is in place. Request BC to derive and provide PNW breakdown."
+    },
+    {
+      "rule_title": "Review Expiry and Timely Annual Review Check",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "next_review_expiry": "2026-12-31",
+        "ca_date": "2026-01-02",
+        "application_type": "Review"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Next review expiry date must be populated. Request from BC/system records."
+    },
+    {
+      "rule_title": "CRR Assessment Must Consider Group Track Record and Keyman",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_existing": "C+",
+        "crr_proposed": "C+",
+        "is_key_management": [
+          true
+        ],
+        "estimated_pnw_rm": [],
+        "year_commenced": 2002
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "ESG High Without Mitigation Must Be Addressed Before Submission",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "esg_rating_existing": "Medium",
+        "esg_rating_proposed": "Medium",
+        "environmental_rating_existing": "Low",
+        "environmental_rating_proposed": "Low",
+        "social_rating_existing": "High with Mitigation",
+        "social_rating_proposed": "High with Mitigation"
+      },
+      "explanation": "High with Mitigation: ['Medium', 'Low', 'High with Mitigation']",
+      "action": "CED to verify mitigation plans are adequate and timeline is realistic."
+    },
+    {
+      "rule_title": "Advances from Related Companies Classification in Financial Spread",
+      "category_5c": "Capital",
+      "result": "MISSING",
+      "extracted_values": {
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Financial spread must include advances_from_related_rm field."
+    },
+    {
+      "rule_title": "Interim Extension CA Must Not Include Additional Facilities",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "application_type": "Review",
+        "total_proposed_rm": 48427,
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Application type and facility details are mandatory."
+    },
+    {
+      "rule_title": "Pre-drawdown Condition Status Check for Pending Conditions",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Non-complied conditions from prior approval must be escalated to original approving authority immediately. Cannot be deferred to next review cycle."
+    },
+    {
+      "rule_title": "ESG Assessment for Downstream of High E&S Risk Sectors",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "esg_rating_existing": "Medium",
+        "esg_rating_proposed": "Medium",
+        "environmental_rating_existing": "Low",
+        "environmental_rating_proposed": "Low"
+      },
+      "explanation": "ESG acceptable: ['Medium', 'Low']",
+      "action": null
+    },
+    {
+      "rule_title": "Contract Financing Limit vs Balance Sheet Size Suitability",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "CRR Discernment - Downgrades and Upgrades Must Be Warranted",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "crr_existing": "C+",
+        "crr_proposed": "C+"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "CED to assess whether CRR change is warranted given material financial changes."
+    },
+    {
+      "rule_title": "Multiple PRAP Applications - Comprehensive Cashflow Assessment Required",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "account_status": "Performing",
+        "account_status_prev": "Audited Unqualified",
+        "bnm_classification_existing": "C5B",
+        "bnm_classification_proposed": "C5B",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "BC to demonstrate borrower's ability to service debts without further PRAP. Provide long-term cashflow projection."
+    },
+    {
+      "rule_title": "Multiple Group Entities Without Consolidated Accounts - Financial Matrix Required",
+      "category_5c": "Capital",
+      "result": "MISSING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "grand_total_rm": 48427
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Group exposure and financial summary data are mandatory."
+    },
+    {
+      "rule_title": "Policy Exceptions Must Be Identified and Highlighted",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {},
+      "explanation": "No policy exceptions",
+      "action": null
+    },
+    {
+      "rule_title": "Covenant Operationalizability - PBT/TNW Variance Thresholds",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "CED to probe variance reasons and ensure covenant terms are being monitored."
+    },
+    {
+      "rule_title": "CAPEX Investment Size vs Revenue Reasonableness",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "BC to provide detailed feasibility assessment and demonstrate how CAPEX will generate sufficient returns."
+    },
+    {
+      "rule_title": "Shareholding Change - Major Shareholding Breach of Covenant",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": []
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Shareholding change data and key persons shareholding percentages are required."
+    },
+    {
+      "rule_title": "Advances to Related Companies vs Balance Sheet Size",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Private Equity Entry - Keyman Shareholding Dilution Check",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "indirect_shareholding_pct": [],
+        "is_key_management": [
+          true
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Shareholding change and key persons data are required to assess PE entry impact."
+    },
+    {
+      "rule_title": "ROC Report - Director and Shareholder Change Detection",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "is_key_management": [
+          true
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Shareholding change data and key persons data are required."
+    },
+    {
+      "rule_title": "Pari-Passu Waiver of Guarantees with Other FIs",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "unsecured_exposure_rm": 32992,
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Total exposure not available",
+      "action": "Return CA to BC. Security details, post-drawdown conditions, and unsecured exposure data are required."
+    },
+    {
+      "rule_title": "Step-Up Repayment Justification with Expected Cashflows",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "BC to provide detailed cashflow projection supporting the step-up schedule and explain early period cashflow weakness."
+    },
+    {
+      "rule_title": "Project Financing - Projected vs Actual Cashflow Comparison",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "outstanding_rm": [
+          878,
+          0,
+          4500,
+          304,
+          0,
+          1811,
+          14845,
+          10561,
+          8662,
+          0,
+          0
+        ]
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "BC to comment on shortfall and whether it impacts the borrower's ability to service commitments with the Bank."
+    },
+    {
+      "rule_title": "NTB Case with Mediocre Financials - Security and Cross-Sell Assessment",
+      "category_5c": "Collateral",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "total_security_value_rm": 15435,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "BC to explore additional/better securities and provide assessment of cross-sell opportunities from the group."
+    },
+    {
+      "rule_title": "Large CAPEX - Cashflow Sustainability Assessment",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "BC to provide sensitivity analysis showing CAPEX cashflow under stress scenarios."
+    },
+    {
+      "rule_title": "CER Reduction from 10% to 3.5% - Applicability Check",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "total_proposed_rm": 48427,
+        "relationship_strategy": "Maintain"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Security cover ratio, relationship strategy, and facility size data are required."
+    },
+    {
+      "rule_title": "RC for Property Financing Must Have Monthly Rollover",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Facility purpose and tenor details are required."
+    },
+    {
+      "rule_title": "Related Company Financials as Additional Support for Moderate Applicants",
+      "category_5c": "Capital",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "is_key_management": [
+          true
+        ],
+        "shareholding_pct": []
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "BC to provide financial standing of related companies controlled by key sponsors to strengthen the application."
+    },
+    {
+      "rule_title": "Sole Proprietorship/Partnership - Sales Validation Against Current Account Deposits",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "is_sme": false
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "BC to provide explanation for significant revenue variance and confirm validation against bank deposits."
+    },
+    {
+      "rule_title": "Key Person PNW Validation for Sole Proprietorship/Partnership",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "estimated_pnw_rm": [],
+        "is_key_management": [
+          true
+        ],
+        "is_sme": false
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Key persons data with PNW is mandatory for sole proprietorships / partnerships."
+    },
+    {
+      "rule_title": "Rollover Tenure for Revolving Credits Maximum 6 Months",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ],
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Facility tenor data must be provided for revolving credit facilities."
+    },
+    {
+      "rule_title": "Avoid Bullet Repayment Structure for Term Loans",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "No policy exceptions",
+      "action": null
+    },
+    {
+      "rule_title": "TNW with Revaluation Reserves - Reasonableness Check",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "paid_up_capital_rm": 14474,
+        "paid_up_capital_rm_prev": 14474
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "CRR Change Must Be Reflected in CA",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_existing": "C+",
+        "crr_proposed": "C+"
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "Negative Pledge Clause for Unsecured Lending",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "unsecured_exposure_rm": 32992,
+        "total_unsecured_exposure_rm": 32992
+      },
+      "explanation": "Total exposure not available",
+      "action": "Return CA to BC. Unsecured exposure and policy exception details are required."
+    },
+    {
+      "rule_title": "Fragmented Shareholders - MOA Reasonableness for Property Financing",
+      "category_5c": "Collateral",
+      "result": "FAIL",
+      "extracted_values": {
+        "moa_pct": 314,
+        "estimated_pnw_rm": [],
+        "shareholding_pct": [],
+        "year_commenced": 2002
+      },
+      "explanation": "MOA 314% > 90%",
+      "action": "Reject or escalate. Financing of newly set-up companies with fragmented shareholders and excessive MOA is to be avoided per credit policy."
+    },
+    {
+      "rule_title": "Quarterly Financials Validation for Improving Performance Claims",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "BC to provide additional interim financial data. Single quarter is insufficient to validate trend."
+    },
+    {
+      "rule_title": "RORA Apple-to-Apple Comparison - Consistent Entity Basis",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below"
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "BC to explain shortfall in target and confirm entity basis is consistent between achieved and projected."
+    },
+    {
+      "rule_title": "JSG Guarantor PNW Must Be Provided and Verified",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "estimated_pnw_rm": [],
+        "is_key_management": [
+          true
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Key person data with PNW is mandatory when JSG is taken as security."
+    },
+    {
+      "rule_title": "Next Review Date Accuracy on Credit Review",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "ca_date": "2026-01-02",
+        "next_review_expiry": "2026-12-31",
+        "last_review_expiry": "2025-12-31"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. CA date and next review expiry are mandatory fields."
+    },
+    {
+      "rule_title": "CG Discharge - Outgoing and Incoming Guarantor Financial Evaluation",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Guarantee details and shareholding change data are required for CG discharge requests."
+    },
+    {
+      "rule_title": "Group Exposure Must Include EAC/RMD Accounts",
+      "category_5c": "Capital",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Return CA to BC. Group exposure must include all entities including those under EAC/RMD purview."
+    },
+    {
+      "rule_title": "Facility Section E Data Accuracy and Completeness",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "outstanding_rm": [
+          878,
+          0,
+          4500,
+          304,
+          0,
+          1811,
+          14845,
+          10561,
+          8662,
+          0,
+          0
+        ],
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ],
+        "total_proposed_rm": 48427
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Facility section data is mandatory for all applications."
+    },
+    {
+      "rule_title": "RORA Reasonableness vs Interest Spread and Non-Interest Income",
+      "category_5c": "Capacity",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "Financial Data Recency for SCEL Submissions",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "FYE dates must be populated in financial summary. Request from BC."
+    },
+    {
+      "rule_title": "Financial Spreading Column Placement for Companies with Limited History",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "year_commenced": 2002
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Financial period data is required. Request BC to provide available financial statements."
+    },
+    {
+      "rule_title": "ESG Checklist Attachment for High-Risk Customers",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "esg_rating_existing": "Medium",
+        "esg_rating_proposed": "Medium",
+        "environmental_rating_existing": "Low",
+        "social_rating_existing": "High with Mitigation"
+      },
+      "explanation": "High with Mitigation: ['Medium', 'Low', 'High with Mitigation']",
+      "action": "High ESG risk detected. Ensure ESG checklist is attached to SVCA. Comprehensively assess borrower's remediation plans and deadline."
+    },
+    {
+      "rule_title": "Balance Sheet Strength for Contract Financing",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "total_proposed_rm": 48427,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Latest Financial Inclusion in SVCA",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "FYE date is required. Financial summary must be included in the SVCA document."
+    },
+    {
+      "rule_title": "RORA Projection Realism and RWA Accuracy",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below",
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "RORA exceeds spread by a notable margin. Verify ancillary income assumptions and RWA inputs."
+    },
+    {
+      "rule_title": "Aging Trade Debtors Assessment",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "days_trade_debtors": 121,
+        "days_trade_debtors_prev": 101
+      },
+      "explanation": "Debtor days 121 elevated",
+      "action": "Elevated or worsening trade debtor days. Investigate aging profile and assess collectability of retention sums and outstanding receivables."
+    },
+    {
+      "rule_title": "New CG/JSG Must Cover Entire Working Capital Line",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ],
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "application_type": "Review"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Guarantee details and facility limits required to verify coverage adequacy."
+    },
+    {
+      "rule_title": "Group Financial Summary Completeness",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "grand_total_rm": 48427
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Financial summaries for all group borrowers are mandatory. Request from BC."
+    },
+    {
+      "rule_title": "Covenant Compliance Timeliness - PDC Revert Deadline",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "ca_date": "2026-01-02",
+        "last_review_expiry": "2025-12-31",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Overdue covenant/PDC detected. BC must have reverted within the imposed timeline. If extension is needed, separate approval is required. Cannot proceed with new requests until addressed."
+    },
+    {
+      "rule_title": "Policy Exception Documentation Check",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {},
+      "explanation": "No policy exceptions",
+      "action": null
+    },
+    {
+      "rule_title": "Latest Management Accounts Required to Validate Performance Claims",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "BC to explain basis for positive outlook when latest accounts still show weakness. Obtain more recent data."
+    },
+    {
+      "rule_title": "Re-availment Request Requires Current Financial Data",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Financial summary dates and CA date are mandatory to assess currency of financial data."
+    },
+    {
+      "rule_title": "Group Exposure Table Must Include All Entities (PFS, Overseas, GM, FI)",
+      "category_5c": "Capital",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Return CA to BC. Total customer exposure must reflect all borrowing entities including PFS, overseas, GM, and FI exposures."
+    },
+    {
+      "rule_title": "RORA Projection Must Exclude Non-Accepted Facilities from Prior Year",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below"
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "CED to verify RORA comparison is on adjusted basis excluding non-accepted facilities."
+    },
+    {
+      "rule_title": "Cash Flow Projection Assumptions Must Be Justified and Validated",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "net_cashflow_ops_rm": 8599,
+        "net_cashflow_ops_rm_prev": 13131
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "CED to scrutinize projection assumptions and require BC to provide supporting evidence for optimistic forecasts."
+    },
+    {
+      "rule_title": "Leasehold Property Security - Remaining Lease Below 30 Years",
+      "category_5c": "Collateral",
+      "result": "N/A",
+      "extracted_values": {
+        "tenure_type": [
+          null,
+          null,
+          null
+        ],
+        "leasehold_remaining_years": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "No leasehold property",
+      "action": null
+    },
+    {
+      "rule_title": "Terms and Conditions Compliance from Prior Approval",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "Ensure non-complied T&Cs are addressed before proceeding. Document reason for non-compliance and obtain appropriate waiver if needed."
+    },
+    {
+      "rule_title": "Stage 2 Loan Modification Treated as R&R",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "account_status": "Performing",
+        "account_status_prev": "Audited Unqualified",
+        "bnm_classification_existing": "C5B",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Data present: ['account_status', 'account_status_prev', 'bnm_classification_existing']",
+      "action": null
+    },
+    {
+      "rule_title": "Facility Structure Change Requires Original Approving Authority",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "application_type": "Review"
+      },
+      "explanation": "Data present: ['purpose', 'application_type']",
+      "action": null
+    },
+    {
+      "rule_title": "Security Valuation Date Freshness Check",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "valuation_date": [
+          null,
+          null,
+          null
+        ],
+        "market_value_rm": [
+          15435,
+          null,
+          null
+        ],
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Valuation date is required for all property securities. Request valuation details."
+    },
+    {
+      "rule_title": "Low or Negative Tangible Net Worth Due to Intangibles/Goodwill",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "paid_up_capital_rm": 14474,
+        "paid_up_capital_rm_prev": 14474,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "Clean Basis Working Capital for SME Contractors to Be Avoided",
+      "category_5c": "Collateral",
+      "result": "PASS",
+      "extracted_values": {
+        "is_sme": false,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "total_unsecured_rm": 32992,
+        "total_unsecured_exposure_rm": 32992
+      },
+      "explanation": "Data present: ['is_sme', 'purpose', 'total_unsecured_rm']",
+      "action": null
+    },
+    {
+      "rule_title": "CRR Scoring Fairness - New Company with Experienced Group",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_existing": "C+",
+        "crr_proposed": "C+",
+        "year_commenced": 2002
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "CAPEX Financing - Performance vs Projection Assessment",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "ebitda_rm": 10067,
+        "ebitda_rm_prev": 13041,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "Compare actual vs projected performance. Identify reasons for underperformance and sustainability of the CAPEX investment."
+    },
+    {
+      "rule_title": "RORA Profitability Target Assessment",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below"
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "Identify reasons for not meeting target. Consider pricing adjustments at next review."
+    },
+    {
+      "rule_title": "High Trade Debtor Aging Relative to Revenue",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "days_trade_debtors": 121,
+        "days_trade_debtors_prev": 101,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Debtor days 121 elevated",
+      "action": "Obtain debtor aging schedule. Compare to business operational norms and past performance."
+    },
+    {
+      "rule_title": "Short-Term Borrowings Increase Disproportionate to Revenue",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "Obtain explanation for debt growth. Assess if related to capex, working capital cycle change, or other justified reason."
+    },
+    {
+      "rule_title": "Gearing Ratio Assessment",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Gearing 0.59x <= 3.0x",
+      "action": null
+    },
+    {
+      "rule_title": "Working Capital Cycle Anomaly Detection",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "days_trade_debtors": 121,
+        "days_trade_debtors_prev": 101,
+        "days_trade_creditors": 101,
+        "days_trade_creditors_prev": 73,
+        "working_capital_cycle": 65,
+        "working_capital_cycle_prev": 101,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Debtor days 121 elevated",
+      "action": "Obtain explanation for working capital changes. Relate to business operations per Credit Note #6."
+    },
+    {
+      "rule_title": "Potential Watchlist/High-Risk Check on Facility Restructuring",
+      "category_5c": "Conditions",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "bnm_classification_existing": "C5B"
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "Document reason for refinancing (e.g., mismatch funding, strategic bank relationship change). Confirm not financial distress."
+    },
+    {
+      "rule_title": "Policy Exceptions Must Be Identified and Mitigated in CA",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {},
+      "explanation": "No policy exceptions",
+      "action": null
+    },
+    {
+      "rule_title": "RORA Sensitization for Pending Drawdown Facilities",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "outstanding_rm": [
+          878,
+          0,
+          4500,
+          304,
+          0,
+          1811,
+          14845,
+          10561,
+          8662,
+          0,
+          0
+        ],
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "Total Customer Exposure Must Include All Obligors (Local + Overseas + GM + FI)",
+      "category_5c": "Capital",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Return CA to BC. All obligor limits across local, overseas, GM, and FI platforms must be reflected in total customer exposure."
+    },
+    {
+      "rule_title": "Security Release Must Be Captured in Security Section",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "market_value_rm": [
+          15435,
+          null,
+          null
+        ],
+        "total_security_value_rm": 15435,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Security valuation data is required."
+    },
+    {
+      "rule_title": "CRE Rating Consistency with BNM Classification",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_existing": "C+",
+        "crr_proposed": "C+",
+        "bnm_classification_existing": "C5B",
+        "bnm_classification_proposed": "C5B"
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "Contract Financing Limit vs Balance Sheet Strength",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552,
+        "total_proposed_rm": 48427,
+        "total_unsecured_rm": 32992
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "CRR Change Discernment Check",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "gearing_times": 0.59,
+        "gearing_times_prev": 0.53,
+        "crr_existing": "C+",
+        "crr_proposed": "C+"
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "CRR downgrade proposed despite improving financials. Verify if non-financial factors warrant the downgrade, otherwise consider maintaining or upgrading."
+    },
+    {
+      "rule_title": "Outdated Financial Data Check (6-Month Staleness)",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "T&C statuses not available",
+      "action": "FYE date is required for staleness assessment. Request from BC."
+    },
+    {
+      "rule_title": "Facility Limits Reassessment on Significant Business Changes",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "total_proposed_rm": 48427,
+        "application_type": "Review"
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "Revenue has changed by more than 40%. Review whether current facility structure and limits remain appropriate for current business scale."
+    },
+    {
+      "rule_title": "Shareholding Changes - Pre and Post Org Chart Requirement",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {},
+      "explanation": "T&C statuses not available",
+      "action": "If shareholding has changed since last review, both before and after data must be populated."
+    },
+    {
+      "rule_title": "SPA Price vs Market Value Discount Check",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "market_value_rm": [
+          15435,
+          null,
+          null
+        ],
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Market valuation and facility/purchase price data required for discount assessment."
+    },
+    {
+      "rule_title": "JSG Absence - Upfront Disclosure Requirement",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "is_key_management": [
+          true
+        ],
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Shareholding, key management status, and guarantee details required to assess JSG coverage."
+    },
+    {
+      "rule_title": "Leasehold Property Remaining Tenure Check",
+      "category_5c": "Collateral",
+      "result": "N/A",
+      "extracted_values": {
+        "tenure_type": [
+          null,
+          null,
+          null
+        ],
+        "leasehold_remaining_years": [
+          null,
+          null,
+          null
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "No leasehold property",
+      "action": null
+    },
+    {
+      "rule_title": "Facility Table Reconciliation - Cancelled Limits Exclusion",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "outstanding_rm": [
+          878,
+          0,
+          4500,
+          304,
+          0,
+          1811,
+          14845,
+          10561,
+          8662,
+          0,
+          0
+        ],
+        "total_proposed_rm": 48427
+      },
+      "explanation": "Data present: ['total_limit_rm', 'outstanding_rm', 'total_proposed_rm']",
+      "action": null
+    },
+    {
+      "rule_title": "RORA Sensitization for Undrawn Limits",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "outstanding_rm": [
+          878,
+          0,
+          4500,
+          304,
+          0,
+          1811,
+          14845,
+          10561,
+          8662,
+          0,
+          0
+        ]
+      },
+      "explanation": "RORA 1.65%",
+      "action": null
+    },
+    {
+      "rule_title": "Short-Term Borrowings Growth vs Revenue and Working Capital Cycle",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "working_capital_cycle": 65,
+        "working_capital_cycle_prev": 101,
+        "total_debt_rm": 34920,
+        "total_debt_rm_prev": 34466,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "Obtain explanation for increased borrowings relative to business activity."
+    },
+    {
+      "rule_title": "Group Exposure Table Reconciliation with Facility Table",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Correct group exposure table. Ensure cancelled limits are excluded and all components reconcile."
+    },
+    {
+      "rule_title": "Review Timeliness - Overdue Account Check",
+      "category_5c": "Conditions",
+      "result": "PASS",
+      "extracted_values": {
+        "next_review_expiry": "2026-12-31",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "Data present: ['next_review_expiry', 'ca_date']",
+      "action": null
+    },
+    {
+      "rule_title": "Security Cover Ratio and MOA Assessment",
+      "category_5c": "Collateral",
+      "result": "FAIL",
+      "extracted_values": {
+        "moa_pct": 314,
+        "total_security_value_rm": 15435,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "MOA 314% > 90%",
+      "action": "Assess if additional security can be obtained. Justify any under-secured exposure with appropriate risk mitigation."
+    },
+    {
+      "rule_title": "Pro-Forma Financial Assessment for Material Divestments",
+      "category_5c": "Capital",
+      "result": "WARNING",
+      "extracted_values": {
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552
+      },
+      "explanation": "Revenue declined 7.2%",
+      "action": "Obtain pro-forma financials post-divestment. Evaluate impact on ongoing business viability."
+    },
+    {
+      "rule_title": "ESG High Without Mitigation - Action Plans and Timeline Required",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "esg_rating_existing": "Medium",
+        "esg_rating_proposed": "Medium",
+        "environmental_rating_existing": "Low",
+        "environmental_rating_proposed": "Low",
+        "social_rating_existing": "High with Mitigation",
+        "social_rating_proposed": "High with Mitigation"
+      },
+      "explanation": "High with Mitigation: ['Medium', 'Low', 'High with Mitigation']",
+      "action": "CED to verify action plans are realistic and deadlines are achievable."
+    },
+    {
+      "rule_title": "Leasehold Property Security - Remaining Lease Period Risk",
+      "category_5c": "Collateral",
+      "result": "N/A",
+      "extracted_values": {
+        "tenure_type": [
+          null,
+          null,
+          null
+        ],
+        "leasehold_remaining_years": [
+          null,
+          null,
+          null
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ]
+      },
+      "explanation": "No leasehold property",
+      "action": null
+    },
+    {
+      "rule_title": "Contract Financing Structure - Pre vs Post Financing Overlap Assessment",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "total_limit_rm": [
+          0,
+          2000,
+          4500,
+          2000,
+          9000,
+          1811,
+          14845,
+          10561,
+          8662,
+          410,
+          3300
+        ],
+        "tenor": [
+          "On Demand",
+          "60 Months",
+          "6 Months",
+          "120 Days",
+          "120 Days",
+          "180 Months",
+          "180 Months",
+          "96 Months per drawdown",
+          "96 Months per drawdown",
+          "6 Months",
+          "180 Months"
+        ],
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "total_proposed_rm": 48427
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Facility details including purpose, tenor, and limits are required."
+    },
+    {
+      "rule_title": "OD/Cashline-i Must Not Use ECOF/ICOF-Based Pricing",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ],
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Facility purpose and pricing data are required."
+    },
+    {
+      "rule_title": "Group Exposure Must Include All Related Borrowers' Financials",
+      "category_5c": "Capital",
+      "result": "FAIL",
+      "extracted_values": {
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435,
+        "unsecured_exposure_rm": 32992
+      },
+      "explanation": "Unsecured 68.1% > 50%",
+      "action": "Return CA to BC. Group exposure must include all related borrowers with their financials for MCC submission."
+    },
+    {
+      "rule_title": "RORA Trend Realism and Achievability Check",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "rora_pct": 1.65,
+        "meets_previous_target": "Below",
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ]
+      },
+      "explanation": "RORA 1.65% but prev target Below",
+      "action": "Previous RORA target not achieved and new target exceeds 1.5x spread. Reassess achievability and present improvement trend."
+    },
+    {
+      "rule_title": "Management Account Integrity - Exceptional Ratios Red Flag",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "pat_rm": -4755,
+        "pat_rm_prev": 21,
+        "revenue_rm": 130041,
+        "revenue_rm_prev": 140150,
+        "account_status": "Management",
+        "account_status_prev": "Audited Unqualified",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "Management account PBT is 3x higher than previous audited period. Verify if material adjustments are pending and obtain normalized figures."
+    },
+    {
+      "rule_title": "Fragmented Shareholders Risk Assessment",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "shareholding_pct": [],
+        "indirect_shareholding_pct": [],
+        "estimated_pnw_rm": []
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Shareholding percentages for all key persons required for fragmentation assessment."
+    },
+    {
+      "rule_title": "Pricing Differentiation - Machinery vs Property Financing",
+      "category_5c": "Capacity",
+      "result": "MISSING",
+      "extracted_values": {
+        "pricing": [
+          "BLR + 0.75%",
+          "IFR + 0.75%",
+          "USD ICOF(6mth) + 0.75%",
+          "Comm 0.1% p.m",
+          "FC ECOF + 1.25%",
+          "ECOF(1mth) + 1.25%",
+          "ECOF(1mth) + 0.75%",
+          "USD ECOF(1mth) + 1.25%",
+          "USD ECOF(1mth) + 1.25%",
+          "FCR",
+          "IRS Rate"
+        ],
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Pricing and purpose data for each facility required for differentiation check."
+    },
+    {
+      "rule_title": "Pre-Drawdown and Post-Drawdown Conditions Completeness",
+      "category_5c": "Conditions",
+      "result": "FAIL",
+      "extracted_values": {
+        "pre_statuses": [
+          "Complied",
+          "Pending",
+          "Pending"
+        ],
+        "post_statuses": [
+          "Complied",
+          "Complied",
+          "Complied",
+          "Complied",
+          "Pending",
+          "Breached",
+          "Complied"
+        ],
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Breached T&C found",
+      "action": "T&Cs have null status - conditions are not properly tracked. All terms must be stated upfront with current status, including those imposed by CED Manager/Team Heads."
+    },
+    {
+      "rule_title": "SJPP/CGC Guaranteed Facility - Guarantor Information Accuracy",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "cgc_sjpp_guarantee": false,
+        "is_key_management": [
+          true
+        ],
+        "shareholding_pct": [],
+        "guarantee_details": [
+          null,
+          null,
+          null
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. CGC/SJPP guarantee status, key persons, and guarantee details are required."
+    },
+    {
+      "rule_title": "CGC Guaranteed Facility - Mandatory Documents Including RAMCI at Application",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "cgc_sjpp_guarantee": false,
+        "is_key_management": [
+          true
+        ],
+        "age": [
+          39
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. CGC/SJPP guarantee status and all guarantor details are mandatory."
+    },
+    {
+      "rule_title": "Cross-Charge Required for Properties Securing Multi-Entity Facilities",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "market_value_rm": [
+          15435,
+          null,
+          null
+        ],
+        "grand_total_rm": 48427,
+        "secured_exposure_rm": 15435
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Security details and group exposure data are required to assess cross-charge requirement."
+    },
+    {
+      "rule_title": "Property Security Quality - Location and Saleability Assessment",
+      "category_5c": "Collateral",
+      "result": "MISSING",
+      "extracted_values": {
+        "market_value_rm": [
+          15435,
+          null,
+          null
+        ],
+        "valuation_date": [
+          null,
+          null,
+          null
+        ],
+        "total_security_value_rm": 15435,
+        "total_proposed_rm": 48427
+      },
+      "explanation": "MOA not available",
+      "action": "Return CA to BC. Security valuation data including valuation date and market value are required."
+    },
+    {
+      "rule_title": "Key Person Age Assessment for Guarantor Capacity",
+      "category_5c": "Character",
+      "result": "MISSING",
+      "extracted_values": {
+        "age": [
+          39
+        ],
+        "is_key_management": [
+          true
+        ],
+        "estimated_pnw_rm": [],
+        "shareholding_pct": []
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Return CA to BC. Key person age, PNW, and shareholding data are required for guarantor assessment."
+    },
+    {
+      "rule_title": "Worsening Losses Before Tax Over 2 Consecutive Years",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "pbt_rm": -3666,
+        "pbt_rm_prev": 1083,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "PBT RM-3666K (first year loss)",
+      "action": "Monitor closely. Assess trend direction and obtain management explanation for loss period."
+    },
+    {
+      "rule_title": "Negative Tangible Net Worth Without Subordination",
+      "category_5c": "Capital",
+      "result": "PASS",
+      "extracted_values": {
+        "tangible_net_worth_rm": 58904,
+        "tangible_net_worth_rm_prev": 65552
+      },
+      "explanation": "TNW RM58904K positive",
+      "action": null
+    },
+    {
+      "rule_title": "DSCR Below 1.0x Over 2 Consecutive Years",
+      "category_5c": "Capacity",
+      "result": "WARNING",
+      "extracted_values": {
+        "dscr_times": 1.03,
+        "dscr_times_prev": 1.18,
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024"
+      },
+      "explanation": "DSCR 1.03x marginal (1.0-1.2x)",
+      "action": "Monitor trend. Obtain management explanation and forward-looking cash flow projections."
+    },
+    {
+      "rule_title": "Non-Submission of Audited Accounts Beyond 18 Months",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "fye_date": "30/11/2025",
+        "fye_date_prev": "31/12/2024",
+        "ca_date": "2026-01-02"
+      },
+      "explanation": "Financials 2 months old",
+      "action": null
+    },
+    {
+      "rule_title": "Non-Submission Exception for Short Interim Review",
+      "category_5c": "Conditions",
+      "result": "MISSING",
+      "extracted_values": {
+        "application_type": "Review",
+        "last_review_expiry": "2025-12-31",
+        "ca_date": "2026-01-02",
+        "purpose": [
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Working Capital",
+          "Land",
+          "Construction",
+          "Plant & Equipment",
+          "Plant & Equipment",
+          "Hedging",
+          "Hedging"
+        ]
+      },
+      "explanation": "T&C statuses not available",
+      "action": "Verify application type and facility details to determine if exception is applicable."
+    },
+    {
+      "rule_title": "Obligatory Trigger - Borrower Account Classification (PN17/PN1/GN3)",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "account_status": "Performing",
+        "account_status_prev": "Audited Unqualified",
+        "bnm_classification_existing": "C5B",
+        "bnm_classification_proposed": "C5B",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Data present: ['account_status', 'account_status_prev', 'bnm_classification_existing']",
+      "action": null
+    },
+    {
+      "rule_title": "Obligatory Trigger - BNM Classification as Impaired/Special Attention",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "bnm_classification_existing": "C5B",
+        "bnm_classification_proposed": "C5B"
+      },
+      "explanation": "Data present: ['bnm_classification_existing', 'bnm_classification_proposed']",
+      "action": null
+    },
+    {
+      "rule_title": "Obligatory Trigger - Audit Qualification (Disclaimer or Adverse Opinion)",
+      "category_5c": "Character",
+      "result": "WARNING",
+      "extracted_values": {
+        "account_status": "Management",
+        "account_status_prev": "Audited Unqualified",
+        "internal_statuses": [
+          "Breached"
+        ]
+      },
+      "explanation": "Management accounts (not audited)",
+      "action": "Review qualification details. Assess impact on borrower's financial representation reliability."
+    },
+    {
+      "rule_title": "CRR Deterioration as Watchlist Indicator",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "crr_existing": "C+",
+        "crr_proposed": "C+"
+      },
+      "explanation": "CRR unchanged at C+",
+      "action": null
+    },
+    {
+      "rule_title": "Key Person Age and Succession Risk",
+      "category_5c": "Character",
+      "result": "PASS",
+      "extracted_values": {
+        "age": [
+          39
+        ],
+        "is_key_management": [
+          true
+        ],
+        "shareholding_pct": []
+      },
+      "explanation": "All under 65 (max 39)",
+      "action": null
+    }
+  ],
+  "summary": {
+    "total_rules_evaluated": 159,
+    "total_pass": 44,
+    "total_warning": 45,
+    "total_fail": 16,
+    "total_missing": 51,
+    "total_na": 3,
+    "by_category": {
+      "Character": {
+        "pass": 12,
+        "warning": 8,
+        "fail": 1,
+        "missing": 12
+      },
+      "Capacity": {
+        "pass": 10,
+        "warning": 27,
+        "fail": 0,
+        "missing": 9
+      },
+      "Capital": {
+        "pass": 8,
+        "warning": 2,
+        "fail": 4,
+        "missing": 3
+      },
+      "Collateral": {
+        "pass": 2,
+        "warning": 1,
+        "fail": 3,
+        "missing": 16
+      },
+      "Conditions": {
+        "pass": 12,
+        "warning": 7,
+        "fail": 8,
+        "missing": 11
+      }
+    },
+    "by_risk_level": {
+      "high_fail_count": 7,
+      "medium_fail_count": 8,
+      "low_fail_count": 1
+    }
+  },
+  "decision": {
+    "recommendation": "Reject",
+    "key_strengths": [
+      "Net CFO RM8599K positive",
+      "TNW RM58904K positive",
+      "TNW RM58904K positive",
+      "ESG acceptable: ['Medium', 'Low']",
+      "TNW RM58904K positive",
+      "TNW RM58904K positive",
+      "TNW RM58904K positive",
+      "TNW RM58904K positive"
+    ],
+    "key_concerns": [
+      "Breached T&C found",
+      "Breached T&C found",
+      "Unsecured 68.1% > 50%",
+      "Breached T&C found",
+      "Breached T&C found",
+      "Breached T&C found",
+      "MOA 314% > 90%",
+      "Unsecured 68.1% > 50%",
+      "Revenue declined 7.2%",
+      "Debtor days 121 elevated",
+      "PBT RM-3666K (first year loss)",
+      "PBT RM-3666K (first year loss)",
+      "DSCR 1.03x marginal (1.0-1.2x)",
+      "Revenue declined 7.2%",
+      "PBT RM-3666K (first year loss)",
+      "High with Mitigation: ['Medium', 'Low', 'High with Mitigation']"
+    ],
+    "required_conditions": [
+      "Overdue covenant/PDC detected. BC must have reverted within the imposed timeline. If extension is needed, separate approval is required. Cannot proceed with new requests until addressed.",
+      "Return CA to BC. Group exposure must include all entities including those under EAC/RMD purview.",
+      "Return CA to BC. All obligor limits across local, overseas, GM, and FI platforms must be reflected in total customer exposure.",
+      "Assess if additional security can be obtained. Justify any under-secured exposure with appropriate risk mitigation.",
+      "Reconcile group exposure figures. Ensure cancelled limits and corresponding security values are correctly excluded per Credit Note format requirements.",
+      "Non-complied conditions from prior approval must be escalated to original approving authority immediately. Cannot be deferred to next review cycle.",
+      "Reject or escalate. Financing of newly set-up companies with fragmented shareholders and excessive MOA is to be avoided per credit policy.",
+      "T&Cs have null status - conditions are not properly tracked. All terms must be stated upfront with current status, including those imposed by CED Manager/Team Heads.",
+      "Block submission of new/incremental proposals until all earlier concerns over the main obligor are addressed and mitigated.",
+      "Return CA to BC. Group exposure must include all related borrowers with their financials for MCC submission."
+    ],
+    "missing_information": [
+      "Shareholding, key management status, and guarantee details required to assess JSG coverage.",
+      "Financial period end dates must be provided. Request financial summaries from BC.",
+      "Shareholding percentages for all key persons must be populated.",
+      "Return CA to BC. Shareholding change data and key persons shareholding percentages are required.",
+      "Pricing and purpose data for each facility required for differentiation check."
+    ],
+    "reasoning": "Recommendation: Reject. 16 FAILs (7 High-risk), 45 WARNINGs, 44 PASSes out of 159 rules. Key fails: Breached T&C found; Breached T&C found; Unsecured 68.1% > 50%. Key warnings: Revenue declined 7.2%; Debtor days 121 elevated; PBT RM-3666K (first year loss)."
+  }
+}
