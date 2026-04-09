@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { createJob, getJob, completeJob, failJob } from "@/lib/job-store"
 import { logger } from "@/lib/logger"
 
-export const maxDuration = 1800
+export const maxDuration = 300
 
 const EXTERNAL_API_URL = "https://dev-genie.001.gs/smart-api/loan-review"
 const EXTERNAL_API_TIMEOUT_MS = 30 * 60 * 1000 // 30 minutes
