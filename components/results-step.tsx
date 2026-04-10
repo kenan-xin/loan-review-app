@@ -47,7 +47,8 @@ const RESULT_CONFIG = {
   "N/A": {
     label: "N/A",
     borderColor: "border-l-slate-300",
-    badge: "bg-slate-50 text-slate-500 dark:bg-slate-800/50 dark:text-slate-500",
+    badge:
+      "bg-slate-50 text-slate-500 dark:bg-slate-800/50 dark:text-slate-500",
     barColor: "bg-slate-200 dark:bg-slate-700",
     statColor: "text-slate-500 dark:text-slate-500",
   },
@@ -77,7 +78,8 @@ function LeftSection({
     <div className="border-b border-border last:border-0">
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-4 py-2.5 text-left"
+        aria-expanded={open}
+        className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
       >
         <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
           {title}
@@ -91,7 +93,16 @@ function LeftSection({
           <ChevronRight className="size-3.5 text-muted-foreground" />
         )}
       </button>
-      {open && <div className="px-4 pb-3">{children}</div>}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-out",
+          open ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="px-4 pb-3">{children}</div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -110,6 +121,7 @@ function CaSection({
     <div className="border-b border-border last:border-0">
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
         className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted/30"
       >
         <span className="text-sm font-medium">{title}</span>
@@ -119,7 +131,16 @@ function CaSection({
           <ChevronRight className="size-4 text-muted-foreground" />
         )}
       </button>
-      {open && <div className="px-4 pb-4 text-sm">{children}</div>}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-out",
+          open ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="px-4 pb-4 text-sm">{children}</div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -146,10 +167,6 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
 
   const { caData, evaluationResults, evaluationSummary, evaluationDecision } =
     result
-
-  const isReject = evaluationDecision.recommendation
-    .toLowerCase()
-    .includes("reject")
 
   const uniqueConcerns = [...new Set(evaluationDecision.key_concerns)]
   const uniqueStrengths = [...new Set(evaluationDecision.key_strengths)]
@@ -197,8 +214,18 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
     <div className="flex h-full flex-col">
       <div className="mb-3 flex shrink-0 items-center justify-between">
         <h2 className="text-base font-semibold">Review Results</h2>
-        <Button variant="outline" size="sm" onClick={onStartNew}>
-          Start New Review
+        <Button
+          size="sm"
+          className="bg-blue-600 font-semibold text-white shadow-md transition-all duration-150 hover:bg-blue-700 hover:shadow-lg active:scale-95"
+          asChild
+        >
+          <a
+            href="https://forms.cloud.microsoft/r/E56ubSr1wt"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Share Feedback →
+          </a>
         </Button>
       </div>
 
@@ -206,16 +233,8 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
         {/* Left panel */}
         <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border lg:max-h-full">
           {/* Decision banner */}
-          <div
-            className={cn(
-              "shrink-0 px-4 py-4",
-              isReject ? "bg-red-600 text-white" : "bg-emerald-600 text-white"
-            )}
-          >
+          <div className="shrink-0 bg-primary px-4 py-4 text-primary-foreground">
             <div className="text-2xl font-bold tracking-tight">
-              {isReject ? "REJECT" : "APPROVE"}
-            </div>
-            <div className="mt-1 text-sm font-medium opacity-90">
               {basicInfo.group_name as string}
             </div>
             <div className="mt-0.5 flex items-center gap-2 text-xs opacity-75">
@@ -243,10 +262,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                   className="flex flex-col items-center border-r py-2.5 last:border-r-0"
                 >
                   <span
-                    className={cn(
-                      "font-mono text-xl font-bold",
-                      cfg.statColor
-                    )}
+                    className={cn("font-mono text-xl font-bold", cfg.statColor)}
                   >
                     {count}
                   </span>
@@ -284,7 +300,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                           {stats.fail}F · {stats.warning}W · {stats.pass}P
                         </span>
                       </div>
-                      <div className="flex h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                      <div className="flex h-1.5 gap-px overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                         {stats.fail > 0 && (
                           <div
                             className="bg-red-500"
@@ -407,7 +423,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                 className={cn(
                   "px-4 py-2.5 text-sm font-medium transition-colors",
                   activeTab === tab
-                    ? "border-b-2 border-foreground text-foreground"
+                    ? "border-b-2 border-primary text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -422,33 +438,29 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               {/* Filter bar */}
               <div className="flex shrink-0 flex-wrap items-center gap-2 border-b px-3 py-2">
                 <div className="flex items-center gap-1">
-                  {(
-                    ["ALL", "FAIL", "WARNING", "PASS", "MISSING"] as const
-                  ).map((f) => (
-                    <button
-                      key={f}
-                      onClick={() => setRuleFilter(f)}
-                      className={cn(
-                        "rounded px-2 py-0.5 text-xs font-medium transition-colors",
-                        ruleFilter === f
-                          ? f === "ALL"
-                            ? "bg-foreground text-background"
-                            : cn("text-white", {
-                                "bg-red-500": f === "FAIL",
-                                "bg-amber-400 text-white": f === "WARNING",
-                                "bg-emerald-500": f === "PASS",
-                                "bg-slate-500": f === "MISSING",
-                              })
-                          : "bg-muted text-muted-foreground hover:bg-muted/80"
-                      )}
-                    >
-                      {f === "ALL"
-                        ? "All"
-                        : f === "WARNING"
-                          ? "WARN"
-                          : f}
-                    </button>
-                  ))}
+                  {(["ALL", "FAIL", "WARNING", "PASS", "MISSING"] as const).map(
+                    (f) => (
+                      <button
+                        key={f}
+                        onClick={() => setRuleFilter(f)}
+                        className={cn(
+                          "rounded px-2 py-0.5 text-xs font-medium transition-colors",
+                          ruleFilter === f
+                            ? f === "ALL"
+                              ? "bg-foreground text-background"
+                              : cn("text-white", {
+                                  "bg-red-500": f === "FAIL",
+                                  "bg-amber-400 text-white": f === "WARNING",
+                                  "bg-emerald-500": f === "PASS",
+                                  "bg-slate-500": f === "MISSING",
+                                })
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        )}
+                      >
+                        {f === "ALL" ? "All" : f === "WARNING" ? "WARN" : f}
+                      </button>
+                    )
+                  )}
                 </div>
                 <div className="h-3 w-px bg-border" />
                 <div className="flex items-center gap-1">
@@ -492,13 +504,14 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                     <div
                       key={idx}
                       className={cn(
-                        "border-b border-border border-l-2 last:border-b-0",
+                        "border-b border-l-2 border-border last:border-b-0",
                         cfg.borderColor
                       )}
                     >
                       <button
                         onClick={() => toggleRule(idx)}
-                        className="flex w-full items-start gap-2 px-3 py-2.5 text-left hover:bg-muted/30"
+                        aria-expanded={isExpanded}
+                        className="flex w-full items-start gap-2 px-3 py-2.5 text-left transition-colors hover:bg-muted/30"
                       >
                         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                           <div className="flex items-center gap-2">
@@ -524,23 +537,32 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                           <ChevronRight className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
                         )}
                       </button>
-                      {isExpanded && (
-                        <div className="px-3 pb-3 pt-0">
-                          <p className="text-xs leading-relaxed text-muted-foreground">
-                            {rule.explanation}
-                          </p>
-                          {rule.action && (
-                            <div className="mt-2 rounded bg-muted/50 px-2.5 py-1.5">
-                              <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-                                Action
-                              </span>
-                              <p className="mt-0.5 text-xs text-foreground">
-                                {rule.action}
-                              </p>
-                            </div>
-                          )}
+                      <div
+                        className={cn(
+                          "grid transition-[grid-template-rows] duration-200 ease-out",
+                          isExpanded
+                            ? "[grid-template-rows:1fr]"
+                            : "[grid-template-rows:0fr]"
+                        )}
+                      >
+                        <div className="overflow-hidden">
+                          <div className="px-3 pt-0 pb-3">
+                            <p className="text-xs leading-relaxed text-muted-foreground">
+                              {rule.explanation}
+                            </p>
+                            {rule.action && (
+                              <div className="mt-2 rounded bg-muted/50 px-2.5 py-1.5">
+                                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                  Action
+                                </span>
+                                <p className="mt-0.5 text-xs text-foreground">
+                                  {rule.action}
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   )
                 })}
@@ -693,10 +715,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                   {(
                     securities.security_items as Record<string, unknown>[]
                   )?.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded bg-muted/30 p-2 text-xs"
-                    >
+                    <div key={idx} className="rounded bg-muted/30 p-2 text-xs">
                       <div className="flex items-start justify-between">
                         <span className="font-medium">
                           {item.security_type as string}
@@ -735,9 +754,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                   <div className="font-mono">
                     {formatCurrency(groupExposure.unsecured_exposure_rm)}
                   </div>
-                  <div className="text-muted-foreground">
-                    Total FEC/CCS/IRS
-                  </div>
+                  <div className="text-muted-foreground">Total FEC/CCS/IRS</div>
                   <div className="font-mono">
                     {formatCurrency(groupExposure.total_fec_ccs_irs_rm)}
                   </div>
@@ -831,7 +848,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                       </span>
                     </div>
                     {typeof issue.mitigant === "string" && issue.mitigant && (
-                      <p className="mt-1 text-xs italic text-muted-foreground">
+                      <p className="mt-1 text-xs text-muted-foreground italic">
                         Mitigant: {issue.mitigant}
                       </p>
                     )}
