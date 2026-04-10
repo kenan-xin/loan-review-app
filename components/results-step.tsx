@@ -214,19 +214,14 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
     <div className="flex h-full flex-col">
       <div className="mb-3 flex shrink-0 items-center justify-between">
         <h2 className="text-base font-semibold">Review Results</h2>
-        <Button
-          size="sm"
-          className="bg-blue-600 font-semibold text-white shadow-md transition-all duration-150 hover:bg-blue-700 hover:shadow-lg active:scale-95"
-          asChild
+        <a
+          href="https://forms.cloud.microsoft/r/E56ubSr1wt"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-8 items-center rounded-md bg-blue-600 px-3 text-sm font-semibold text-white shadow-md transition-all duration-150 hover:bg-blue-700 hover:shadow-lg active:scale-95"
         >
-          <a
-            href="https://forms.cloud.microsoft/r/E56ubSr1wt"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Share Feedback →
-          </a>
-        </Button>
+          Share Feedback →
+        </a>
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 overflow-hidden lg:grid-cols-[360px_1fr]">
