@@ -35,6 +35,16 @@ export async function POST(req: Request) {
   // Get or create session UUID
   let sessionUUID = sessionMap.get(clientSessionId) ?? ""
 
+  console.log("[chat] Request:", {
+    userPrompt,
+    clientSessionId,
+    sessionUUID: sessionUUID || "(new)",
+    caDataKeys: caData ? Object.keys(caData as object) : "(none)",
+    evaluationReportKeys: evaluationReport
+      ? Object.keys(evaluationReport as object)
+      : "(none)",
+  })
+
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
       const res = await fetch(API_URL, {
@@ -54,6 +64,8 @@ export async function POST(req: Request) {
           },
         }),
       })
+
+      console.log("[chat] External API response status:", res.status)
 
       if (!res.ok || !res.body) {
         writer.write({
@@ -105,12 +117,24 @@ export async function POST(req: Request) {
               if (clientSessionId && capturedSessionUUID) {
                 sessionMap.set(clientSessionId, capturedSessionUUID)
               }
+              console.log("[chat] Captured sessionUUID:", capturedSessionUUID)
             }
 
             // Stream non-empty answer deltas
             const answer = event.answer as string | undefined
             if (answer) {
+              console.log(
+                "[chat] Delta:",
+                answer.slice(0, 80) + (answer.length > 80 ? "..." : "")
+              )
               writer.write({ type: "text-delta", id: textId, delta: answer })
+            }
+
+            if (event.status === "completed") {
+              console.log(
+                "[chat] Stream completed. Full answer length:",
+                (answer as string | undefined)?.length ?? 0
+              )
             }
           }
         }
