@@ -4,6 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Streamdown plugins use Tailwind classes that live in node_modules.
+   Tailwind v4 doesn't scan node_modules by default, so we need @source
+   directives to tell it where to find these classes. */
+@source "../node_modules/streamdown/dist/*.js";
+@source "../node_modules/@streamdown/code/dist/*.js";
+@source "../node_modules/@streamdown/cjk/dist/*.js";
+@source "../node_modules/@streamdown/math/dist/*.js";
+@source "../node_modules/@streamdown/mermaid/dist/*.js";
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -117,11 +126,6 @@
 }
 
 @layer base {
-  /* @streamdown/code uses pointer-events-auto but Tailwind v4 doesn't scan
-     node_modules, so the utility is never generated. Safelist it here. */
-  [data-streamdown="code-block-actions"] {
-    pointer-events: auto;
-  }
   * {
     @apply border-border outline-ring/50;
   }
