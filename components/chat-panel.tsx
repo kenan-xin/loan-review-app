@@ -110,22 +110,19 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
     }
   }, [result])
 
-  const chatBody = useMemo(
-    () => ({
-      caData: result.caData,
-      evaluationReport,
-      clientSessionId: clientSessionId.current,
-    }),
-    [result, evaluationReport]
-  )
+  const getChatBody = () => ({
+    caData: result.caData,
+    evaluationReport,
+    clientSessionId: clientSessionId.current,
+  })
 
   const handleSubmit = (message: PromptInputMessage) => {
     if (!message.text.trim()) return
-    sendMessage({ text: message.text }, { body: chatBody })
+    sendMessage({ text: message.text }, { body: getChatBody() })
   }
 
   const handleSuggestion = (text: string) => {
-    sendMessage({ text }, { body: chatBody })
+    sendMessage({ text }, { body: getChatBody() })
   }
 
   return (

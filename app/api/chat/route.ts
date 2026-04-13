@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       .join("") ?? ""
 
   // Get or create session UUID
-  let sessionUUID = sessionMap.get(clientSessionId) ?? ""
+  const sessionUUID = sessionMap.get(clientSessionId) ?? ""
 
   console.log("[chat] Request:", {
     userPrompt,
