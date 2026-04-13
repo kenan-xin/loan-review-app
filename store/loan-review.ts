@@ -61,8 +61,18 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       clearInterval(progressInterval)
 
       try {
-        const { caData, evaluationResults, evaluationSummary, evaluationDecision } = loadSimulationData()
-        const result = transformToReviewResult(caData, evaluationResults, evaluationSummary, evaluationDecision)
+        const {
+          caData,
+          evaluationResults,
+          evaluationSummary,
+          evaluationDecision,
+        } = loadSimulationData()
+        const result = transformToReviewResult(
+          caData,
+          evaluationResults,
+          evaluationSummary,
+          evaluationDecision
+        )
 
         set({
           result,

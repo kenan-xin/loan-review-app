@@ -90,7 +90,12 @@ export const useUploadExamplesStore = create<UploadExamplesState>(
 
       const updated = files.map((entry) =>
         entry.status === "failed"
-          ? { ...entry, status: "pending" as const, retries: 0, errorMessage: undefined }
+          ? {
+              ...entry,
+              status: "pending" as const,
+              retries: 0,
+              errorMessage: undefined,
+            }
           : entry
       )
 

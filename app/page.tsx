@@ -10,6 +10,13 @@ import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ChatBubble } from "@/components/chat-bubble"
+import {
+  loadSimulationData,
+  transformToReviewResult,
+} from "@/lib/simulate-review"
+
+// Set to true to skip processing delay and go straight to results after upload
+const DEBUG_SKIP_PROCESSING = true
 
 export default function Page() {
   return (
@@ -50,6 +57,31 @@ function LoanReviewWizard() {
       setUrlJobId(null)
     }
   }, [jobId, urlJobId, setUrlJobId])
+
+  // Debug: skip processing delay, load results instantly after upload
+  useEffect(() => {
+    if (DEBUG_SKIP_PROCESSING && isSubmitting && !result) {
+      const {
+        caData,
+        evaluationResults,
+        evaluationSummary,
+        evaluationDecision,
+      } = loadSimulationData()
+      const r = transformToReviewResult(
+        caData,
+        evaluationResults,
+        evaluationSummary,
+        evaluationDecision
+      )
+      useLoanReviewStore.setState({
+        result: r,
+        step: 3,
+        isSubmitting: false,
+        processingProgress: 100,
+        jobId: `debug-${Date.now()}`,
+      })
+    }
+  }, [isSubmitting, result])
 
   const handleNext = () => {
     if (step === 1 && applicationFile) submit()

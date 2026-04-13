@@ -38,10 +38,7 @@ export function WizardFooter({
         <div />
       )}
       {onNext && (
-        <Button
-          onClick={onNext}
-          disabled={nextDisabled || nextLoading}
-        >
+        <Button onClick={onNext} disabled={nextDisabled || nextLoading}>
           {nextLoading ? (
             <>
               <Loader2 className="size-4 animate-spin" />

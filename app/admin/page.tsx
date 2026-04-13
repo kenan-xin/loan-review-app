@@ -14,13 +14,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import type { FileEntry } from "@/types/upload"
 import { useState } from "react"
-import {
-  Clock,
-  Loader2,
-  CheckCircle2,
-  XCircle,
-  FileText,
-} from "lucide-react"
+import { Clock, Loader2, CheckCircle2, XCircle, FileText } from "lucide-react"
 
 function formatSize(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`
@@ -112,12 +106,12 @@ export default function AdminPage() {
                 key={`${entry.file.name}-${i}`}
                 className={cn(
                   "flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2",
-                  clickable && "cursor-pointer hover:bg-muted",
+                  clickable && "cursor-pointer hover:bg-muted"
                 )}
                 onClick={clickable ? () => setSelectedFile(i) : undefined}
               >
                 <FileText className="size-4 shrink-0 text-muted-foreground" />
-                <span className="truncate text-sm flex-1">
+                <span className="flex-1 truncate text-sm">
                   {entry.file.name}
                 </span>
                 <span className="shrink-0 text-xs text-muted-foreground">
@@ -187,7 +181,10 @@ interface Rule {
 
 type RiskLevel = "High" | "Medium" | "Low"
 
-const riskConfig: Record<RiskLevel, { bg: string; badge: string; label: string }> = {
+const riskConfig: Record<
+  RiskLevel,
+  { bg: string; badge: string; label: string }
+> = {
   High: {
     bg: "bg-red-500/[0.05] dark:bg-red-500/[0.08]",
     badge: "bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400",
@@ -195,12 +192,14 @@ const riskConfig: Record<RiskLevel, { bg: string; badge: string; label: string }
   },
   Medium: {
     bg: "bg-amber-500/[0.05] dark:bg-amber-500/[0.08]",
-    badge: "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400",
+    badge:
+      "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400",
     label: "Medium Risk",
   },
   Low: {
     bg: "bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08]",
-    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400",
+    badge:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400",
     label: "Low Risk",
   },
 }
@@ -216,12 +215,16 @@ function ResponseDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-h-[85vh] max-w-2xl flex flex-col p-0 gap-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-5 pb-4 shrink-0 border-b">
-          <DialogTitle className="text-base font-semibold truncate pr-8">{entry?.file.name ?? "Response"}</DialogTitle>
-          <DialogDescription className="sr-only">Extracted checklist rules</DialogDescription>
+      <DialogContent className="flex max-h-[85vh] max-w-2xl flex-col gap-0 overflow-hidden p-0">
+        <DialogHeader className="shrink-0 border-b px-6 pt-5 pb-4">
+          <DialogTitle className="truncate pr-8 text-base font-semibold">
+            {entry?.file.name ?? "Response"}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            Extracted checklist rules
+          </DialogDescription>
         </DialogHeader>
-        <div className="overflow-y-auto flex-1 px-6 py-4">
+        <div className="flex-1 overflow-y-auto px-6 py-4">
           {entry?.response && <ResponseContent data={entry.response} />}
         </div>
       </DialogContent>
@@ -236,16 +239,19 @@ function ResponseContent({ data }: { data: Record<string, unknown> }) {
   const rules = rawRules
     ? [...rawRules].sort(
         (a, b) =>
-          (riskOrder[a.risk_level ?? ""] ?? 3) - (riskOrder[b.risk_level ?? ""] ?? 3),
+          (riskOrder[a.risk_level ?? ""] ?? 3) -
+          (riskOrder[b.risk_level ?? ""] ?? 3)
       )
     : null
-  const rowsAffected = typeof data.rowsAffected === "number" ? data.rowsAffected : null
+  const rowsAffected =
+    typeof data.rowsAffected === "number" ? data.rowsAffected : null
 
   return (
     <div className="space-y-3">
       {rowsAffected !== null && (
-        <p className="text-xs text-muted-foreground pb-3">
-          {rowsAffected} checklist rule{rowsAffected !== 1 ? "s" : ""} added to database
+        <p className="pb-3 text-xs text-muted-foreground">
+          {rowsAffected} checklist rule{rowsAffected !== 1 ? "s" : ""} added to
+          database
         </p>
       )}
       {rules && rules.length > 0 && (
@@ -260,47 +266,66 @@ function ResponseContent({ data }: { data: Record<string, unknown> }) {
 }
 
 function RuleCard({ rule, index }: { rule: Rule; index: number }) {
-
-  const rc = rule.risk_level ? riskConfig[rule.risk_level as RiskLevel] : undefined
+  const rc = rule.risk_level
+    ? riskConfig[rule.risk_level as RiskLevel]
+    : undefined
 
   const actions = [
     rule.action_if_fail && rule.action_if_fail !== "N/A"
-      ? { label: "FAIL", text: rule.action_if_fail, labelCls: "text-red-600 dark:text-red-400" }
+      ? {
+          label: "FAIL",
+          text: rule.action_if_fail,
+          labelCls: "text-red-600 dark:text-red-400",
+        }
       : null,
     rule.action_if_warning && rule.action_if_warning !== "N/A"
-      ? { label: "WARN", text: rule.action_if_warning, labelCls: "text-amber-600 dark:text-amber-400" }
+      ? {
+          label: "WARN",
+          text: rule.action_if_warning,
+          labelCls: "text-amber-600 dark:text-amber-400",
+        }
       : null,
     rule.action_if_missing && rule.action_if_missing !== "N/A"
-      ? { label: "MISSING", text: rule.action_if_missing, labelCls: "text-sky-600 dark:text-sky-400" }
+      ? {
+          label: "MISSING",
+          text: rule.action_if_missing,
+          labelCls: "text-sky-600 dark:text-sky-400",
+        }
       : null,
   ].filter(Boolean)
 
   const hasTechnical =
-    !!rule.validation_logic || (rule.required_fields && rule.required_fields.length > 0)
+    !!rule.validation_logic ||
+    (rule.required_fields && rule.required_fields.length > 0)
 
   return (
-    <div className={cn("rounded-xl overflow-hidden", rc?.bg ?? "bg-muted/30")}>
+    <div className={cn("overflow-hidden rounded-xl", rc?.bg ?? "bg-muted/30")}>
       {/* — Header ————————————————————————————————————————— */}
       <div className="px-5 pt-4 pb-3">
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="mb-2 flex items-start justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-1.5">
             {rc && (
-              <span className={cn("rounded text-[10px] font-semibold tracking-wide px-1.5 py-px", rc.badge)}>
+              <span
+                className={cn(
+                  "rounded px-1.5 py-px text-[10px] font-semibold tracking-wide",
+                  rc.badge
+                )}
+              >
                 {rc.label}
               </span>
             )}
             {rule.category_5c && (
-              <span className="rounded text-[10px] font-medium px-1.5 py-px bg-black/[0.06] dark:bg-white/[0.08] text-muted-foreground">
+              <span className="rounded bg-black/[0.06] px-1.5 py-px text-[10px] font-medium text-muted-foreground dark:bg-white/[0.08]">
                 {rule.category_5c}
               </span>
             )}
           </div>
-          <span className="text-[10px] font-mono text-muted-foreground/35 shrink-0 mt-px">
+          <span className="mt-px shrink-0 font-mono text-[10px] text-muted-foreground/35">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
         {rule.title && (
-          <p className="text-[13px] font-semibold leading-snug text-foreground">
+          <p className="text-[13px] leading-snug font-semibold text-foreground">
             {rule.title}
           </p>
         )}
@@ -318,17 +343,24 @@ function RuleCard({ rule, index }: { rule: Rule; index: number }) {
       {/* — Actions ———————————————————————————————————————— */}
       {actions.length > 0 && (
         <div className="px-5 pb-4">
-          <div className="h-px bg-foreground/[0.12] mb-3" />
+          <div className="mb-3 h-px bg-foreground/[0.12]" />
           <div className="space-y-1.5">
             {actions.map((action) =>
               action ? (
-                <div key={action.label} className="flex gap-3 items-baseline">
-                  <span className={cn("shrink-0 font-bold text-[10px] tracking-widest w-[52px]", action.labelCls)}>
+                <div key={action.label} className="flex items-baseline gap-3">
+                  <span
+                    className={cn(
+                      "w-[52px] shrink-0 text-[10px] font-bold tracking-widest",
+                      action.labelCls
+                    )}
+                  >
                     {action.label}
                   </span>
-                  <span className="text-xs leading-relaxed text-muted-foreground">{action.text}</span>
+                  <span className="text-xs leading-relaxed text-muted-foreground">
+                    {action.text}
+                  </span>
                 </div>
-              ) : null,
+              ) : null
             )}
           </div>
         </div>
@@ -336,27 +368,27 @@ function RuleCard({ rule, index }: { rule: Rule; index: number }) {
 
       {/* — Technical ————————————————————————————————————————— */}
       {hasTechnical && (
-        <div className="px-5 py-3 space-y-3 bg-black/[0.03] dark:bg-white/[0.03]">
+        <div className="space-y-3 bg-black/[0.03] px-5 py-3 dark:bg-white/[0.03]">
           {rule.validation_logic && (
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50 mb-1.5">
+              <p className="mb-1.5 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground/50 uppercase">
                 Validation Logic
               </p>
-              <pre className="text-[11px] font-mono leading-relaxed text-muted-foreground whitespace-pre-wrap break-words rounded-lg bg-background/60 px-3 py-2.5">
+              <pre className="rounded-lg bg-background/60 px-3 py-2.5 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap text-muted-foreground">
                 {rule.validation_logic}
               </pre>
             </div>
           )}
           {rule.required_fields && rule.required_fields.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50 mb-1.5">
+              <p className="mb-1.5 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground/50 uppercase">
                 Required Fields
               </p>
               <div className="flex flex-wrap gap-1">
                 {rule.required_fields.map((field, fi) => (
                   <code
                     key={fi}
-                    className="rounded-md bg-background/60 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground"
+                    className="rounded-md bg-background/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
                   >
                     {field}
                   </code>
@@ -369,9 +401,13 @@ function RuleCard({ rule, index }: { rule: Rule; index: number }) {
 
       {/* — Source ————————————————————————————————————————— */}
       {rule.source_evidence && rule.source_evidence.length > 0 && (
-        <div className="px-5 py-3 bg-black/[0.02] dark:bg-white/[0.02] space-y-0.5">
+        <div className="space-y-0.5 bg-black/[0.02] px-5 py-3 dark:bg-white/[0.02]">
           {rule.source_evidence.map((src, si) => (
-            <p key={si} className="text-[10px] text-muted-foreground/70 leading-snug truncate" title={src}>
+            <p
+              key={si}
+              className="truncate text-[10px] leading-snug text-muted-foreground/70"
+              title={src}
+            >
               {src}
             </p>
           ))}

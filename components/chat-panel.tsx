@@ -1,9 +1,10 @@
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { X } from "lucide-react"
+import { Maximize2, Minimize2, X } from "lucide-react"
+import { cn } from "@/lib/utils"
 import type { SimulationResult } from "@/types/review"
 import {
   Message,
@@ -22,6 +23,7 @@ import {
 
 interface ChatPanelProps {
   readonly result: SimulationResult
+  readonly isOpen: boolean
   readonly onClose: () => void
 }
 
@@ -77,7 +79,8 @@ function getSuggestions(
   return suggestions
 }
 
-export function ChatPanel({ result, onClose }: ChatPanelProps) {
+export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
   const clientSessionId = useRef(crypto.randomUUID())
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -110,6 +113,16 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
     }
   }, [result])
 
+  // Auto-scroll to bottom when messages change or streaming
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: status === "streaming" ? "auto" : "smooth",
+    })
+  }, [messages, status])
+
   const getChatBody = () => ({
     caData: result.caData,
     evaluationReport,
@@ -126,39 +139,65 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
   }
 
   return (
-    <div className="flex h-[50vh] w-[100vw] flex-col overflow-hidden rounded-none border-none bg-card shadow-none sm:h-[420px] sm:w-[360px] sm:rounded-lg sm:border sm:shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+    <div
+      className={cn(
+        "fixed z-50 flex flex-col bg-card transition-opacity duration-150",
+        isOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        isExpanded
+          ? "top-0 right-0 h-full w-full sm:w-[520px]"
+          : "right-4 bottom-4 h-[50vh] w-full overflow-hidden rounded-none border-none shadow-none sm:h-[560px] sm:w-[480px] sm:rounded-lg sm:border sm:shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+      )}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between border-b px-3.5 py-2.5">
-        <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-sm bg-primary" />
-          <span className="text-xs font-semibold">Ask about this review</span>
+      <div className="flex shrink-0 items-center justify-between border-b px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <div className="h-2 w-2 rounded-full bg-primary" />
+          <span className="text-xs font-semibold tracking-wide">
+            Ask about this review
+          </span>
         </div>
-        <button
-          onClick={onClose}
-          className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
-        >
-          <X className="h-3 w-3" />
-        </button>
+        <div className="flex items-center gap-0.5">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex h-6 w-6 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
+            title={isExpanded ? "Collapse" : "Expand"}
+          >
+            {isExpanded ? (
+              <Minimize2 className="h-3.5 w-3.5" />
+            ) : (
+              <Maximize2 className="h-3.5 w-3.5" />
+            )}
+          </button>
+          <button
+            onClick={onClose}
+            className="flex h-6 w-6 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Messages or empty state */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col justify-center px-3.5 py-5">
-            <p className="mb-3.5 text-[11px] leading-relaxed text-muted-foreground">
-              Reviewing <strong className="text-foreground">{groupName}</strong>{" "}
-              — {result.evaluationSummary.total_fail} failures,{" "}
-              {result.evaluationSummary.total_warning} warnings found.
+          <div className="flex h-full flex-col justify-center px-4 py-6">
+            <p className="mb-1 text-xs font-medium text-foreground">
+              {groupName}
             </p>
-            <div className="flex flex-col gap-1">
+            <p className="mb-5 text-[11px] leading-relaxed text-muted-foreground">
+              {result.evaluationSummary.total_fail} failures,{" "}
+              {result.evaluationSummary.total_warning} warnings,{" "}
+              {result.evaluationSummary.total_pass} passed
+            </p>
+            <div className="space-y-1.5">
               {suggestions.map((s) => (
                 <button
                   key={s.text}
                   onClick={() => handleSuggestion(s.text)}
-                  className="flex cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-[7px] text-left text-[11px] text-foreground transition-colors hover:bg-muted"
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-left text-[11px] text-foreground transition-colors hover:bg-muted"
                 >
                   <span
-                    className={`font-mono text-[9px] font-bold ${s.badgeColor}`}
+                    className={`shrink-0 font-mono text-[9px] font-bold ${s.badgeColor}`}
                   >
                     {s.badge}
                   </span>
@@ -168,20 +207,18 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3 p-3.5">
+          <div className="flex flex-col gap-2.5 p-4">
             {messages.map((message) => (
               <Message
                 key={message.id}
                 from={message.role}
-                className={
-                  message.role === "user" ? "max-w-[80%]" : "max-w-[90%]"
-                }
+                className={message.role === "user" ? "max-w-[80%]" : ""}
               >
                 <MessageContent
                   className={
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground"
-                      : "bg-muted"
+                      ? "rounded-lg bg-primary px-4 py-2.5 text-primary-foreground group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground"
+                      : "rounded-lg bg-muted px-4 py-2.5"
                   }
                 >
                   {message.parts.map((part, i) => {
@@ -197,12 +234,17 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
                 </MessageContent>
               </Message>
             ))}
+            {status === "error" && (
+              <p className="px-1 py-1 text-[11px] text-destructive">
+                Something went wrong. Please try again.
+              </p>
+            )}
           </div>
         )}
       </div>
 
       {/* Input */}
-      <div className="border-t px-2.5 py-2">
+      <div className="shrink-0 border-t px-3 py-2.5">
         <PromptInputProvider>
           <PromptInput onSubmit={handleSubmit}>
             <PromptInputBody>

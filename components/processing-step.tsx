@@ -123,7 +123,10 @@ export function ProcessingStep({
           {activeStepIndex > 0 && (
             <div className="mt-3 space-y-1.5 border-t pt-3">
               {PROCESSING_STEPS.slice(0, activeStepIndex).map((step) => (
-                <div key={step.id} className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div
+                  key={step.id}
+                  className="flex items-center gap-2 text-xs text-muted-foreground"
+                >
                   <Check className="size-3 shrink-0 text-muted-foreground/50" />
                   <span>{step.text}</span>
                 </div>
@@ -133,11 +136,11 @@ export function ProcessingStep({
 
           {displayIndex > 0 && (
             <div className="mt-3 text-xs text-muted-foreground">
-              Step {Math.min(displayIndex, PROCESSING_STEPS.length)} of {PROCESSING_STEPS.length}
+              Step {Math.min(displayIndex, PROCESSING_STEPS.length)} of{" "}
+              {PROCESSING_STEPS.length}
             </div>
           )}
         </div>
-
       </div>
     )
   }

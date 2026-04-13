@@ -19,7 +19,7 @@ The results page displays AI-generated loan review data (credit analysis + evalu
   documentIDs: [],
   imageIDs: [],
   audioIDs: [],
-  customFields: { reviewData: SimulationResult }
+  customFields: { caData: string, evaluationReport: string }  // both JSON.stringify'd
 }
 ```
 
@@ -55,7 +55,7 @@ ResultsStep
 - Client component
 - Manages open/close state
 - Fixed position bottom-right
-- Passes `SimulationResult` to the API route via `useChat` body
+- Passes `caData` and `evaluationReport` to the API route via `useChat` body
 
 ### ChatPanel (`components/chat-panel.tsx`)
 
@@ -66,16 +66,18 @@ ResultsStep
 
 ### API Route (`app/api/chat/route.ts`)
 
-- Receives `POST` with `{ messages, reviewData, sessionUUID }` from useChat body
+- Receives `POST` with `{ messages, caData, evaluationReport, clientSessionId }` from useChat body
 - Extracts last user message as `userPrompt`
-- Calls external chatbot API with `sessionUUID` for continuity, streams response
+- Calls external chatbot API with `customFields: { caData, evaluationReport }` and `sessionUUID` for continuity, streams response
+- Client generates a `clientSessionId` (e.g. `crypto.randomUUID()`) and sends it in the `body`
+- Server maintains an in-memory `Map<clientSessionId, sessionUUID>` for mapping
+- First request: server sends `sessionUUID: ""` to external API, captures response `uuid`, stores in map
+- Subsequent requests: server reads sessionUUID from map, sends to external API
 - Parses SSE events, concatenates non-empty `answer` fragments for progressive streaming
 - Emits concatenated text incrementally as AI SDK stream text parts for real-time display
 - On `status: "completed"`, uses the completed event's `answer` as the authoritative final text (replaces any minor differences from streamed deltas)
 - Sends fixed `uuid` (workflow ID `e43f866d-3b1b-43f8-b776-7db8a615a94e`) in every request
-- Captures `uuid` from the first SSE event body, returns it to the client as the sessionUUID
-- Client sends sessionUUID back in subsequent requests for conversation continuity
-- Emits AI SDK `UIMessageStream` format back to client
+- No auth required — API works without cookies
 
 ## Design
 
@@ -106,21 +108,24 @@ ResultsStep
 
 - Fresh session per page visit (no persistence across refreshes)
 - `uuid` in payload is always the fixed workflow ID: `e43f866d-3b1b-43f8-b776-7db8a615a94e`
-- First request: `sessionUUID: ""`. The `uuid` field in the SSE response body IS the sessionUUID.
-- Client captures response `uuid`, stores in component state, sends as `sessionUUID` in subsequent requests
-- No server-side session storage needed — client owns the session UUID
+- Client generates a `clientSessionId` (e.g. `crypto.randomUUID()`) on mount, sends in every request body
+- Server maintains an in-memory `Map<clientSessionId, sessionUUID>` for mapping
+- First request: server sends `sessionUUID: ""` to external API, captures response `uuid`, stores in map
+- Subsequent requests: server reads `sessionUUID` from map, sends to external API
 
 ## Data Flow
 
 1. User opens chat bubble on results page
 2. Zustand store has `SimulationResult` with `caData`, `evaluationResults`, `evaluationSummary`, `evaluationDecision`
 3. `ChatBubble` reads `result` from store, passes to `ChatPanel`
-4. `ChatPanel` uses `useChat({ body: { reviewData: result } })` — review data sent with every request but invisible to user
-5. First request: `sessionUUID: ""`. SSE response `uuid` field → client captures and stores as sessionUUID
-6. Subsequent requests: client sends stored sessionUUID in the `sessionUUID` payload field
-7. API route sends fixed workflow `uuid` + `sessionUUID` + `customFields` to external API
-8. External API returns SSE with concatenable `answer` fragments
-9. API route concatenates fragments, translates to AI SDK stream format, client renders incrementally
+4. `ChatPanel` generates `clientSessionId` on mount, uses `useChat` with `body: { caData: result.caData, evaluationReport, clientSessionId }` — CA data, evaluation report, and client session ID sent with every request
+5. API route receives `clientSessionId` + last user message as `userPrompt`
+6. First request: API route sends `sessionUUID: ""` to external API, captures response `uuid`, stores in `Map<clientSessionId, sessionUUID>`
+7. Subsequent requests: API route reads `sessionUUID` from map, sends to external API
+8. API route sends fixed workflow `uuid` + `sessionUUID` + `customFields` to external API
+9. External API returns SSE with concatenable `answer` fragments
+10. API route concatenates fragments, translates to AI SDK stream format, client renders incrementally
+11. On `status: "completed"`, API route uses completed event's `answer` as authoritative final text
 
 ## Files to Create/Modify
 

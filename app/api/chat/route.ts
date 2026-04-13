@@ -35,34 +35,31 @@ export async function POST(req: Request) {
   // Get or create session UUID
   const sessionUUID = sessionMap.get(clientSessionId) ?? ""
 
-  console.log("[chat] Request:", {
+  const externalRequestBody = {
+    uuid: WORKFLOW_UUID,
     userPrompt,
-    clientSessionId,
-    sessionUUID: sessionUUID || "(new)",
-    caDataKeys: caData ? Object.keys(caData as object) : "(none)",
-    evaluationReportKeys: evaluationReport
-      ? Object.keys(evaluationReport as object)
-      : "(none)",
-  })
+    sessionUUID,
+    language: "en-US",
+    documentIDs: [],
+    imageIDs: [],
+    audioIDs: [],
+    customFields: {
+      caData: JSON.stringify(caData),
+      evaluationReport: JSON.stringify(evaluationReport),
+    },
+  }
+
+  console.log(
+    "[chat] Outgoing request body:",
+    JSON.stringify(externalRequestBody, null, 2)
+  )
 
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          uuid: WORKFLOW_UUID,
-          userPrompt,
-          sessionUUID,
-          language: "en-US",
-          documentIDs: [],
-          imageIDs: [],
-          audioIDs: [],
-          customFields: {
-            caData: JSON.stringify(caData),
-            evaluationReport: JSON.stringify(evaluationReport),
-          },
-        }),
+        body: JSON.stringify(externalRequestBody),
       })
 
       console.log("[chat] External API response status:", res.status)
@@ -110,6 +107,8 @@ export async function POST(req: Request) {
             } catch {
               continue
             }
+
+            console.log("[chat] SSE event:", JSON.stringify(event, null, 2))
 
             // Capture session UUID from first event
             if (!capturedSessionUUID && typeof event.uuid === "string") {
