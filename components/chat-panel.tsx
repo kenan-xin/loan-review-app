@@ -6,10 +6,6 @@ import { DefaultChatTransport } from "ai"
 import { X } from "lucide-react"
 import type { SimulationResult } from "@/types/review"
 import {
-  Conversation,
-  ConversationContent,
-} from "@/components/ai-elements/conversation"
-import {
   Message,
   MessageContent,
   MessageResponse,
@@ -133,7 +129,7 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
   }
 
   return (
-    <div className="flex h-[420px] w-[360px] flex-col overflow-hidden rounded-lg border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+    <div className="flex h-[420px] w-[360px] flex-col overflow-hidden rounded-lg border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-3.5 py-2.5">
         <div className="flex items-center gap-2">
@@ -175,10 +171,22 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
             </div>
           </div>
         ) : (
-          <div className="p-3.5">
+          <div className="flex flex-col gap-3 p-3.5">
             {messages.map((message) => (
-              <Message key={message.id} from={message.role}>
-                <MessageContent>
+              <Message
+                key={message.id}
+                from={message.role}
+                className={
+                  message.role === "user" ? "max-w-[80%]" : "max-w-[90%]"
+                }
+              >
+                <MessageContent
+                  className={
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground group-[.is-user]:bg-primary group-[.is-user]:text-primary-foreground"
+                      : "bg-muted"
+                  }
+                >
                   {message.parts.map((part, i) => {
                     if (part.type === "text") {
                       return (
@@ -204,7 +212,7 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
               <PromptInputTextarea placeholder="Type a question..." />
             </PromptInputBody>
             <PromptInputFooter>
-              <PromptInputSubmit status={status} />
+              <PromptInputSubmit className="rounded-md" status={status} />
             </PromptInputFooter>
           </PromptInput>
         </PromptInputProvider>
