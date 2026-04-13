@@ -129,7 +129,7 @@ export function ChatPanel({ result, onClose }: ChatPanelProps) {
   }
 
   return (
-    <div className="flex h-[420px] w-[360px] flex-col overflow-hidden rounded-lg border bg-card shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+    <div className="flex h-[50vh] w-[100vw] flex-col overflow-hidden rounded-none border-none bg-card shadow-none sm:h-[420px] sm:w-[360px] sm:rounded-lg sm:border sm:shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-3.5 py-2.5">
         <div className="flex items-center gap-2">
