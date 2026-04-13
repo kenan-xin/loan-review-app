@@ -9,6 +9,7 @@ import { UploadStep } from "@/components/upload-step"
 import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { ChatBubble } from "@/components/chat-bubble"
 
 export default function Page() {
   return (
@@ -95,7 +96,10 @@ function LoanReviewWizard() {
             />
           )}
           {step === 3 && result && (
-            <ResultsStep result={result} onStartNew={reset} />
+            <>
+              <ResultsStep result={result} onStartNew={reset} />
+              <ChatBubble result={result} />
+            </>
           )}
         </div>
 
