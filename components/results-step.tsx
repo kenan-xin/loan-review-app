@@ -160,7 +160,9 @@ function formatMultiple(value: unknown): string {
 }
 
 export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
-  const [activeTab, setActiveTab] = useState<"rules" | "ca-data">("ca-data")
+  const [activeTab, setActiveTab] = useState<"rules" | "ca-data" | "risks">(
+    "ca-data"
+  )
   const [ruleFilter, setRuleFilter] = useState<RuleFilter>("ALL")
   const [categoryFilter, setCategoryFilter] = useState("ALL")
   const [expandedRules, setExpandedRules] = useState<Set<number>>(new Set())
@@ -409,7 +411,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
         <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border">
           {/* Tab bar */}
           <div role="tablist" className="flex shrink-0 border-b">
-            {(["ca-data", "rules"] as const).map((tab) => (
+            {(["ca-data", "risks", "rules"] as const).map((tab) => (
               <button
                 key={tab}
                 role="tab"
@@ -422,7 +424,11 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {tab === "rules" ? "Rules" : "CA Data"}
+                {tab === "rules"
+                  ? "Rules"
+                  : tab === "risks"
+                    ? "Risks"
+                    : "CA Data"}
               </button>
             ))}
           </div>
@@ -922,6 +928,84 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                       </p>
                     )}
                 </div>
+              </CaSection>
+            </div>
+          )}
+
+          {/* Risks tab */}
+          {activeTab === "risks" && (
+            <div role="tabpanel" className="flex-1 overflow-y-auto">
+              <CaSection title="Management Risk">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for management risk assessment. Will include
+                  analysis of key personnel, board composition, management
+                  succession planning, and governance structure.
+                </p>
+              </CaSection>
+
+              <CaSection title="Collateral Risk / Asset Quality">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for collateral risk and asset quality review. Will
+                  cover valuation adequacy, collateral coverage ratio, asset
+                  depreciation, and enforceability of security interests.
+                </p>
+              </CaSection>
+
+              <CaSection title="Market / Industry News / Bursa Announcements">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for market and industry analysis. Will include
+                  sector outlook, competitive landscape, regulatory changes, and
+                  material Bursa announcements affecting the borrower.
+                </p>
+              </CaSection>
+
+              <CaSection title="Cashflow / Capacity Risk / Cash Conversion Cycle">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for cashflow and capacity risk assessment. Will
+                  cover operating cashflow trends, debt service coverage, cash
+                  conversion cycle efficiency, and liquidity position.
+                </p>
+              </CaSection>
+
+              <CaSection title="Operational / Project Risk">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for operational and project risk analysis. Will
+                  include project milestone tracking, operational efficiency
+                  metrics, supply chain risks, and business continuity planning.
+                </p>
+              </CaSection>
+
+              <CaSection title="Fraud Risk">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for fraud risk indicators. Will cover red flags in
+                  financial statements, related-party anomalies, audit concerns,
+                  and AML/CFT compliance status.
+                </p>
+              </CaSection>
+
+              <CaSection title="Related Party Transaction / Fund Leakage / Dividend Paid">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for related-party transaction analysis. Will
+                  include material RPTs, fund flow analysis, dividend payout
+                  patterns, and potential fund leakage indicators.
+                </p>
+              </CaSection>
+
+              <CaSection title="Financial Analysis">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for detailed financial analysis. Will cover
+                  profitability trends, leverage ratios, efficiency metrics,
+                  working capital analysis, and peer benchmarking.
+                </p>
+              </CaSection>
+
+              <CaSection title="Areas for Probe (Others)">
+                <p className="text-xs text-muted-foreground">
+                  Placeholder for additional areas requiring further
+                  investigation. Will include miscellaneous risk flags, pending
+                  litigations, contingent liabilities, and other credit
+                  concerns.
+                </p>
               </CaSection>
             </div>
           )}
