@@ -85,35 +85,8 @@ export function ResultSidebar({
 
       {/* Executive AI Summary */}
       {evaluationDecision.reasoning && (
-        <div
-          className={cn(
-            "border-b px-4 py-3",
-            evaluationDecision.recommendation.toLowerCase().includes("reject")
-              ? "bg-red-50 dark:bg-red-950/30"
-              : evaluationDecision.recommendation
-                    .toLowerCase()
-                    .includes("approv")
-                ? "bg-emerald-50 dark:bg-emerald-950/30"
-                : "bg-amber-50 dark:bg-amber-950/30"
-          )}
-        >
+        <div className="border-b px-4 py-3">
           <div className="mb-1.5 flex items-center gap-2">
-            <span
-              className={cn(
-                "inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide uppercase",
-                evaluationDecision.recommendation
-                  .toLowerCase()
-                  .includes("reject")
-                  ? "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400"
-                  : evaluationDecision.recommendation
-                        .toLowerCase()
-                        .includes("approv")
-                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400"
-                    : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400"
-              )}
-            >
-              {evaluationDecision.recommendation}
-            </span>
             <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
               AI Summary
             </span>
