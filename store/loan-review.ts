@@ -7,6 +7,8 @@ import {
 
 const SIMULATION_DELAY_MS = 120_000
 
+type ResultLayout = "sidebar" | "briefing" | "ledger"
+
 interface LoanReviewState {
   step: 1 | 2 | 3
   applicationFile: File | null
@@ -15,12 +17,14 @@ interface LoanReviewState {
   error: string | null
   isSubmitting: boolean
   processingProgress: number
+  resultLayout: ResultLayout
 
   setStep: (step: 1 | 2 | 3) => void
   setApplicationFile: (file: File | null) => void
   submit: () => void
   reset: () => void
   resumeJob: (jobId: string) => void
+  setResultLayout: (layout: ResultLayout) => void
 }
 
 export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
@@ -31,10 +35,13 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   error: null,
   isSubmitting: false,
   processingProgress: 0,
+  resultLayout: "sidebar",
 
   setStep: (step) => set({ step }),
 
   setApplicationFile: (file) => set({ applicationFile: file }),
+
+  setResultLayout: (layout) => set({ resultLayout: layout }),
 
   submit: () => {
     const { applicationFile, jobId, isSubmitting } = get()
@@ -100,6 +107,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       error: null,
       isSubmitting: false,
       processingProgress: 0,
+      resultLayout: "sidebar",
     })
   },
 
