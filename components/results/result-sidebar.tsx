@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Sparkles } from "lucide-react"
 import { RESULT_CONFIG, RISK_CATEGORIES } from "@/lib/risk-framework"
 import type { EvaluationSummary, EvaluationDecision } from "@/types/review"
 import { RiskMeter } from "./risk-meter"
@@ -87,6 +87,7 @@ export function ResultSidebar({
       {evaluationDecision.reasoning && (
         <div className="border-b px-4 py-3">
           <div className="mb-1.5 flex items-center gap-2">
+            <Sparkles className="size-3 text-muted-foreground" />
             <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
               AI Summary
             </span>
