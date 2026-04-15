@@ -27,16 +27,16 @@ export function FindingsSection({
 }: FindingsSectionProps) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-b">
+    <div className="border-b border-border">
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
+        className="flex w-full items-center justify-between px-4 py-2.5 text-left"
       >
         <span className="text-xs font-medium text-foreground">{title}</span>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-muted-foreground">
-            {items.length} items
+          <span className="text-[10px] text-muted-foreground tabular-nums">
+            {items.length}
           </span>
           {open ? (
             <ChevronDown className="size-3.5 text-muted-foreground" />

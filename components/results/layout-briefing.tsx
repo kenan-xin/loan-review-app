@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { ChevronDown, ChevronRight, Sparkles } from "lucide-react"
+import { ChevronDown, ChevronRight } from "lucide-react"
 import { RISK_CATEGORIES } from "@/lib/risk-framework"
 import type {
   EvaluationRuleResult,
@@ -18,9 +18,6 @@ import type { ResultLayoutProps } from "./types"
 
 type StatusFilter = "ALL" | "FAIL" | "WARNING" | "PASS" | "MISSING"
 
-const PAPER = "oklch(0.98 0.005 80)"
-const INK = "oklch(0.18 0.01 60)"
-const ACCENT = "oklch(0.45 0.12 55)"
 const RULE_STATUS_ORDER = {
   FAIL: 0,
   WARNING: 1,
@@ -46,40 +43,12 @@ function getRiskBandColor(band: string) {
   }
 }
 
-function StatPill({
-  label,
-  value,
-  color,
-}: {
-  label: string
-  value: number
-  color: string
-}) {
-  return (
-    <div className="flex flex-col items-center">
-      <span className="font-mono text-lg font-bold" style={{ color: INK }}>
-        {value}
-      </span>
-      <span className="text-[10px] tracking-wider uppercase" style={{ color }}>
-        {label}
-      </span>
-    </div>
-  )
-}
-
-function SectionDivider({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-3 pt-6 pb-3">
-      <div className="h-px flex-1" style={{ background: INK, opacity: 0.15 }} />
-      <span
-        className="font-[family-name:var(--font-serif-4)] text-xs font-semibold tracking-widest uppercase"
-        style={{ color: INK, opacity: 0.5 }}
-      >
-        {children}
-      </span>
-      <div className="h-px flex-1" style={{ background: INK, opacity: 0.15 }} />
-    </div>
-  )
+function getPassRatioColor(ratio: number) {
+  if (ratio >= 0.8)
+    return { bg: "oklch(0.85 0.1 145)", fg: "oklch(0.3 0.08 145)" }
+  if (ratio >= 0.5)
+    return { bg: "oklch(0.88 0.12 85)", fg: "oklch(0.35 0.1 60)" }
+  return { bg: "oklch(0.85 0.12 25)", fg: "oklch(0.3 0.1 25)" }
 }
 
 interface CategoryRowProps {
@@ -92,7 +61,6 @@ interface CategoryRowProps {
 }
 
 function CategoryRow({
-  index,
   categoryId,
   rules,
   summary,
@@ -125,55 +93,21 @@ function CategoryRow({
     })
   }
 
-  const oneLineSummary =
-    filteredRules.length > 0
-      ? filteredRules
-          .slice(0, 3)
-          .map((r) => r.rule.result)
-          .reduce(
-            (acc, status) => {
-              acc[status] = (acc[status] || 0) + 1
-              return acc
-            },
-            {} as Record<string, number>
-          )
-      : null
-
-  const summaryParts = oneLineSummary
-    ? Object.entries(oneLineSummary)
-        .map(([status, count]) => `${count} ${status}`)
-        .join(", ")
-    : "No rules"
+  const passRatio = summary.total > 0 ? summary.pass / summary.total : 0
+  const ratioColor = getPassRatioColor(passRatio)
 
   return (
-    <div
-      className="border-b last:border-b-0"
-      style={{ borderColor: `${INK}12` }}
-    >
+    <div className="border-oklch-[0.18_0.01_60/10] border-b">
+      {/* Row header — grid for predictable column widths */}
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-black/[0.02]"
+        className="grid w-full grid-cols-[1fr_auto_auto_auto] items-center gap-x-3 px-4 py-3 text-left"
       >
-        <span
-          className="w-5 shrink-0 text-center font-mono text-xs font-bold"
-          style={{ color: INK, opacity: 0.3 }}
-        >
-          {index}
-        </span>
-        <span
-          className="min-w-0 flex-1 font-[family-name:var(--font-serif-4)] text-sm font-medium"
-          style={{ color: INK }}
-        >
+        <span className="text-oklch-[0.18_0.01_60] truncate font-[family-name:var(--font-serif-4)] text-sm font-medium">
           {cat.label}
         </span>
-        <span
-          className="hidden max-w-[200px] truncate text-[11px] sm:inline"
-          style={{ color: INK, opacity: 0.5 }}
-        >
-          {summaryParts}
-        </span>
-        <div className="hidden w-20 sm:block">
+        <span className="hidden w-20 sm:block">
           <CategoryStackedBar
             fail={summary.fail}
             warning={summary.warning}
@@ -181,49 +115,28 @@ function CategoryRow({
             missing={summary.missing}
             className="w-full"
           />
-        </div>
+        </span>
         <span
-          className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold"
-          style={{
-            background:
-              summary.pass / summary.total >= 0.8
-                ? "oklch(0.85 0.1 145)"
-                : summary.pass / summary.total >= 0.5
-                  ? "oklch(0.88 0.12 85)"
-                  : "oklch(0.85 0.12 25)",
-            color:
-              summary.pass / summary.total >= 0.8
-                ? "oklch(0.3 0.08 145)"
-                : summary.pass / summary.total >= 0.5
-                  ? "oklch(0.35 0.1 60)"
-                  : "oklch(0.3 0.1 25)",
-          }}
+          className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums"
+          style={{ background: ratioColor.bg, color: ratioColor.fg }}
         >
           {summary.pass}/{summary.total}
         </span>
-        {open ? (
-          <ChevronDown
-            className="size-3.5 shrink-0"
-            style={{ color: INK, opacity: 0.4 }}
-          />
-        ) : (
-          <ChevronRight
-            className="size-3.5 shrink-0"
-            style={{ color: INK, opacity: 0.4 }}
-          />
-        )}
+        <ChevronDown
+          className={cn(
+            "text-oklch-[0.18_0.01_60/35] size-3.5 shrink-0",
+            open ? "" : "hidden"
+          )}
+        />
+        <ChevronRight
+          className={cn(
+            "text-oklch-[0.18_0.01_60/35] size-3.5 shrink-0",
+            open ? "hidden" : ""
+          )}
+        />
       </button>
-      {filteredRules.length > 0 && (
-        <div className="px-4 pb-1.5">
-          <span
-            className="text-[10px] underline decoration-dotted underline-offset-2"
-            style={{ color: INK, opacity: 0.35 }}
-          >
-            Click to expand {filteredRules.length} rule
-            {filteredRules.length !== 1 && "s"}
-          </span>
-        </div>
-      )}
+
+      {/* Expanded content */}
       <div
         className={cn(
           "grid transition-[grid-template-rows] duration-200 ease-out",
@@ -231,25 +144,10 @@ function CategoryRow({
         )}
       >
         <div className="overflow-hidden">
-          <div className="px-4 pb-4">
+          <div className="border-oklch-[0.18_0.01_60/6] border-t px-4 pt-3 pb-4">
             {aiSummary && (
-              <div
-                className="mb-3 rounded-lg p-3"
-                style={{ background: `${INK}06` }}
-              >
-                <div className="mb-1.5 flex items-center gap-1.5">
-                  <Sparkles className="size-3" style={{ color: ACCENT }} />
-                  <span
-                    className="text-[10px] font-medium tracking-wide uppercase"
-                    style={{ color: ACCENT }}
-                  >
-                    AI Summary
-                  </span>
-                </div>
-                <p
-                  className="font-[family-name:var(--font-serif-4)] text-xs leading-relaxed italic"
-                  style={{ color: INK, opacity: 0.75 }}
-                >
+              <div className="bg-oklch-[0.18_0.01_60/4] mb-3 rounded p-3">
+                <p className="text-oklch-[0.18_0.01_60/75] font-[family-name:var(--font-serif-4)] text-xs leading-relaxed italic">
                   {aiSummary}
                 </p>
               </div>
@@ -297,7 +195,6 @@ export function LayoutBriefing({
     })
   }
 
-  // Build rules by category
   const rulesByCategory: Record<string, EvaluationRuleResult[]> = {}
   for (const cat of RISK_CATEGORIES) {
     rulesByCategory[cat.id] = evaluationResults.filter(
@@ -309,13 +206,11 @@ export function LayoutBriefing({
     (r) => activeFilters.size === 0 || activeFilters.has(r.result)
   ).length
 
-  // Flag categories: those with any FAIL or WARNING rules
   const flagCategories = RISK_CATEGORIES.filter((cat) => {
     const catSummary = evaluationSummary.by_risk_category[cat.id]
     return catSummary && (catSummary.fail > 0 || catSummary.warning > 0)
   })
 
-  // Filtered categories based on active filters
   const visibleCategories = RISK_CATEGORIES.filter((cat) => {
     const catRules = rulesByCategory[cat.id]
     if (catRules.length === 0) return false
@@ -326,24 +221,23 @@ export function LayoutBriefing({
   return (
     <div
       className="flex flex-1 flex-col overflow-hidden"
-      style={{ background: PAPER }}
+      style={{ background: "oklch(0.98 0.005 80)" }}
     >
       {/* Tab bar */}
-      <div
-        className="flex shrink-0 border-b"
-        style={{ background: PAPER, borderColor: `${INK}12` }}
-      >
+      <div className="border-oklch-[0.18_0.01_60/10] flex shrink-0 border-b">
         {(["risks", "ca-data"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => onTabChange(tab)}
             className={cn(
-              "px-6 py-2.5 text-xs font-medium tracking-wide uppercase transition-colors",
-              activeTab === tab ? "border-b-2" : ""
+              "px-6 py-2.5 text-xs font-medium transition-colors",
+              activeTab === tab
+                ? "text-oklch-[0.18_0.01_60] border-b-2"
+                : "text-oklch-[0.18_0.01_60/50]"
             )}
             style={{
-              color: activeTab === tab ? INK : `${INK}60`,
-              borderColor: activeTab === tab ? ACCENT : "transparent",
+              borderColor:
+                activeTab === tab ? "oklch(0.45 0.12 55)" : "transparent",
               fontFamily: "var(--font-sans-3)",
             }}
           >
@@ -359,93 +253,71 @@ export function LayoutBriefing({
           <div className="mx-auto max-w-3xl">
             {/* Masthead */}
             <div className="px-6 pt-6 pb-4">
-              <h1
-                className="font-[family-name:var(--font-serif-4)] text-xl leading-tight font-bold"
-                style={{ color: INK }}
-              >
+              <h1 className="text-oklch-[0.18_0.01_60] font-[family-name:var(--font-serif-4)] text-xl leading-tight font-bold">
                 {String(basicInfo.group_name ?? "Unknown Group")}
               </h1>
-              <div
-                className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 font-[family-name:var(--font-sans-3)] text-xs"
-                style={{ color: INK, opacity: 0.6 }}
-              >
+              <div className="text-oklch-[0.18_0.01_60/60] mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 font-[family-name:var(--font-sans-3)] text-xs">
                 <span>CA Ref: {String(basicInfo.ca_reference_no ?? "-")}</span>
                 <span>{String(basicInfo.application_type ?? "-")}</span>
               </div>
             </div>
 
             {/* Risk score strip */}
-            <div
-              className="mx-6 flex flex-wrap items-center gap-6 rounded-lg px-5 py-4"
-              style={{ background: `${INK}06`, border: `1px solid ${INK}10` }}
-            >
-              <div className="flex items-baseline gap-2">
-                <span
-                  className="font-mono text-3xl font-bold"
-                  style={{ color: INK }}
-                >
+            <div className="border-oklch-[0.18_0.01_60/10] bg-oklch-[0.18_0.01_60/4%] border-y px-6 py-3">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <span className="text-oklch-[0.18_0.01_60] font-mono text-2xl font-bold tabular-nums">
                   {evaluationSummary.risk_score}
                 </span>
                 <span
                   className={cn(
-                    "rounded px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase",
+                    "rounded px-1.5 py-0.5 text-[10px] font-semibold",
                     getRiskBandColor(evaluationSummary.risk_band)
                   )}
                 >
                   {evaluationSummary.risk_band}
                 </span>
+                <span className="bg-oklch-[0.18_0.01_60/15] h-4 w-px" />
+                <span className="text-xs">
+                  <span className="font-mono font-bold text-red-700">
+                    {evaluationSummary.total_fail}
+                  </span>{" "}
+                  <span className="text-oklch-[0.18_0.01_60/50]">fail</span>
+                </span>
+                <span className="text-xs">
+                  <span className="font-mono font-bold text-amber-700">
+                    {evaluationSummary.total_warning}
+                  </span>{" "}
+                  <span className="text-oklch-[0.18_0.01_60/50]">warn</span>
+                </span>
+                <span className="text-xs">
+                  <span className="font-mono font-bold text-emerald-700">
+                    {evaluationSummary.total_pass}
+                  </span>{" "}
+                  <span className="text-oklch-[0.18_0.01_60/50]">pass</span>
+                </span>
+                <span className="text-xs">
+                  <span className="font-mono font-bold text-slate-500">
+                    {evaluationSummary.total_missing}
+                  </span>{" "}
+                  <span className="text-oklch-[0.18_0.01_60/50]">miss</span>
+                </span>
               </div>
-              <div className="h-8 w-px" style={{ background: `${INK}15` }} />
-              <StatPill
-                label="Fail"
-                value={evaluationSummary.total_fail}
-                color="oklch(0.55 0.2 25)"
-              />
-              <StatPill
-                label="Warn"
-                value={evaluationSummary.total_warning}
-                color="oklch(0.7 0.15 75)"
-              />
-              <StatPill
-                label="Pass"
-                value={evaluationSummary.total_pass}
-                color="oklch(0.55 0.15 145)"
-              />
-              <StatPill
-                label="Miss"
-                value={evaluationSummary.total_missing}
-                color="oklch(0.5 0.02 260)"
-              />
             </div>
 
             {/* AI Briefing */}
             <div className="px-6 pt-5 pb-2">
-              <div className="mb-2 flex items-center gap-2">
-                <Sparkles className="size-3.5" style={{ color: ACCENT }} />
-                <span
-                  className="text-[10px] font-medium tracking-widest uppercase"
-                  style={{ color: ACCENT }}
-                >
-                  AI Briefing
-                </span>
-              </div>
-              <div
-                className="font-[family-name:var(--font-serif-4)] text-sm leading-relaxed"
-                style={{ color: INK, opacity: 0.85 }}
-              >
+              <span className="text-oklch-[0.45_0.12_55] mb-2 block font-[family-name:var(--font-sans-3)] text-[11px] font-semibold">
+                AI Briefing
+              </span>
+              <p className="text-oklch-[0.18_0.01_60/85] font-[family-name:var(--font-serif-4)] text-sm leading-relaxed">
                 {evaluationDecision.reasoning}
-              </div>
+              </p>
             </div>
 
-            {/* Categories Requiring Attention */}
+            {/* Flagged categories */}
             {flagCategories.length > 0 && (
-              <>
-                <div className="px-6">
-                  <SectionDivider>
-                    Categories Requiring Attention
-                  </SectionDivider>
-                </div>
-                <div className="flex flex-wrap gap-2 px-6 pb-2">
+              <div className="px-6 pt-2 pb-1">
+                <div className="flex flex-wrap gap-1.5">
                   {flagCategories.map((cat) => {
                     const catSummary =
                       evaluationSummary.by_risk_category[cat.id]
@@ -454,7 +326,7 @@ export function LayoutBriefing({
                       <span
                         key={cat.id}
                         className={cn(
-                          "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium",
+                          "inline-flex items-center gap-1.5 rounded px-2.5 py-0.5 text-[11px] font-medium",
                           hasFail
                             ? "bg-red-50 text-red-800"
                             : "bg-amber-50 text-amber-800"
@@ -471,82 +343,71 @@ export function LayoutBriefing({
                     )
                   })}
                 </div>
-              </>
+              </div>
             )}
 
-            {/* All 9 Risk Categories */}
-            <div className="px-6">
-              <SectionDivider>All 9 Risk Categories</SectionDivider>
+            {/* Category section heading */}
+            <div className="px-6 pt-5 pb-2">
+              <h2 className="text-oklch-[0.18_0.01_60/70] font-[family-name:var(--font-serif-4)] text-sm font-semibold">
+                All 9 Risk Categories
+              </h2>
             </div>
 
             {/* Filter chips */}
-            <div className="px-6">
-              <StatusFilterChips
-                activeFilters={activeFilters}
-                onToggle={toggleFilter}
-                total={filteredTotal}
-              />
-            </div>
+            <StatusFilterChips
+              activeFilters={activeFilters}
+              onToggle={toggleFilter}
+              total={filteredTotal}
+            />
 
-            {/* Category grid: single column on mobile, two on tablet, single on desktop */}
-            <div className="px-6">
-              <div className="grid grid-cols-1 gap-x-6 md:grid-cols-2">
-                {visibleCategories.map((cat, idx) => {
-                  const catSummary = evaluationSummary.by_risk_category[cat.id]
-                  if (!catSummary) return null
-                  return (
-                    <CategoryRow
-                      key={cat.id}
-                      index={idx + 1}
-                      categoryId={cat.id as RiskCategoryId}
-                      rules={rulesByCategory[cat.id]}
-                      summary={catSummary}
-                      aiSummary={evaluationSummary.risk_summaries[cat.id] ?? ""}
-                      activeFilters={activeFilters}
-                    />
-                  )
-                })}
+            {/* Category list */}
+            {visibleCategories.map((cat) => {
+              const catSummary = evaluationSummary.by_risk_category[cat.id]
+              if (!catSummary) return null
+              return (
+                <CategoryRow
+                  key={cat.id}
+                  index={RISK_CATEGORIES.indexOf(cat) + 1}
+                  categoryId={cat.id as RiskCategoryId}
+                  rules={rulesByCategory[cat.id]}
+                  summary={catSummary}
+                  aiSummary={evaluationSummary.risk_summaries[cat.id] ?? ""}
+                  activeFilters={activeFilters}
+                />
+              )
+            })}
+            {visibleCategories.length === 0 && (
+              <div className="text-oklch-[0.18_0.01_60/40] py-12 text-center text-sm">
+                No matches
               </div>
-              {visibleCategories.length === 0 && (
-                <div
-                  className="py-12 text-center text-sm"
-                  style={{ color: INK, opacity: 0.4 }}
-                >
-                  No categories match the current filters.
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Findings sections */}
-            <div className="px-6 pt-4 pb-8">
-              <SectionDivider>Key Findings</SectionDivider>
-
-              <div
-                className="overflow-hidden rounded-lg border"
-                style={{ borderColor: `${INK}10` }}
-              >
-                <FindingsSection
-                  title="Key Concerns"
-                  items={evaluationDecision.key_concerns}
-                  dotColor="red"
-                  defaultOpen={evaluationDecision.key_concerns.length > 0}
-                />
-                <FindingsSection
-                  title="Key Strengths"
-                  items={evaluationDecision.key_strengths}
-                  dotColor="green"
-                />
-                <FindingsSection
-                  title="Required Conditions"
-                  items={evaluationDecision.required_conditions}
-                  dotColor="amber"
-                />
-                <FindingsSection
-                  title="Missing Information"
-                  items={evaluationDecision.missing_information}
-                  dotColor="grey"
-                />
-              </div>
+            <div className="px-6 pt-6 pb-8">
+              <h2 className="text-oklch-[0.18_0.01_60/70] mb-1 font-[family-name:var(--font-serif-4)] text-sm font-semibold">
+                Key Findings
+              </h2>
+              <FindingsSection
+                title="Key Concerns"
+                items={evaluationDecision.key_concerns}
+                dotColor="red"
+                defaultOpen={evaluationDecision.key_concerns.length > 0}
+              />
+              <FindingsSection
+                title="Key Strengths"
+                items={evaluationDecision.key_strengths}
+                dotColor="green"
+              />
+              <FindingsSection
+                title="Required Conditions"
+                items={evaluationDecision.required_conditions}
+                dotColor="amber"
+              />
+              <FindingsSection
+                title="Missing Information"
+                items={evaluationDecision.missing_information}
+                dotColor="grey"
+              />
             </div>
           </div>
         </div>
