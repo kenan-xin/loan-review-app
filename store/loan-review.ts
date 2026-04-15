@@ -15,12 +15,14 @@ interface LoanReviewState {
   error: string | null
   isSubmitting: boolean
   processingProgress: number
+  resultLayout: "sidebar" | "briefing" | "ledger"
 
   setStep: (step: 1 | 2 | 3) => void
   setApplicationFile: (file: File | null) => void
   submit: () => void
   reset: () => void
   resumeJob: (jobId: string) => void
+  setResultLayout: (layout: "sidebar" | "briefing" | "ledger") => void
 }
 
 export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
@@ -31,6 +33,13 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   error: null,
   isSubmitting: false,
   processingProgress: 0,
+  resultLayout:
+    typeof window !== "undefined"
+      ? ((localStorage.getItem("result-layout") as
+          | "sidebar"
+          | "briefing"
+          | "ledger") ?? "sidebar")
+      : "sidebar",
 
   setStep: (step) => set({ step }),
 
@@ -106,4 +115,12 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   resumeJob: (jobId) => {
     set({ jobId, step: 2, isSubmitting: false })
   },
+
+  setResultLayout: (layout) =>
+    set((state) => {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("result-layout", layout)
+      }
+      return { ...state, resultLayout: layout }
+    }),
 }))
