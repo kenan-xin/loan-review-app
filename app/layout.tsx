@@ -1,4 +1,13 @@
-import { Geist, Geist_Mono, Public_Sans, Inter } from "next/font/google"
+import {
+  Geist,
+  Geist_Mono,
+  Public_Sans,
+  Inter,
+  Source_Serif_4,
+  Source_Sans_3,
+  Manrope,
+  JetBrains_Mono,
+} from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
@@ -12,6 +21,30 @@ const publicSans = Public_Sans({ subsets: ["latin"], variable: "--font-sans" })
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+})
+
+const sourceSerif4 = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif-4",
+  display: "swap",
+})
+
+const sourceSans3 = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-sans-3",
+  display: "swap",
+})
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-display",
+  display: "swap",
 })
 
 export default function RootLayout({
@@ -28,7 +61,11 @@ export default function RootLayout({
         fontMono.variable,
         "font-sans",
         publicSans.variable,
-        interHeading.variable
+        interHeading.variable,
+        sourceSerif4.variable,
+        sourceSans3.variable,
+        manrope.variable,
+        jetbrainsMono.variable
       )}
     >
       <body>
