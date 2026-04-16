@@ -76,27 +76,27 @@ export function ResultSidebar({
         <div className="text-lg font-bold tracking-tight">
           {basicInfo.group_name as string}
         </div>
-        <div className="mt-0.5 flex items-center gap-2 text-xs opacity-75">
+        <div className="mt-0.5 text-xs opacity-75">
           <span>{basicInfo.ca_reference_no as string}</span>
-          <span>·</span>
-          <span>{basicInfo.application_type as string}</span>
         </div>
-      </div>
-
-      {/* Executive AI Summary */}
-      {evaluationDecision.reasoning && (
-        <div className="border-b px-5 py-4">
-          <div className="mb-2 flex items-center gap-2">
-            <Sparkles className="size-3 text-muted-foreground" />
-            <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-              AI Summary
+        <div className="mt-2 flex items-center gap-3 text-[10px]">
+          <div className="flex items-center gap-1">
+            <span className="tracking-wide uppercase opacity-60">App Type</span>
+            <span className="font-semibold">
+              {basicInfo.application_type as string}
             </span>
           </div>
-          <p className="text-xs leading-relaxed whitespace-pre-line text-foreground/80">
-            {evaluationDecision.reasoning}
-          </p>
+          <span className="opacity-40">·</span>
+          <div className="flex items-center gap-1">
+            <span className="tracking-wide uppercase opacity-60">
+              Relationship
+            </span>
+            <span className="font-semibold">
+              {(basicInfo.relationship_strategy as string) ?? "—"}
+            </span>
+          </div>
         </div>
-      )}
+      </div>
 
       {/* Risk gauge */}
       <div className="shrink-0 border-b px-5 pt-5 pb-4">
@@ -133,6 +133,21 @@ export function ResultSidebar({
         })}
       </div>
 
+      {/* Executive AI Summary */}
+      {evaluationDecision.reasoning && (
+        <div className="border-b px-5 py-4">
+          <div className="mb-2 flex items-center gap-2">
+            <Sparkles className="size-3 text-muted-foreground" />
+            <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+              AI Summary
+            </span>
+          </div>
+          <p className="text-xs leading-relaxed whitespace-pre-line text-foreground/80">
+            {evaluationDecision.reasoning}
+          </p>
+        </div>
+      )}
+
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         {/* Risk Categories */}
@@ -147,11 +162,16 @@ export function ResultSidebar({
               const total = stats.total
               return (
                 <div key={cat.id}>
-                  <div className="mb-1 flex items-center justify-between">
+                  <div className="mb-1">
                     <span className="text-xs text-foreground">{cat.label}</span>
-                    <span className="font-mono text-[10px] text-muted-foreground">
-                      {stats.fail}F · {stats.warning}W · {stats.pass}P
-                    </span>
+                    <div className="font-mono text-[10px] whitespace-nowrap text-muted-foreground">
+                      {stats.fail}F ({Math.round((stats.fail / total) * 100)}%)
+                      · {stats.warning}W (
+                      {Math.round((stats.warning / total) * 100)}%) ·{" "}
+                      {stats.pass}P ({Math.round((stats.pass / total) * 100)}%)
+                      · {stats.missing}UV (
+                      {Math.round((stats.missing / total) * 100)}%)
+                    </div>
                   </div>
                   <div className="flex h-1.5 gap-px overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     {stats.fail > 0 && (
@@ -220,22 +240,6 @@ export function ResultSidebar({
             ))}
           </ul>
         </LeftSection>
-
-        {evaluationDecision.required_conditions.length > 0 && (
-          <LeftSection
-            title="Required Conditions"
-            count={evaluationDecision.required_conditions.length}
-            defaultOpen={false}
-          >
-            <ul className="space-y-2">
-              {evaluationDecision.required_conditions.map((cond, idx) => (
-                <li key={idx} className="pl-2.5 text-xs leading-relaxed">
-                  {cond}
-                </li>
-              ))}
-            </ul>
-          </LeftSection>
-        )}
 
         {evaluationDecision.missing_information.length > 0 && (
           <LeftSection

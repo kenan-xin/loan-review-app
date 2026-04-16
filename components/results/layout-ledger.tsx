@@ -581,11 +581,6 @@ export function LayoutLedger({
                 dotColor="green"
               />
               <FindingsSection
-                title="Required Conditions"
-                items={evaluationDecision.required_conditions}
-                dotColor="amber"
-              />
-              <FindingsSection
                 title="Missing Information"
                 items={evaluationDecision.missing_information}
                 dotColor="grey"

@@ -19,7 +19,7 @@ const STATUS_OPTIONS: Array<{
   { value: "ALL", key: "FAIL", label: "All" },
   { value: "FAIL", key: "FAIL", label: "FAIL" },
   { value: "WARNING", key: "WARNING", label: "WARN" },
-  { value: "MISSING", key: "MISSING", label: "MISS" },
+  { value: "MISSING", key: "MISSING", label: "UNVERIFIABLE" },
   { value: "PASS", key: "PASS", label: "PASS" },
 ]
 

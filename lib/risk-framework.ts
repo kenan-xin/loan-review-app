@@ -113,7 +113,7 @@ export const RESULT_CONFIG = {
     statColor: "text-emerald-500 dark:text-emerald-400",
   },
   MISSING: {
-    label: "MISS",
+    label: "UNVERIFIABLE",
     badge: "bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400",
     barColor: "bg-slate-200 dark:bg-slate-600",
     statColor: "text-slate-500 dark:text-slate-400",

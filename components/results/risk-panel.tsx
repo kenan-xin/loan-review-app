@@ -17,7 +17,7 @@ const STATUS_OPTIONS: Array<{ value: StatusFilter; label: string }> = [
   { value: "ALL", label: "All" },
   { value: "FAIL", label: "FAIL" },
   { value: "WARNING", label: "WARN" },
-  { value: "MISSING", label: "MISS" },
+  { value: "MISSING", label: "UNVERIFIABLE" },
   { value: "PASS", label: "PASS" },
 ]
 
