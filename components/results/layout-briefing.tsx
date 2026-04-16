@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import { RISK_CATEGORIES } from "@/lib/risk-framework"
@@ -30,26 +31,103 @@ function getRuleKey(rule: EvaluationRuleResult) {
   return [rule.rule_title, rule.category_5c, rule.result].join("::")
 }
 
-function getRiskBandColor(band: string) {
+/* ── Colour tokens ─────────────────────────────────────── */
+
+const LIGHT = {
+  bg: "oklch(0.975 0.007 78)",
+  hdBg: "oklch(0.32 0.07 255)",
+  hdText: "oklch(0.97 0.01 80)",
+  hdSub: "oklch(0.75 0.02 255)",
+  hdDot: "oklch(0.55 0.03 255)",
+  hdLine: "oklch(0.65 0.14 70 / 0.45)",
+  hdLabel: "oklch(0.68 0.02 255)",
+  text: "oklch(0.18 0.03 255)",
+  textStrong: "oklch(0.20 0.03 255 / 0.85)",
+  textMuted: "oklch(0.40 0.03 255 / 0.55)",
+  textFaint: "oklch(0.40 0.03 255 / 0.40)",
+  accent: "oklch(0.52 0.10 65)",
+  border: "oklch(0.25 0.04 255 / 0.10)",
+  borderLight: "oklch(0.25 0.04 255 / 0.06)",
+  surface: "oklch(0.25 0.04 255 / 0.04)",
+  tabActive: "oklch(0.18 0.03 255)",
+  tabInactive: "oklch(0.40 0.03 255 / 0.55)",
+  tabLine: "oklch(0.52 0.10 65)",
+  fail: "oklch(0.70 0.15 25)",
+  warn: "oklch(0.75 0.14 75)",
+  pass: "oklch(0.70 0.14 160)",
+  miss: "oklch(0.55 0.01 255)",
+}
+
+const DARK = {
+  bg: "oklch(0.16 0.02 255)",
+  hdBg: "oklch(0.12 0.035 255)",
+  hdText: "oklch(0.93 0.01 78)",
+  hdSub: "oklch(0.58 0.02 255)",
+  hdDot: "oklch(0.40 0.02 255)",
+  hdLine: "oklch(0.65 0.12 70 / 0.45)",
+  hdLabel: "oklch(0.55 0.02 255)",
+  text: "oklch(0.88 0.01 255)",
+  textStrong: "oklch(0.90 0.01 255)",
+  textMuted: "oklch(0.58 0.02 255)",
+  textFaint: "oklch(0.45 0.02 255)",
+  accent: "oklch(0.62 0.12 65)",
+  border: "oklch(0.35 0.02 255 / 0.15)",
+  borderLight: "oklch(0.30 0.02 255 / 0.10)",
+  surface: "oklch(0.20 0.03 255)",
+  tabActive: "oklch(0.90 0.01 255)",
+  tabInactive: "oklch(0.50 0.02 255)",
+  tabLine: "oklch(0.62 0.12 65)",
+  fail: "oklch(0.72 0.16 25)",
+  warn: "oklch(0.78 0.14 75)",
+  pass: "oklch(0.72 0.14 160)",
+  miss: "oklch(0.55 0.01 250)",
+}
+
+function useColors() {
+  const { resolvedTheme } = useTheme()
+  return resolvedTheme === "dark" ? DARK : LIGHT
+}
+
+/* ── Risk band / ratio helpers ─────────────────────────── */
+
+function getRiskBandStyle(band: string, c: typeof LIGHT) {
+  const isDark = c === DARK
   switch (band) {
     case "low":
-      return "bg-emerald-100 text-emerald-800"
+      return isDark
+        ? { bg: "oklch(0.20 0.04 160)", fg: "oklch(0.68 0.12 160)" }
+        : { bg: "oklch(0.92 0.04 160)", fg: "oklch(0.28 0.06 160)" }
     case "medium":
-      return "bg-amber-100 text-amber-800"
+      return isDark
+        ? { bg: "oklch(0.22 0.04 75)", fg: "oklch(0.78 0.10 75)" }
+        : { bg: "oklch(0.92 0.06 75)", fg: "oklch(0.32 0.08 65)" }
     case "high":
-      return "bg-red-100 text-red-800"
+      return isDark
+        ? { bg: "oklch(0.22 0.04 25)", fg: "oklch(0.68 0.14 22)" }
+        : { bg: "oklch(0.90 0.06 25)", fg: "oklch(0.28 0.06 25)" }
     default:
-      return "bg-slate-100 text-slate-700"
+      return isDark
+        ? { bg: "oklch(0.20 0.02 255)", fg: "oklch(0.58 0.02 255)" }
+        : { bg: "oklch(0.94 0.01 255)", fg: "oklch(0.30 0.02 255)" }
   }
 }
 
-function getPassRatioColor(ratio: number) {
+function getPassRatioBadge(ratio: number, c: typeof LIGHT) {
+  const isDark = c === DARK
   if (ratio >= 0.8)
-    return { bg: "oklch(0.85 0.1 145)", fg: "oklch(0.3 0.08 145)" }
+    return isDark
+      ? { bg: "oklch(0.20 0.04 160)", fg: "oklch(0.68 0.12 160)" }
+      : { bg: "oklch(0.92 0.04 160)", fg: "oklch(0.28 0.06 160)" }
   if (ratio >= 0.5)
-    return { bg: "oklch(0.88 0.12 85)", fg: "oklch(0.35 0.1 60)" }
-  return { bg: "oklch(0.85 0.12 25)", fg: "oklch(0.3 0.1 25)" }
+    return isDark
+      ? { bg: "oklch(0.22 0.04 75)", fg: "oklch(0.78 0.10 75)" }
+      : { bg: "oklch(0.92 0.06 75)", fg: "oklch(0.32 0.08 65)" }
+  return isDark
+    ? { bg: "oklch(0.22 0.04 25)", fg: "oklch(0.68 0.14 22)" }
+    : { bg: "oklch(0.90 0.06 25)", fg: "oklch(0.28 0.06 25)" }
 }
+
+/* ── Category row ──────────────────────────────────────── */
 
 interface CategoryRowProps {
   readonly index: number
@@ -67,6 +145,7 @@ function CategoryRow({
   aiSummary,
   activeFilters,
 }: CategoryRowProps) {
+  const c = useColors()
   const [open, setOpen] = useState(false)
   const [expandedRules, setExpandedRules] = useState<Set<string>>(new Set())
 
@@ -94,17 +173,19 @@ function CategoryRow({
   }
 
   const passRatio = summary.total > 0 ? summary.pass / summary.total : 0
-  const ratioColor = getPassRatioColor(passRatio)
+  const badgeStyle = getPassRatioBadge(passRatio, c)
 
   return (
-    <div className="border-oklch-[0.18_0.01_60/10] border-b">
-      {/* Row header — grid for predictable column widths */}
+    <div className="border-b" style={{ borderColor: c.border }}>
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="grid w-full grid-cols-[1fr_auto_auto_auto] items-center gap-x-3 px-4 py-3 text-left"
+        className="grid w-full grid-cols-[1fr_auto_auto_auto] items-center gap-x-3 px-6 py-3 text-left"
       >
-        <span className="text-oklch-[0.18_0.01_60] truncate font-[family-name:var(--font-serif-4)] text-sm font-medium">
+        <span
+          className="truncate text-sm font-medium"
+          style={{ fontFamily: "var(--font-serif-4)", color: c.text }}
+        >
           {cat.label}
         </span>
         <span className="hidden w-20 sm:block">
@@ -117,26 +198,28 @@ function CategoryRow({
           />
         </span>
         <span
-          className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums"
-          style={{ background: ratioColor.bg, color: ratioColor.fg }}
+          className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
+          style={{
+            fontFamily: "var(--font-mono)",
+            background: badgeStyle.bg,
+            color: badgeStyle.fg,
+          }}
         >
           {summary.pass}/{summary.total}
         </span>
-        <ChevronDown
-          className={cn(
-            "text-oklch-[0.18_0.01_60/35] size-3.5 shrink-0",
-            open ? "" : "hidden"
-          )}
-        />
-        <ChevronRight
-          className={cn(
-            "text-oklch-[0.18_0.01_60/35] size-3.5 shrink-0",
-            open ? "hidden" : ""
-          )}
-        />
+        {open ? (
+          <ChevronDown
+            className="size-3.5 shrink-0"
+            style={{ color: c.textMuted }}
+          />
+        ) : (
+          <ChevronRight
+            className="size-3.5 shrink-0"
+            style={{ color: c.textMuted }}
+          />
+        )}
       </button>
 
-      {/* Expanded content */}
       <div
         className={cn(
           "grid transition-[grid-template-rows] duration-200 ease-out",
@@ -144,10 +227,22 @@ function CategoryRow({
         )}
       >
         <div className="overflow-hidden">
-          <div className="border-oklch-[0.18_0.01_60/6] border-t px-4 pt-3 pb-4">
+          <div
+            className="px-6 pt-3 pb-4"
+            style={{ borderTop: `1px solid ${c.borderLight}` }}
+          >
             {aiSummary && (
-              <div className="bg-oklch-[0.18_0.01_60/4] mb-3 rounded p-3">
-                <p className="text-oklch-[0.18_0.01_60/75] font-[family-name:var(--font-serif-4)] text-xs leading-relaxed italic">
+              <div
+                className="mb-3 rounded p-3"
+                style={{ background: c.surface }}
+              >
+                <p
+                  className="text-xs leading-relaxed italic"
+                  style={{
+                    fontFamily: "var(--font-serif-4)",
+                    color: c.textMuted,
+                  }}
+                >
                   {aiSummary}
                 </p>
               </div>
@@ -170,11 +265,14 @@ function CategoryRow({
   )
 }
 
+/* ── Main layout ───────────────────────────────────────── */
+
 export function LayoutBriefing({
   result,
   activeTab,
   onTabChange,
 }: ResultLayoutProps) {
+  const c = useColors()
   const [activeFilters, setActiveFilters] = useState<Set<string>>(
     new Set(["FAIL", "WARNING", "MISSING"])
   )
@@ -218,27 +316,107 @@ export function LayoutBriefing({
     return catRules.some((r) => activeFilters.has(r.result))
   })
 
+  const bandStyle = getRiskBandStyle(evaluationSummary.risk_band, c)
+
   return (
     <div
       className="flex flex-1 flex-col overflow-hidden"
-      style={{ background: "oklch(0.98 0.005 80)" }}
+      style={{ background: c.bg }}
     >
+      {/* Dark navy header band */}
+      <div className="shrink-0 px-6 pt-5 pb-4" style={{ background: c.hdBg }}>
+        <div className="mx-auto flex max-w-3xl items-start justify-between gap-4">
+          <div>
+            <h1
+              className="text-xl leading-tight font-bold"
+              style={{
+                fontFamily: "var(--font-serif-4)",
+                color: c.hdText,
+              }}
+            >
+              {String(basicInfo.group_name ?? "Unknown Group")}
+            </h1>
+            <div
+              className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs"
+              style={{
+                fontFamily: "var(--font-sans-3)",
+                color: c.hdSub,
+              }}
+            >
+              <span>CA Ref: {String(basicInfo.ca_reference_no ?? "-")}</span>
+              <span style={{ color: c.hdDot }}>·</span>
+              <span>{String(basicInfo.application_type ?? "-")}</span>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <span
+              className="text-3xl font-bold tabular-nums"
+              style={{
+                fontFamily: "var(--font-mono)",
+                color: c.hdText,
+              }}
+            >
+              {evaluationSummary.risk_score}
+            </span>
+            <span
+              className="rounded px-2 py-0.5 text-[10px] font-semibold uppercase"
+              style={{ background: bandStyle.bg, color: bandStyle.fg }}
+            >
+              {evaluationSummary.risk_band}
+            </span>
+          </div>
+        </div>
+        {/* Gold line */}
+        <div
+          className="mx-auto mt-3 h-px max-w-3xl"
+          style={{ background: c.hdLine }}
+        />
+        {/* Stats row */}
+        <div
+          className="mx-auto mt-2.5 flex max-w-3xl flex-wrap items-center gap-x-4 gap-y-1 text-xs"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          <span>
+            <span className="font-bold" style={{ color: c.fail }}>
+              {evaluationSummary.total_fail}
+            </span>{" "}
+            <span style={{ color: c.hdLabel }}>fail</span>
+          </span>
+          <span>
+            <span className="font-bold" style={{ color: c.warn }}>
+              {evaluationSummary.total_warning}
+            </span>{" "}
+            <span style={{ color: c.hdLabel }}>warn</span>
+          </span>
+          <span>
+            <span className="font-bold" style={{ color: c.pass }}>
+              {evaluationSummary.total_pass}
+            </span>{" "}
+            <span style={{ color: c.hdLabel }}>pass</span>
+          </span>
+          <span>
+            <span className="font-bold" style={{ color: c.miss }}>
+              {evaluationSummary.total_missing}
+            </span>{" "}
+            <span style={{ color: c.hdLabel }}>miss</span>
+          </span>
+        </div>
+      </div>
+
       {/* Tab bar */}
-      <div className="border-oklch-[0.18_0.01_60/10] flex shrink-0 border-b">
+      <div className="flex shrink-0 border-b" style={{ borderColor: c.border }}>
         {(["risks", "ca-data"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => onTabChange(tab)}
-            className={cn(
-              "px-6 py-2.5 text-xs font-medium transition-colors",
-              activeTab === tab
-                ? "text-oklch-[0.18_0.01_60] border-b-2"
-                : "text-oklch-[0.18_0.01_60/50]"
-            )}
+            className="px-6 py-2.5 text-xs font-medium transition-colors"
             style={{
-              borderColor:
-                activeTab === tab ? "oklch(0.45 0.12 55)" : "transparent",
               fontFamily: "var(--font-sans-3)",
+              borderBottom:
+                activeTab === tab
+                  ? `2px solid ${c.tabLine}`
+                  : "2px solid transparent",
+              color: activeTab === tab ? c.tabActive : c.tabInactive,
             }}
           >
             {tab === "risks" ? "Risk Assessment" : "CA Data"}
@@ -251,65 +429,24 @@ export function LayoutBriefing({
       ) : (
         <div className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-3xl">
-            {/* Masthead */}
-            <div className="px-6 pt-6 pb-4">
-              <h1 className="text-oklch-[0.18_0.01_60] font-[family-name:var(--font-serif-4)] text-xl leading-tight font-bold">
-                {String(basicInfo.group_name ?? "Unknown Group")}
-              </h1>
-              <div className="text-oklch-[0.18_0.01_60/60] mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 font-[family-name:var(--font-sans-3)] text-xs">
-                <span>CA Ref: {String(basicInfo.ca_reference_no ?? "-")}</span>
-                <span>{String(basicInfo.application_type ?? "-")}</span>
-              </div>
-            </div>
-
-            {/* Risk score strip */}
-            <div className="border-oklch-[0.18_0.01_60/10] bg-oklch-[0.18_0.01_60/4%] border-y px-6 py-3">
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <span className="text-oklch-[0.18_0.01_60] font-mono text-2xl font-bold tabular-nums">
-                  {evaluationSummary.risk_score}
-                </span>
-                <span
-                  className={cn(
-                    "rounded px-1.5 py-0.5 text-[10px] font-semibold",
-                    getRiskBandColor(evaluationSummary.risk_band)
-                  )}
-                >
-                  {evaluationSummary.risk_band}
-                </span>
-                <span className="bg-oklch-[0.18_0.01_60/15] h-4 w-px" />
-                <span className="text-xs">
-                  <span className="font-mono font-bold text-red-700">
-                    {evaluationSummary.total_fail}
-                  </span>{" "}
-                  <span className="text-oklch-[0.18_0.01_60/50]">fail</span>
-                </span>
-                <span className="text-xs">
-                  <span className="font-mono font-bold text-amber-700">
-                    {evaluationSummary.total_warning}
-                  </span>{" "}
-                  <span className="text-oklch-[0.18_0.01_60/50]">warn</span>
-                </span>
-                <span className="text-xs">
-                  <span className="font-mono font-bold text-emerald-700">
-                    {evaluationSummary.total_pass}
-                  </span>{" "}
-                  <span className="text-oklch-[0.18_0.01_60/50]">pass</span>
-                </span>
-                <span className="text-xs">
-                  <span className="font-mono font-bold text-slate-500">
-                    {evaluationSummary.total_missing}
-                  </span>{" "}
-                  <span className="text-oklch-[0.18_0.01_60/50]">miss</span>
-                </span>
-              </div>
-            </div>
-
-            {/* AI Briefing */}
+            {/* AI Assessment */}
             <div className="px-6 pt-5 pb-2">
-              <span className="text-oklch-[0.45_0.12_55] mb-2 block font-[family-name:var(--font-sans-3)] text-[11px] font-semibold">
-                AI Briefing
+              <span
+                className="mb-2 block text-[11px] font-semibold tracking-widest uppercase"
+                style={{
+                  fontFamily: "var(--font-sans-3)",
+                  color: c.accent,
+                }}
+              >
+                AI Assessment
               </span>
-              <p className="text-oklch-[0.18_0.01_60/85] font-[family-name:var(--font-serif-4)] text-sm leading-relaxed">
+              <p
+                className="text-sm leading-relaxed"
+                style={{
+                  fontFamily: "var(--font-serif-4)",
+                  color: c.textStrong,
+                }}
+              >
                 {evaluationDecision.reasoning}
               </p>
             </div>
@@ -325,18 +462,29 @@ export function LayoutBriefing({
                     return (
                       <span
                         key={cat.id}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 rounded px-2.5 py-0.5 text-[11px] font-medium",
-                          hasFail
-                            ? "bg-red-50 text-red-800"
-                            : "bg-amber-50 text-amber-800"
-                        )}
+                        className="inline-flex items-center gap-1.5 rounded px-2.5 py-0.5 text-[11px] font-medium"
+                        style={{
+                          background: hasFail
+                            ? c === DARK
+                              ? "oklch(0.22 0.04 25)"
+                              : "oklch(0.92 0.04 25)"
+                            : c === DARK
+                              ? "oklch(0.22 0.03 75)"
+                              : "oklch(0.93 0.04 75)",
+                          color: hasFail
+                            ? c === DARK
+                              ? "oklch(0.68 0.12 22)"
+                              : "oklch(0.35 0.08 25)"
+                            : c === DARK
+                              ? "oklch(0.75 0.10 75)"
+                              : "oklch(0.35 0.06 65)",
+                        }}
                       >
                         <span
-                          className={cn(
-                            "size-1.5 rounded-full",
-                            hasFail ? "bg-red-500" : "bg-amber-400"
-                          )}
+                          className="size-1.5 rounded-full"
+                          style={{
+                            background: hasFail ? c.fail : c.warn,
+                          }}
                         />
                         {cat.label}
                       </span>
@@ -348,7 +496,13 @@ export function LayoutBriefing({
 
             {/* Category section heading */}
             <div className="px-6 pt-5 pb-2">
-              <h2 className="text-oklch-[0.18_0.01_60/70] font-[family-name:var(--font-serif-4)] text-sm font-semibold">
+              <h2
+                className="text-sm font-semibold"
+                style={{
+                  fontFamily: "var(--font-serif-4)",
+                  color: c.textMuted,
+                }}
+              >
                 All 9 Risk Categories
               </h2>
             </div>
@@ -377,14 +531,23 @@ export function LayoutBriefing({
               )
             })}
             {visibleCategories.length === 0 && (
-              <div className="text-oklch-[0.18_0.01_60/40] py-12 text-center text-sm">
+              <div
+                className="py-12 text-center text-sm"
+                style={{ color: c.textFaint }}
+              >
                 No matches
               </div>
             )}
 
             {/* Findings sections */}
             <div className="px-6 pt-6 pb-8">
-              <h2 className="text-oklch-[0.18_0.01_60/70] mb-1 font-[family-name:var(--font-serif-4)] text-sm font-semibold">
+              <h2
+                className="mb-1 text-sm font-semibold"
+                style={{
+                  fontFamily: "var(--font-serif-4)",
+                  color: c.textMuted,
+                }}
+              >
                 Key Findings
               </h2>
               <FindingsSection

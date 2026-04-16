@@ -4,7 +4,6 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import type { SimulationResult } from "@/types/review"
 import { useLoanReviewStore } from "@/store/loan-review"
-import type { ResultLayout } from "./results/types"
 import { LayoutBriefing } from "./results/layout-briefing"
 import { LayoutLedger } from "./results/layout-ledger"
 import { ResultHeader } from "./results/result-header"
@@ -19,7 +18,7 @@ interface ResultsStepProps {
 
 export function ResultsStep({ result }: ResultsStepProps) {
   const [activeTab, setActiveTab] = useState<"ca-data" | "risks">("risks")
-  const { resultLayout, setResultLayout } = useLoanReviewStore()
+  const { resultLayout } = useLoanReviewStore()
 
   const { caData, evaluationResults, evaluationSummary, evaluationDecision } =
     result
@@ -31,17 +30,17 @@ export function ResultsStep({ result }: ResultsStepProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <ResultHeader layout={resultLayout} onLayoutChange={setResultLayout} />
+      <ResultHeader />
 
       {resultLayout === "sidebar" && (
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 overflow-hidden lg:grid-cols-[360px_1fr]">
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-5 overflow-hidden lg:grid-cols-[380px_1fr]">
           <ResultSidebar
             basicInfo={basicInfo}
             evaluationSummary={evaluationSummary}
             evaluationDecision={evaluationDecision}
           />
 
-          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border">
+          <div className="flex min-h-0 flex-col overflow-hidden rounded-xl border">
             {/* Tab bar */}
             <div role="tablist" className="flex shrink-0 border-b">
               {(["ca-data", "risks"] as const).map((tab) => (

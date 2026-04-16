@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import { RISK_CATEGORIES } from "@/lib/risk-framework"
@@ -30,34 +31,100 @@ function getRuleKey(rule: EvaluationRuleResult) {
   return [rule.rule_title, rule.category_5c, rule.result].join("::")
 }
 
-function getRiskBandColor(band: string) {
-  switch (band) {
-    case "low":
-      return "bg-emerald-100 text-emerald-800"
-    case "medium":
-      return "bg-amber-100 text-amber-800"
-    case "high":
-      return "bg-red-100 text-red-800"
-    default:
-      return "bg-slate-100 text-slate-700"
-  }
+/* ── Colour tokens ─────────────────────────────────────── */
+
+const LIGHT = {
+  bg: "oklch(0.965 0.008 260)",
+  toolbarBg: "oklch(0.94 0.01 260)",
+  text: "oklch(0.15 0.02 260)",
+  textStrong: "oklch(0.18 0.02 260)",
+  textMuted: "oklch(0.42 0.015 260)",
+  textFaint: "oklch(0.48 0.01 260)",
+  accent: "oklch(0.50 0.14 185)",
+  accentLight: "oklch(0.50 0.14 185 / 0.10)",
+  border: "oklch(0.25 0.02 260 / 0.10)",
+  surface: "oklch(0.25 0.02 260 / 0.04)",
+  tabActive: "oklch(0.15 0.02 260)",
+  tabInactive: "oklch(0.42 0.015 260)",
+  tabLine: "oklch(0.50 0.14 185)",
+  refBg: "oklch(0.25 0.02 260 / 0.06)",
+  refBorder: "oklch(0.25 0.02 260 / 0.12)",
+  refText: "oklch(0.50 0.14 185)",
+  briefingBg: "oklch(0.50 0.14 185 / 0.07)",
+  briefingLabel: "oklch(0.50 0.14 185)",
+  briefingText: "oklch(0.22 0.02 260)",
+  fail: "oklch(0.55 0.18 25)",
+  warn: "oklch(0.62 0.16 75)",
+  pass: "oklch(0.55 0.14 165)",
+  miss: "oklch(0.45 0.01 260)",
+  rowFail: "bg-red-50 dark:bg-red-950/20",
+  rowWarn: "bg-amber-50 dark:bg-amber-950/15",
+  rowEmpty: "bg-slate-50 dark:bg-slate-900/30",
 }
 
-function getRowTint(summary: RiskCategorySummary) {
-  if (summary.fail > 0) return "bg-red-50 dark:bg-red-950/20"
-  if (summary.warning > 0) return "bg-amber-50 dark:bg-amber-950/20"
-  if (summary.missing > 0 && summary.pass === 0)
-    return "bg-slate-50 dark:bg-slate-800/30"
+const DARK = {
+  bg: "oklch(0.14 0.02 260)",
+  toolbarBg: "oklch(0.12 0.025 260)",
+  text: "oklch(0.90 0.005 250)",
+  textStrong: "oklch(0.93 0.005 250)",
+  textMuted: "oklch(0.55 0.02 250)",
+  textFaint: "oklch(0.42 0.02 250)",
+  accent: "oklch(0.68 0.14 178)",
+  accentLight: "oklch(0.68 0.14 178 / 0.10)",
+  border: "oklch(0.30 0.02 260)",
+  surface: "oklch(0.18 0.025 260)",
+  tabActive: "oklch(0.90 0.005 250)",
+  tabInactive: "oklch(0.48 0.02 250)",
+  tabLine: "oklch(0.68 0.14 178)",
+  refBg: "oklch(0.18 0.025 260)",
+  refBorder: "oklch(0.30 0.02 260)",
+  refText: "oklch(0.68 0.14 178)",
+  briefingBg: "oklch(0.68 0.14 178 / 0.08)",
+  briefingLabel: "oklch(0.68 0.14 178)",
+  briefingText: "oklch(0.82 0.01 250)",
+  fail: "oklch(0.65 0.18 22)",
+  warn: "oklch(0.75 0.12 80)",
+  pass: "oklch(0.65 0.14 165)",
+  miss: "oklch(0.50 0.01 250)",
+  rowFail: "bg-red-950/20",
+  rowWarn: "bg-amber-950/15",
+  rowEmpty: "bg-slate-900/30",
+}
+
+function useColors() {
+  const { resolvedTheme } = useTheme()
+  return resolvedTheme === "dark" ? DARK : LIGHT
+}
+
+/* ── Helpers ───────────────────────────────────────────── */
+
+function getPassRatioColor(ratio: number, c: typeof LIGHT) {
+  const isDark = c === DARK
+  if (ratio >= 0.8)
+    return isDark
+      ? { bg: "oklch(0.20 0.04 165)", fg: "oklch(0.68 0.12 178)" }
+      : { bg: "oklch(0.92 0.04 185)", fg: "oklch(0.30 0.08 185)" }
+  if (ratio >= 0.5)
+    return isDark
+      ? { bg: "oklch(0.22 0.04 80)", fg: "oklch(0.75 0.10 80)" }
+      : { bg: "oklch(0.92 0.05 75)", fg: "oklch(0.32 0.06 70)" }
+  return isDark
+    ? { bg: "oklch(0.22 0.04 25)", fg: "oklch(0.65 0.14 22)" }
+    : { bg: "oklch(0.92 0.04 25)", fg: "oklch(0.30 0.06 25)" }
+}
+
+function getRiskBandStyle(band: string, c: typeof LIGHT) {
+  return getPassRatioColor(band === "low" ? 1 : band === "medium" ? 0.6 : 0, c)
+}
+
+function getRowTint(summary: RiskCategorySummary, c: typeof LIGHT) {
+  if (summary.fail > 0) return c.rowFail
+  if (summary.warning > 0) return c.rowWarn
+  if (summary.missing > 0 && summary.pass === 0) return c.rowEmpty
   return ""
 }
 
-function getPassRatioColor(ratio: number) {
-  if (ratio >= 0.8)
-    return { bg: "oklch(0.85 0.1 145)", fg: "oklch(0.3 0.08 145)" }
-  if (ratio >= 0.5)
-    return { bg: "oklch(0.88 0.12 85)", fg: "oklch(0.35 0.1 60)" }
-  return { bg: "oklch(0.85 0.12 25)", fg: "oklch(0.3 0.1 25)" }
-}
+/* ── Ledger row ────────────────────────────────────────── */
 
 interface LedgerRowProps {
   readonly index: number
@@ -76,6 +143,7 @@ function LedgerRow({
   aiSummary,
   activeFilters,
 }: LedgerRowProps) {
+  const c = useColors()
   const [open, setOpen] = useState(false)
   const [expandedRules, setExpandedRules] = useState<Set<string>>(new Set())
 
@@ -103,38 +171,49 @@ function LedgerRow({
   }
 
   const passRatio = summary.total > 0 ? summary.pass / summary.total : 0
-  const ratioColor = getPassRatioColor(passRatio)
+  const ratioColor = getPassRatioColor(passRatio, c)
 
   return (
     <div
-      className={cn(
-        "border-oklch-[0.15_0.01_70/10] border-b",
-        getRowTint(summary)
-      )}
+      className={cn("border-b", getRowTint(summary, c))}
+      style={{ borderColor: c.border }}
     >
-      {/* Row header — separate the clickable button from the chevron */}
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         className="grid w-full grid-cols-[2rem_1fr] items-center gap-2 px-4 py-2.5 text-left md:grid-cols-[2rem_1fr_8rem_5rem_3rem]"
       >
-        {/* # */}
-        <span className="text-oklch-[0.15_0.01_70/35] font-[family-name:var(--font-mono-display)] text-xs font-bold tabular-nums">
+        <span
+          className="text-xs font-bold tabular-nums"
+          style={{
+            fontFamily: "var(--font-mono-display)",
+            color: c.textFaint,
+          }}
+        >
           {String(index).padStart(2, "0")}
         </span>
 
-        {/* Category */}
         <div className="min-w-0">
-          <span className="text-oklch-[0.15_0.01_70] block truncate font-[family-name:var(--font-manrope)] text-sm leading-tight font-semibold">
+          <span
+            className="block truncate text-sm leading-tight font-semibold"
+            style={{
+              fontFamily: "var(--font-manrope)",
+              color: c.text,
+            }}
+          >
             {cat.label}
           </span>
-          {/* Mobile-only ratio */}
-          <span className="text-oklch-[0.15_0.01_70/45] font-[family-name:var(--font-mono-display)] text-[10px] tabular-nums md:hidden">
+          <span
+            className="text-[10px] tabular-nums md:hidden"
+            style={{
+              fontFamily: "var(--font-mono-display)",
+              color: c.textFaint,
+            }}
+          >
             {summary.pass}/{summary.total} passed
           </span>
         </div>
 
-        {/* Breakdown — hidden on mobile */}
         <div className="hidden items-center gap-2 md:flex">
           <CategoryStackedBar
             fail={summary.fail}
@@ -144,29 +223,36 @@ function LedgerRow({
             className="flex-1"
           />
           <span
-            className="shrink-0 rounded px-1.5 py-0.5 font-[family-name:var(--font-mono-display)] text-[10px] font-semibold tabular-nums"
-            style={{ background: ratioColor.bg, color: ratioColor.fg }}
+            className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
+            style={{
+              fontFamily: "var(--font-mono-display)",
+              background: ratioColor.bg,
+              color: ratioColor.fg,
+            }}
           >
             {summary.pass}/{summary.total}
           </span>
         </div>
 
-        {/* Rules count — hidden on mobile */}
-        <span className="text-oklch-[0.15_0.01_70/45] hidden text-right font-[family-name:var(--font-mono-display)] text-xs tabular-nums md:block">
+        <span
+          className="hidden text-right text-xs tabular-nums md:block"
+          style={{
+            fontFamily: "var(--font-mono-display)",
+            color: c.textFaint,
+          }}
+        >
           {rules.length}
         </span>
 
-        {/* Chevron — always visible */}
         <span className="flex justify-end">
           {open ? (
-            <ChevronDown className="text-oklch-[0.15_0.01_70/35] size-3.5" />
+            <ChevronDown className="size-3.5" style={{ color: c.textFaint }} />
           ) : (
-            <ChevronRight className="text-oklch-[0.15_0.01_70/35] size-3.5" />
+            <ChevronRight className="size-3.5" style={{ color: c.textFaint }} />
           )}
         </span>
       </button>
 
-      {/* Expanded content */}
       <div
         className={cn(
           "grid transition-[grid-template-rows] duration-200 ease-out",
@@ -174,10 +260,22 @@ function LedgerRow({
         )}
       >
         <div className="overflow-hidden">
-          <div className="border-oklch-[0.15_0.01_70/8] border-t px-4 pt-3 pb-4">
+          <div
+            className="px-4 pt-3 pb-4"
+            style={{ borderTop: `1px solid ${c.border}` }}
+          >
             {aiSummary && (
-              <div className="bg-oklch-[0.42_0.14_65/6] mb-3 rounded p-3">
-                <p className="text-oklch-[0.15_0.01_70/80] font-[family-name:var(--font-manrope)] text-xs leading-relaxed">
+              <div
+                className="mb-3 rounded p-3"
+                style={{ background: c.accentLight }}
+              >
+                <p
+                  className="text-xs leading-relaxed"
+                  style={{
+                    fontFamily: "var(--font-manrope)",
+                    color: c.textMuted,
+                  }}
+                >
                   {aiSummary}
                 </p>
               </div>
@@ -200,11 +298,14 @@ function LedgerRow({
   )
 }
 
+/* ── Main layout ───────────────────────────────────────── */
+
 export function LayoutLedger({
   result,
   activeTab,
   onTabChange,
 }: ResultLayoutProps) {
+  const c = useColors()
   const [activeFilters, setActiveFilters] = useState<Set<string>>(
     new Set(["FAIL", "WARNING", "MISSING"])
   )
@@ -243,30 +344,53 @@ export function LayoutLedger({
     return catRules.some((r) => activeFilters.has(r.result))
   })
 
+  const bandStyle = getRiskBandStyle(evaluationSummary.risk_band, c)
+
   return (
     <div
       className="flex flex-1 flex-col overflow-hidden"
-      style={{ background: "oklch(0.99 0.003 70)" }}
+      style={{ background: c.bg }}
     >
-      {/* Top bar */}
-      <div className="border-oklch-[0.15_0.01_70/10] flex shrink-0 items-center justify-between gap-3 border-b px-4 py-2.5">
+      {/* Compact toolbar */}
+      <div
+        className="flex shrink-0 items-center justify-between gap-3 border-b px-4 py-2.5"
+        style={{ borderColor: c.border, background: c.toolbarBg }}
+      >
         <div className="flex min-w-0 items-center gap-3">
-          <span className="text-oklch-[0.15_0.01_70] truncate font-[family-name:var(--font-manrope)] text-sm font-bold">
+          <span
+            className="truncate text-sm font-bold"
+            style={{
+              fontFamily: "var(--font-manrope)",
+              color: c.text,
+            }}
+          >
             {String(basicInfo.group_name ?? "Unknown Group")}
           </span>
-          <span className="border-oklch-[0.15_0.01_70/18] bg-oklch-[0.15_0.01_70/5%] text-oklch-[0.15_0.01_70] shrink-0 rounded border px-1.5 py-0.5 font-[family-name:var(--font-mono-display)] text-[10px] tabular-nums">
+          <span
+            className="shrink-0 rounded border px-1.5 py-0.5 text-[10px] tabular-nums"
+            style={{
+              fontFamily: "var(--font-mono-display)",
+              background: c.refBg,
+              borderColor: c.refBorder,
+              color: c.refText,
+            }}
+          >
             {String(basicInfo.ca_reference_no ?? "-")}
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-1.5">
-          <span className="text-oklch-[0.15_0.01_70] font-[family-name:var(--font-mono-display)] text-lg font-bold tabular-nums">
+          <span
+            className="text-lg font-bold tabular-nums"
+            style={{
+              fontFamily: "var(--font-mono-display)",
+              color: c.text,
+            }}
+          >
             {evaluationSummary.risk_score}
           </span>
           <span
-            className={cn(
-              "rounded px-2 py-0.5 text-[10px] font-semibold",
-              getRiskBandColor(evaluationSummary.risk_band)
-            )}
+            className="rounded px-2 py-0.5 text-[10px] font-semibold uppercase"
+            style={{ background: bandStyle.bg, color: bandStyle.fg }}
           >
             {evaluationSummary.risk_band}
           </span>
@@ -274,21 +398,19 @@ export function LayoutLedger({
       </div>
 
       {/* Tab bar */}
-      <div className="border-oklch-[0.15_0.01_70/10] flex shrink-0 border-b">
+      <div className="flex shrink-0 border-b" style={{ borderColor: c.border }}>
         {(["risks", "ca-data"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => onTabChange(tab)}
-            className={cn(
-              "px-5 py-2 text-xs font-medium transition-colors",
-              activeTab === tab
-                ? "text-oklch-[0.15_0.01_70] border-b-2"
-                : "text-oklch-[0.15_0.01_70/50]"
-            )}
+            className="px-5 py-2 text-xs font-medium transition-colors"
             style={{
-              borderColor:
-                activeTab === tab ? "oklch(0.42 0.14 65)" : "transparent",
               fontFamily: "var(--font-manrope)",
+              borderBottom:
+                activeTab === tab
+                  ? `2px solid ${c.tabLine}`
+                  : "2px solid transparent",
+              color: activeTab === tab ? c.tabActive : c.tabInactive,
             }}
           >
             {tab === "risks" ? "Risk Ledger" : "CA Data"}
@@ -303,47 +425,84 @@ export function LayoutLedger({
           <div className="mx-auto max-w-4xl">
             {/* Summary header */}
             <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-[1fr_auto]">
-              {/* AI Briefing */}
-              <div className="bg-oklch-[0.42_0.14_65/6] rounded-lg p-4">
-                <span className="text-oklch-[0.42_0.14_65] mb-2 block font-[family-name:var(--font-manrope)] text-[11px] font-semibold">
+              <div
+                className="rounded-lg p-4"
+                style={{ background: c.briefingBg }}
+              >
+                <span
+                  className="mb-2 block text-[11px] font-semibold tracking-widest uppercase"
+                  style={{
+                    fontFamily: "var(--font-mono-display)",
+                    color: c.briefingLabel,
+                  }}
+                >
                   AI Briefing
                 </span>
-                <p className="text-oklch-[0.15_0.01_70/85] font-[family-name:var(--font-manrope)] text-sm leading-relaxed">
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{
+                    fontFamily: "var(--font-manrope)",
+                    color: c.briefingText,
+                  }}
+                >
                   {evaluationDecision.reasoning}
                 </p>
               </div>
 
-              {/* Stats — compact inline row */}
               <div className="flex items-center gap-4">
                 <span className="text-xs">
-                  <span className="font-[family-name:var(--font-mono-display)] text-lg font-bold text-red-700 tabular-nums">
+                  <span
+                    className="text-lg font-bold tabular-nums"
+                    style={{
+                      fontFamily: "var(--font-mono-display)",
+                      color: c.fail,
+                    }}
+                  >
                     {evaluationSummary.total_fail}
                   </span>
-                  <span className="text-oklch-[0.15_0.01_70/40] ml-1">
+                  <span className="ml-1" style={{ color: c.textFaint }}>
                     fail
                   </span>
                 </span>
                 <span className="text-xs">
-                  <span className="font-[family-name:var(--font-mono-display)] text-lg font-bold text-amber-700 tabular-nums">
+                  <span
+                    className="text-lg font-bold tabular-nums"
+                    style={{
+                      fontFamily: "var(--font-mono-display)",
+                      color: c.warn,
+                    }}
+                  >
                     {evaluationSummary.total_warning}
                   </span>
-                  <span className="text-oklch-[0.15_0.01_70/40] ml-1">
+                  <span className="ml-1" style={{ color: c.textFaint }}>
                     warn
                   </span>
                 </span>
                 <span className="text-xs">
-                  <span className="font-[family-name:var(--font-mono-display)] text-lg font-bold text-emerald-700 tabular-nums">
+                  <span
+                    className="text-lg font-bold tabular-nums"
+                    style={{
+                      fontFamily: "var(--font-mono-display)",
+                      color: c.pass,
+                    }}
+                  >
                     {evaluationSummary.total_pass}
                   </span>
-                  <span className="text-oklch-[0.15_0.01_70/40] ml-1">
+                  <span className="ml-1" style={{ color: c.textFaint }}>
                     pass
                   </span>
                 </span>
                 <span className="text-xs">
-                  <span className="font-[family-name:var(--font-mono-display)] text-lg font-bold text-slate-500 tabular-nums">
+                  <span
+                    className="text-lg font-bold tabular-nums"
+                    style={{
+                      fontFamily: "var(--font-mono-display)",
+                      color: c.miss,
+                    }}
+                  >
                     {evaluationSummary.total_missing}
                   </span>
-                  <span className="text-oklch-[0.15_0.01_70/40] ml-1">
+                  <span className="ml-1" style={{ color: c.textFaint }}>
                     miss
                   </span>
                 </span>
@@ -351,18 +510,27 @@ export function LayoutLedger({
             </div>
 
             {/* Table header */}
-            <div className="border-oklch-[0.15_0.01_70/10] text-oklch-[0.15_0.01_70/35] hidden border-b px-4 py-2 text-[10px] font-semibold tracking-wide md:grid md:grid-cols-[2rem_1fr_8rem_5rem_3rem]">
-              <span className="font-[family-name:var(--font-manrope)]">#</span>
-              <span className="font-[family-name:var(--font-manrope)]">
+            <div
+              className="hidden border-b px-4 py-2 text-[10px] font-semibold tracking-wide md:grid md:grid-cols-[2rem_1fr_8rem_5rem_3rem]"
+              style={{
+                borderColor: c.border,
+                color: c.textFaint,
+              }}
+            >
+              <span style={{ fontFamily: "var(--font-mono-display)" }}>#</span>
+              <span style={{ fontFamily: "var(--font-mono-display)" }}>
                 Category
               </span>
-              <span className="font-[family-name:var(--font-manrope)]">
+              <span style={{ fontFamily: "var(--font-mono-display)" }}>
                 Breakdown
               </span>
-              <span className="font-[family-name:var(--font-manrope)]">
+              <span style={{ fontFamily: "var(--font-mono-display)" }}>
                 Ratio
               </span>
-              <span className="text-right font-[family-name:var(--font-manrope)]">
+              <span
+                className="text-right"
+                style={{ fontFamily: "var(--font-mono-display)" }}
+              >
                 Rules
               </span>
             </div>
@@ -391,12 +559,15 @@ export function LayoutLedger({
               )
             })}
             {visibleCategories.length === 0 && (
-              <div className="text-oklch-[0.15_0.01_70/40] py-12 text-center text-sm">
+              <div
+                className="py-12 text-center text-sm"
+                style={{ color: c.textFaint }}
+              >
                 No matches
               </div>
             )}
 
-            {/* Findings sections — no card wrapper */}
+            {/* Findings sections */}
             <div className="px-4 pt-6 pb-8">
               <FindingsSection
                 title="Key Concerns"

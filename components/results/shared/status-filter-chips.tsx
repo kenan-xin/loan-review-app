@@ -41,11 +41,14 @@ export function StatusFilterChips({
                 ? "bg-foreground text-background"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
               : activeFilters.has(opt.value)
-                ? cn("text-white", {
-                    "bg-red-500": opt.value === "FAIL",
-                    "bg-amber-400 text-white": opt.value === "WARNING",
-                    "bg-emerald-500": opt.value === "PASS",
-                    "bg-slate-500": opt.value === "MISSING",
+                ? cn("ring-1 ring-inset", {
+                    "bg-red-50 text-red-600 ring-red-200": opt.value === "FAIL",
+                    "bg-amber-50 text-amber-600 ring-amber-200":
+                      opt.value === "WARNING",
+                    "bg-emerald-50 text-emerald-600 ring-emerald-200":
+                      opt.value === "PASS",
+                    "bg-slate-100 text-slate-600 ring-slate-200":
+                      opt.value === "MISSING",
                   })
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
           )}

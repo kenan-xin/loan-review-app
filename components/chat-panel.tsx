@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { Maximize2, Minimize2, X } from "lucide-react"
+import { Maximize2, Minimize2, RotateCcw, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { SimulationResult } from "@/types/review"
 import {
@@ -81,10 +81,13 @@ function getSuggestions(
 
 export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [clickedSuggestions, setClickedSuggestions] = useState<Set<string>>(
+    new Set()
+  )
   const clientSessionId = useRef(crypto.randomUUID())
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, setMessages, stop } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
@@ -135,16 +138,50 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
   }
 
   const handleSuggestion = (text: string) => {
+    setClickedSuggestions((prev) => new Set(prev).add(text))
     sendMessage({ text }, { body: getChatBody() })
   }
 
+  const handleClearChat = () => {
+    setMessages([])
+    clientSessionId.current = crypto.randomUUID()
+  }
+
+  const handleRetry = () => {
+    const lastUserMessage = messages.filter((m) => m.role === "user").pop()
+    if (lastUserMessage) {
+      const textPart = lastUserMessage.parts.find((p) => p.type === "text")
+      const text = textPart && textPart.type === "text" ? textPart.text : ""
+      if (text) {
+        sendMessage({ text }, { body: getChatBody() })
+      }
+    }
+  }
+
+  // Escape key to close panel
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose()
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [isOpen, onClose])
+
   return (
     <div
+      role="dialog"
+      aria-modal="false"
+      aria-label="Ask AI chat panel"
       className={cn(
-        "fixed z-50 flex flex-col bg-card transition-opacity duration-150",
+        "fixed z-50 flex flex-col bg-card transition-all duration-300 ease-in-out",
         isOpen ? "opacity-100" : "pointer-events-none opacity-0",
         isExpanded
-          ? "top-0 right-0 h-full w-full sm:w-[520px]"
+          ? "top-0 right-0 h-full w-full border-l border-border shadow-[-2px_0_8px_rgba(0,0,0,0.06)] sm:w-[520px]"
           : "right-4 bottom-4 h-[50vh] w-full overflow-hidden rounded-none border-none shadow-none sm:h-[560px] sm:w-[480px] sm:rounded-lg sm:border sm:shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
       )}
     >
@@ -157,6 +194,15 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
           </span>
         </div>
         <div className="flex items-center gap-0.5">
+          {messages.length > 0 && (
+            <button
+              onClick={handleClearChat}
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
+              title="New chat"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </button>
+          )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="flex h-6 w-6 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
@@ -171,6 +217,7 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
           <button
             onClick={onClose}
             className="flex h-6 w-6 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted"
+            aria-label="Close chat"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -184,7 +231,7 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
             <p className="mb-1 text-xs font-medium text-foreground">
               {groupName}
             </p>
-            <p className="mb-5 text-[11px] leading-relaxed text-muted-foreground">
+            <p className="mb-5 text-xs leading-relaxed text-muted-foreground">
               {result.evaluationSummary.total_fail} failures,{" "}
               {result.evaluationSummary.total_warning} warnings,{" "}
               {result.evaluationSummary.total_pass} passed
@@ -194,10 +241,10 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
                 <button
                   key={s.text}
                   onClick={() => handleSuggestion(s.text)}
-                  className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-left text-[11px] text-foreground transition-colors hover:bg-muted"
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-left text-xs text-foreground transition-colors hover:bg-muted"
                 >
                   <span
-                    className={`shrink-0 font-mono text-[9px] font-bold ${s.badgeColor}`}
+                    className={`shrink-0 font-mono text-[10px] font-bold ${s.badgeColor}`}
                   >
                     {s.badge}
                   </span>
@@ -234,10 +281,23 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
                 </MessageContent>
               </Message>
             ))}
+            {status === "streaming" && (
+              <div className="flex items-center gap-1 px-4 py-2 text-xs text-muted-foreground">
+                <span className="animate-pulse">●</span>
+                <span className="animate-pulse delay-75">●</span>
+                <span className="animate-pulse delay-150">●</span>
+              </div>
+            )}
             {status === "error" && (
-              <p className="px-1 py-1 text-[11px] text-destructive">
-                Something went wrong. Please try again.
-              </p>
+              <div className="flex items-center gap-2 px-2 py-2 text-sm text-destructive">
+                <p>Something went wrong.</p>
+                <button
+                  onClick={handleRetry}
+                  className="rounded-md bg-destructive/10 px-2 py-1 text-xs font-semibold hover:bg-destructive/20"
+                >
+                  Retry
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -245,13 +305,44 @@ export function ChatPanel({ result, isOpen, onClose }: ChatPanelProps) {
 
       {/* Input */}
       <div className="shrink-0 border-t px-3 py-2.5">
+        {messages.length > 0 &&
+          suggestions.filter((s) => !clickedSuggestions.has(s.text)).length >
+            0 && (
+            <div className="mb-2 flex flex-wrap gap-1.5">
+              {suggestions
+                .filter((s) => !clickedSuggestions.has(s.text))
+                .slice(0, 3)
+                .map((s) => (
+                  <button
+                    key={s.text}
+                    onClick={() => handleSuggestion(s.text)}
+                    className="flex items-center gap-1.5 rounded-full border bg-muted/50 px-2.5 py-1 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <span
+                      className={`shrink-0 font-mono text-[9px] font-bold ${s.badgeColor}`}
+                    >
+                      {s.badge}
+                    </span>
+                    {s.text}
+                  </button>
+                ))}
+            </div>
+          )}
         <PromptInputProvider>
           <PromptInput onSubmit={handleSubmit}>
             <PromptInputBody>
               <PromptInputTextarea placeholder="Type a question..." />
             </PromptInputBody>
             <PromptInputFooter>
-              <PromptInputSubmit className="rounded-md" status={status} />
+              <PromptInputSubmit
+                className="rounded-md"
+                status={status}
+                onStop={
+                  status === "submitted" || status === "streaming"
+                    ? stop
+                    : undefined
+                }
+              />
             </PromptInputFooter>
           </PromptInput>
         </PromptInputProvider>

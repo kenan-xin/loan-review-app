@@ -1,0 +1,3 @@
+curl -N -X POST https://dev-genie.001.gs/public-api/v2/workflow/chatbot/chats \
+  -H "Content-Type: application/json" \
+  -d @chat-body.json

@@ -9,6 +9,7 @@ import { UploadStep } from "@/components/upload-step"
 import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LayoutSwitcher } from "@/components/layout-switcher"
 import { ChatBubble } from "@/components/chat-bubble"
 import {
   loadSimulationData,
@@ -104,7 +105,10 @@ function LoanReviewWizard() {
     <div className="flex min-h-svh flex-col">
       <header className="flex items-center justify-between border-b px-6 py-4">
         <h1 className="text-lg font-semibold">Loan Review</h1>
-        <ThemeToggle />
+        <div className="flex items-center gap-0.5">
+          {step === 3 && <LayoutSwitcher />}
+          <ThemeToggle />
+        </div>
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6">

@@ -21,19 +21,19 @@ export function CategoryStackedBar({
     >
       {fail > 0 && (
         <div
-          className="bg-red-500"
+          className="bg-red-400"
           style={{ width: `${(fail / total) * 100}%` }}
         />
       )}
       {warning > 0 && (
         <div
-          className="bg-amber-400"
+          className="bg-amber-300"
           style={{ width: `${(warning / total) * 100}%` }}
         />
       )}
       {pass > 0 && (
         <div
-          className="bg-emerald-500"
+          className="bg-emerald-400"
           style={{ width: `${(pass / total) * 100}%` }}
         />
       )}

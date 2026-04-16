@@ -136,3 +136,28 @@
     @apply font-sans;
   }
 }
+
+@layer components {
+  .chat-markdown {
+    & p {
+      max-width: 65ch;
+    }
+    & h1,
+    & h2,
+    & h3 {
+      letter-spacing: -0.01em;
+    }
+    & pre,
+    & code {
+      font-family: var(--font-mono), ui-monospace, monospace;
+    }
+    & hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    & strong {
+      letter-spacing: -0.005em;
+    }
+  }
+}

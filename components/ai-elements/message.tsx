@@ -25,7 +25,65 @@ import {
   useMemo,
   useState,
 } from "react"
-import { Streamdown } from "streamdown"
+import { Streamdown, type Components } from "streamdown"
+
+export const chatComponents: Components = {
+  p: ({ children }) => <p className="mb-3 leading-7">{children}</p>,
+  h1: ({ children }) => (
+    <h1 className="mt-5 mb-2.5 text-lg font-semibold">{children}</h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="mt-4 mb-2 text-base font-semibold">{children}</h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="mt-3 mb-1.5 text-[0.9375rem] font-semibold">{children}</h3>
+  ),
+  ul: ({ children }) => (
+    <ul className="mb-3 list-disc space-y-1 pl-5">{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="mb-3 list-decimal space-y-1 pl-5">{children}</ol>
+  ),
+  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+  strong: ({ children }) => (
+    <strong className="font-semibold text-foreground">{children}</strong>
+  ),
+  em: ({ children }) => (
+    <em className="text-muted-foreground italic">{children}</em>
+  ),
+  code: ({ children }) => (
+    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em]">
+      {children}
+    </code>
+  ),
+  pre: ({ children }) => (
+    <pre className="overflow-x-auto rounded-lg border bg-muted/50 p-3">
+      {children}
+    </pre>
+  ),
+  blockquote: ({ children }) => (
+    <blockquote className="border-l-2 border-primary/30 pl-3 text-muted-foreground italic">
+      {children}
+    </blockquote>
+  ),
+  table: ({ children }) => (
+    <table className="mb-3 w-full border-collapse text-sm">{children}</table>
+  ),
+  th: ({ children }) => (
+    <th className="border px-3 py-1.5 text-left font-semibold">{children}</th>
+  ),
+  td: ({ children }) => <td className="border px-3 py-1.5">{children}</td>,
+  a: ({ children, href }) => (
+    <a
+      className="text-primary underline underline-offset-2 hover:text-primary/80"
+      href={href}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {children}
+    </a>
+  ),
+}
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"]
@@ -51,9 +109,9 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 text-sm",
+      "flex w-fit max-w-full min-w-0 flex-col gap-2 text-[0.9375rem]",
       "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
-      "group-[.is-assistant]:text-foreground",
+      "group-[.is-assistant]:leading-relaxed group-[.is-assistant]:text-foreground",
       className
     )}
     {...props}
@@ -324,9 +382,10 @@ export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Streamdown
       className={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+        "chat-markdown size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className
       )}
+      components={chatComponents}
       plugins={streamdownPlugins}
       {...props}
     />

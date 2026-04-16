@@ -20,13 +20,34 @@ export interface Job {
   error?: string
 }
 
+export type RiskCategoryId =
+  | "management"
+  | "collateral"
+  | "market"
+  | "cashflow"
+  | "operational"
+  | "fraud"
+  | "related_party"
+  | "financial"
+  | "probe"
+
 export interface EvaluationRuleResult {
   rule_title: string
   category_5c: string
+  risk_category: RiskCategoryId
   result: "PASS" | "FAIL" | "WARNING" | "MISSING" | "N/A"
   extracted_values: Record<string, unknown>
   explanation: string
   action: string | null
+}
+
+export interface RiskCategorySummary {
+  pass: number
+  warning: number
+  fail: number
+  missing: number
+  total: number
+  risk_score: number
 }
 
 export interface EvaluationSummary {
@@ -45,6 +66,10 @@ export interface EvaluationSummary {
     medium_fail_count: number
     low_fail_count: number
   }
+  risk_score: number
+  risk_band: "low" | "medium" | "high"
+  by_risk_category: Record<string, RiskCategorySummary>
+  risk_summaries: Record<string, string>
 }
 
 export interface EvaluationDecision {

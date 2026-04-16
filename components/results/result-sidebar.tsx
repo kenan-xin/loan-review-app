@@ -30,7 +30,7 @@ function LeftSection({
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
+        className="flex w-full items-center justify-between px-5 py-3 text-left transition-colors hover:bg-muted/30"
       >
         <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
           {title}
@@ -51,7 +51,7 @@ function LeftSection({
         )}
       >
         <div className="overflow-hidden">
-          <div className="px-4 pb-3">{children}</div>
+          <div className="px-5 pb-4">{children}</div>
         </div>
       </div>
     </div>
@@ -70,9 +70,9 @@ export function ResultSidebar({
   const riskBand = evaluationSummary.risk_band ?? "medium"
 
   return (
-    <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border lg:max-h-full">
+    <div className="flex min-h-0 flex-col overflow-hidden rounded-xl border lg:max-h-full">
       {/* Group info banner */}
-      <div className="shrink-0 bg-primary px-4 py-3 text-primary-foreground">
+      <div className="shrink-0 bg-primary px-5 py-4 text-primary-foreground">
         <div className="text-lg font-bold tracking-tight">
           {basicInfo.group_name as string}
         </div>
@@ -85,8 +85,8 @@ export function ResultSidebar({
 
       {/* Executive AI Summary */}
       {evaluationDecision.reasoning && (
-        <div className="border-b px-4 py-3">
-          <div className="mb-1.5 flex items-center gap-2">
+        <div className="border-b px-5 py-4">
+          <div className="mb-2 flex items-center gap-2">
             <Sparkles className="size-3 text-muted-foreground" />
             <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
               AI Summary
@@ -99,7 +99,7 @@ export function ResultSidebar({
       )}
 
       {/* Risk gauge */}
-      <div className="shrink-0 border-b px-4 pt-4 pb-3">
+      <div className="shrink-0 border-b px-5 pt-5 pb-4">
         <RiskMeter value={riskScore} band={riskBand} size="md" />
       </div>
 
@@ -118,10 +118,10 @@ export function ResultSidebar({
           return (
             <div
               key={type}
-              className="flex flex-col items-center border-r py-2.5 last:border-r-0"
+              className="flex flex-col items-center border-r py-3.5 last:border-r-0"
             >
               <span
-                className={cn("font-mono text-xl font-bold", cfg.statColor)}
+                className={cn("font-mono text-xl font-semibold", cfg.statColor)}
               >
                 {count}
               </span>
@@ -136,11 +136,11 @@ export function ResultSidebar({
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         {/* Risk Categories */}
-        <div className="border-b px-4 py-3">
-          <div className="mb-2.5 text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+        <div className="border-b px-5 py-4">
+          <div className="mb-3 text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
             Risk Categories
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {RISK_CATEGORIES.map((cat) => {
               const stats = byRiskCategory[cat.id]
               if (!stats || stats.total === 0) return null
@@ -156,13 +156,13 @@ export function ResultSidebar({
                   <div className="flex h-1.5 gap-px overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     {stats.fail > 0 && (
                       <div
-                        className="bg-red-500"
+                        className="bg-red-400"
                         style={{ width: `${(stats.fail / total) * 100}%` }}
                       />
                     )}
                     {stats.warning > 0 && (
                       <div
-                        className="bg-amber-400"
+                        className="bg-amber-300"
                         style={{
                           width: `${(stats.warning / total) * 100}%`,
                         }}
@@ -170,7 +170,7 @@ export function ResultSidebar({
                     )}
                     {stats.pass > 0 && (
                       <div
-                        className="bg-emerald-500"
+                        className="bg-emerald-400"
                         style={{
                           width: `${(stats.pass / total) * 100}%`,
                         }}
@@ -199,7 +199,7 @@ export function ResultSidebar({
           <ul className="space-y-1.5">
             {uniqueConcerns.map((concern, idx) => (
               <li key={idx} className="flex items-start gap-2 text-xs">
-                <span className="mt-0.5 shrink-0 text-red-500">•</span>
+                <span className="mt-0.5 shrink-0 text-red-400">•</span>
                 <span>{concern}</span>
               </li>
             ))}
@@ -214,7 +214,7 @@ export function ResultSidebar({
           <ul className="space-y-1.5">
             {uniqueStrengths.map((strength, idx) => (
               <li key={idx} className="flex items-start gap-2 text-xs">
-                <span className="mt-0.5 shrink-0 text-emerald-500">•</span>
+                <span className="mt-0.5 shrink-0 text-emerald-400">•</span>
                 <span>{strength}</span>
               </li>
             ))}
@@ -229,10 +229,7 @@ export function ResultSidebar({
           >
             <ul className="space-y-2">
               {evaluationDecision.required_conditions.map((cond, idx) => (
-                <li
-                  key={idx}
-                  className="border-l-2 border-amber-400 pl-2.5 text-xs leading-relaxed"
-                >
+                <li key={idx} className="pl-2.5 text-xs leading-relaxed">
                   {cond}
                 </li>
               ))}
@@ -250,7 +247,7 @@ export function ResultSidebar({
               {evaluationDecision.missing_information.map((item, idx) => (
                 <li
                   key={idx}
-                  className="border-l-2 border-slate-300 pl-2.5 text-xs leading-relaxed text-muted-foreground dark:border-slate-600"
+                  className="pl-2.5 text-xs leading-relaxed text-muted-foreground"
                 >
                   {item}
                 </li>

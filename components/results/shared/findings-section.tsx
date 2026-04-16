@@ -6,9 +6,9 @@ import { ChevronDown, ChevronRight } from "lucide-react"
 type DotColor = "red" | "green" | "amber" | "grey"
 
 const DOT_COLORS: Record<DotColor, string> = {
-  red: "bg-red-500",
-  green: "bg-emerald-500",
-  amber: "bg-amber-400",
+  red: "bg-red-400",
+  green: "bg-emerald-400",
+  amber: "bg-amber-300",
   grey: "bg-slate-400",
 }
 

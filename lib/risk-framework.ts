@@ -94,37 +94,32 @@ export type RuleStatus = "PASS" | "FAIL" | "WARNING" | "MISSING" | "N/A"
 export const RESULT_CONFIG = {
   FAIL: {
     label: "FAIL",
-    borderColor: "border-l-red-500",
-    badge: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
-    barColor: "bg-red-500",
-    statColor: "text-red-600 dark:text-red-400",
+    badge: "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+    barColor: "bg-red-400",
+    statColor: "text-red-500 dark:text-red-400",
   },
   WARNING: {
     label: "WARN",
-    borderColor: "border-l-amber-400",
     badge:
-      "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400",
-    barColor: "bg-amber-400",
-    statColor: "text-amber-600 dark:text-amber-400",
+      "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+    barColor: "bg-amber-300",
+    statColor: "text-amber-500 dark:text-amber-400",
   },
   PASS: {
     label: "PASS",
-    borderColor: "border-l-emerald-500",
     badge:
-      "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
-    barColor: "bg-emerald-500",
-    statColor: "text-emerald-600 dark:text-emerald-400",
+      "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400",
+    barColor: "bg-emerald-400",
+    statColor: "text-emerald-500 dark:text-emerald-400",
   },
   MISSING: {
     label: "MISS",
-    borderColor: "border-l-slate-400",
-    badge: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",
-    barColor: "bg-slate-300 dark:bg-slate-600",
-    statColor: "text-slate-600 dark:text-slate-400",
+    badge: "bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400",
+    barColor: "bg-slate-200 dark:bg-slate-600",
+    statColor: "text-slate-500 dark:text-slate-400",
   },
   "N/A": {
     label: "N/A",
-    borderColor: "border-l-slate-300",
     badge:
       "bg-slate-50 text-slate-500 dark:bg-slate-800/50 dark:text-slate-500",
     barColor: "bg-slate-200 dark:bg-slate-700",
