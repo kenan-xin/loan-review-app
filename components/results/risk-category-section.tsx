@@ -11,8 +11,8 @@ import { RiskItem } from "./risk-item"
 const RULE_STATUS_ORDER = {
   FAIL: 0,
   WARNING: 1,
-  MISSING: 2,
-  PASS: 3,
+  PASS: 2,
+  MISSING: 3,
   "N/A": 4,
 } as const
 
@@ -42,6 +42,7 @@ export function RiskCategorySection({
   const failCount = rules.filter((r) => r.result === "FAIL").length
   const warnCount = rules.filter((r) => r.result === "WARNING").length
   const passCount = rules.filter((r) => r.result === "PASS").length
+  const missingCount = rules.filter((r) => r.result === "MISSING").length
   const totalCount = rules.length
 
   const filteredRules = rules
@@ -66,12 +67,11 @@ export function RiskCategorySection({
   }
 
   const countsLabel = [
-    failCount > 0 ? `${failCount}F` : null,
-    warnCount > 0 ? `${warnCount}W` : null,
-    passCount > 0 ? `${passCount}P` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ")
+    `${failCount}F`,
+    `${warnCount}W`,
+    `${passCount}P`,
+    `${missingCount}U`,
+  ].join(" · ")
 
   return (
     <div className="border-b border-border last:border-b-0">
@@ -109,6 +109,12 @@ export function RiskCategorySection({
                   style={{
                     width: `${(passCount / totalCount) * 100}%`,
                   }}
+                />
+              )}
+              {missingCount > 0 && (
+                <div
+                  className="bg-slate-300 dark:bg-slate-600"
+                  style={{ width: `${(missingCount / totalCount) * 100}%` }}
                 />
               )}
             </div>

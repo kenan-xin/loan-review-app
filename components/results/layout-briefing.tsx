@@ -22,8 +22,8 @@ type StatusFilter = "ALL" | "FAIL" | "WARNING" | "PASS" | "MISSING"
 const RULE_STATUS_ORDER = {
   FAIL: 0,
   WARNING: 1,
-  MISSING: 2,
-  PASS: 3,
+  PASS: 2,
+  MISSING: 3,
   "N/A": 4,
 } as const
 
