@@ -70,9 +70,9 @@ function getSuggestions(
   }
   if (decision.required_conditions.length > 0) {
     suggestions.push({
-      badge: "COND",
-      badgeColor: "text-blue-500",
-      text: "What conditions are required?",
+      badge: "UNVERIFIABLE",
+      badgeColor: "text-slate-500",
+      text: "What are the unverifiable risks?",
     })
   }
 

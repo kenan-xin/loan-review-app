@@ -119,21 +119,21 @@ export async function POST(req: Request) {
               console.log("[chat] Captured sessionUUID:", capturedSessionUUID)
             }
 
-            // Stream non-empty answer deltas
+            // Stream non-empty answer deltas — skip the completed event
+            // because its `answer` field contains the full accumulated text,
+            // not an incremental delta.
             const answer = event.answer as string | undefined
-            if (answer) {
+            if (event.status === "completed") {
+              console.log(
+                "[chat] Stream completed. Full answer length:",
+                answer?.length ?? 0
+              )
+            } else if (answer) {
               console.log(
                 "[chat] Delta:",
                 answer.slice(0, 80) + (answer.length > 80 ? "..." : "")
               )
               writer.write({ type: "text-delta", id: textId, delta: answer })
-            }
-
-            if (event.status === "completed") {
-              console.log(
-                "[chat] Stream completed. Full answer length:",
-                (answer as string | undefined)?.length ?? 0
-              )
             }
           }
         }
