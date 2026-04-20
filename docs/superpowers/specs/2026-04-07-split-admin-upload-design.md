@@ -31,7 +31,7 @@ Split into two pages:
 - Multi-file upload (drag & drop + browse), PDF only, **50MB max per file**
 - Dedupe files by filename
 - On submit: POST all files as FormData to `/api/risk-learning` (internal proxy)
-- Proxy forwards to `https://dev-genie.001.gs/smart-api/risk_learning`
+- Proxy forwards to `https://dev-genie.001.gs/smart-api/risk_learning_agent_s2`
 - Show success/error message after upload
 - No auth required
 

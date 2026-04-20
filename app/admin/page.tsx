@@ -215,7 +215,7 @@ function ResponseDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex max-h-[85vh] max-w-2xl flex-col gap-0 overflow-hidden p-0">
+      <DialogContent className="flex max-h-[85vh] max-w-4xl flex-col gap-0 overflow-hidden p-0">
         <DialogHeader className="shrink-0 border-b px-6 pt-5 pb-4">
           <DialogTitle className="truncate pr-8 text-base font-semibold">
             {entry?.file.name ?? "Response"}

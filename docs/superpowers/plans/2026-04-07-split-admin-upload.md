@@ -109,7 +109,7 @@ Create `app/api/risk-learning/route.ts`:
 import { NextResponse } from "next/server"
 import { logger } from "@/lib/logger"
 
-const RISK_LEARNING_URL = "https://dev-genie.001.gs/smart-api/risk_learning"
+const RISK_LEARNING_URL = "https://dev-genie.001.gs/smart-api/risk_learning_agent_s2"
 
 export async function POST(request: Request): Promise<NextResponse> {
   const context = "POST /api/risk-learning"
