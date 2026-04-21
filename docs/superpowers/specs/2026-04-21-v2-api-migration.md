@@ -25,7 +25,7 @@ Verified from `/home/kenan/Desktop/v1_sse.txt` and `/home/kenan/Desktop/v2_sse.t
 - `summary.by_risk_level` on real backend is `{high_fail_count, medium_fail_count, low_fail_count}` only (mock's v1/v2 types had richer shape).
 - `summary.by_category[x]` on real backend has `{fail, missing, pass, warning}` — no `na`.
 - Rules on both v1 and v2 already carry the "new" fields: `risk_level`, `required_fields`, `source_evidence`, `source_file`, `validation_logic`. These are not new to v2 — the v2-mock dataset just happened to drop them.
-- `ca.D_shareholding_changes` absent in v2 sample (removed from type — CA data panel never referenced it anyway).
+- `ca.D_shareholding_changes` absent in v2 sample — marked optional in type (backend references it in `decision.missing_information`, may appear in other CA files; CA data panel never renders it).
 
 **Only real v1→v2 schema delta:** rule items lose `category_5c` (5 C's: Capacity/Capital/Character/Collateral/Conditions) and gain `risk_category` (verbose string: "Management risk", "Cashflow / Capacity risk / Cash conversion cycle", etc.). `summary.by_category` keys follow the same change — 5 C's in v1, verbose names in v2.
 
@@ -75,7 +75,7 @@ Files:
 - `types/review.ts`
   - `EvaluationRuleResult`: drop `category_5c`; add `risk_level:"High"|"Medium"|"Low"`, `required_fields:string[]`, `source_evidence:string[]`, `source_file:string|null`, `validation_logic:string`. Change `risk_category` from `RiskCategoryId` to `string` (backend delivers full name).
   - `EvaluationSummary`: drop `risk_score`, `risk_band`, `by_risk_category`, `risk_summaries`. Change `by_risk_level` to `{high_fail_count, medium_fail_count, low_fail_count}`. Per-category entries: drop `na`.
-  - `CaData`: remove `D_shareholding_changes` entirely (not in backend, not rendered).
+  - `CaData`: mark `D_shareholding_changes` as optional (`D_shareholding_changes?: unknown`) — absent in this sample but backend references it in `decision.missing_information`, so it may appear in other CA files. CA data panel never renders it regardless.
   - `ReviewResult.riskScore`: keep (client-computed from summary).
   - Add `riskBand: "low"|"medium"|"high"` to `SimulationResult` (client-derived).
 - `types/sse.ts` (new): SSE envelope + per-node output types for type-safe parsing.
@@ -218,7 +218,7 @@ UI surgery:
 - Gauge + band → **invert gauge track zones** to `0–40 red / 40–70 amber / 70–100 emerald`; band thresholds `≥70 low / 40–69 medium / <40 high`.
 - Empty categories → show all 9 always, even with 0 rules.
 - `decision.required_conditions` → transformer coerces `null` → `[]`. Type stays `string[]`.
-- CA `D_shareholding_changes` absent → remove from type entirely.
+- CA `D_shareholding_changes` absent → mark optional in type (may appear in other CA files).
 - Admin page → no change (separate `/api/risk-learning` backend, out of scope).
 - Stream resilience → match v1, no watchdog. Wait indefinitely; user reloads if stuck.
 - Unknown `risk_category` strings → fall back to `probe` silently with `console.warn`.
