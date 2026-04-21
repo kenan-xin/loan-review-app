@@ -5,27 +5,7 @@ import type {
   EvaluationSummary,
   EvaluationDecision,
 } from "@/types/review"
-import caExtractedData from "@/app/data/ca_extracted_rh_group.json"
-import evaluationData from "@/app/data/evaluation_report_rh_group.json"
-
-export function loadSimulationData(): {
-  caData: CaData
-  evaluationResults: EvaluationRuleResult[]
-  evaluationSummary: EvaluationSummary
-  evaluationDecision: EvaluationDecision
-} {
-  const typed = evaluationData as {
-    evaluation_results: EvaluationRuleResult[]
-    summary: EvaluationSummary
-    decision: EvaluationDecision
-  }
-  return {
-    caData: caExtractedData as CaData,
-    evaluationResults: typed.evaluation_results,
-    evaluationSummary: typed.summary,
-    evaluationDecision: typed.decision,
-  }
-}
+import { deriveRiskBand } from "@/lib/risk-band"
 
 export function transformToReviewResult(
   caData: CaData,
@@ -33,22 +13,42 @@ export function transformToReviewResult(
   evaluationSummary: EvaluationSummary,
   evaluationDecision: EvaluationDecision
 ): SimulationResult {
+  const filteredResults = evaluationResults.filter(
+    (r) => r.result !== "N/A"
+  )
+
   const { findings, recommendations } =
-    transformFindingsAndRecommendations(evaluationResults)
-  const riskScore = calculateRiskScore(findings)
+    transformFindingsAndRecommendations(filteredResults)
+
+  const riskScore =
+    evaluationSummary.total_rules_evaluated > 0
+      ? Math.round(
+          (evaluationSummary.total_pass /
+            evaluationSummary.total_rules_evaluated) *
+            100
+        )
+      : 0
+
+  const riskBand = deriveRiskBand(riskScore)
   const status = determineStatus(findings)
   const summary = generateSummary(caData, findings)
+
+  const safeDecision: EvaluationDecision = {
+    ...evaluationDecision,
+    required_conditions: evaluationDecision.required_conditions ?? [],
+  }
 
   return {
     summary,
     riskScore,
+    riskBand,
     status,
     findings,
     recommendations,
     caData,
-    evaluationResults,
+    evaluationResults: filteredResults,
     evaluationSummary,
-    evaluationDecision,
+    evaluationDecision: safeDecision,
   }
 }
 
@@ -62,7 +62,7 @@ function transformFindingsAndRecommendations(
     const severity = mapResultToSeverity(rule.result)
 
     findings.push({
-      category: rule.category_5c,
+      category: rule.risk_category,
       severity,
       title: rule.rule_title,
       description:
@@ -71,7 +71,7 @@ function transformFindingsAndRecommendations(
 
     if (rule.action && rule.result !== "PASS") {
       recommendations.push(
-        `[${rule.category_5c}] ${rule.rule_title}: ${rule.action}`
+        `[${rule.risk_category}] ${rule.rule_title}: ${rule.action}`
       )
     }
   }
@@ -95,15 +95,6 @@ function mapResultToSeverity(
   }
 }
 
-function calculateRiskScore(findings: SimulationResult["findings"]): number {
-  const criticalCount = findings.filter((f) => f.severity === "critical").length
-  const warningCount = findings.filter((f) => f.severity === "warning").length
-  const infoCount = findings.filter((f) => f.severity === "info").length
-
-  const score = 100 - criticalCount * 15 - warningCount * 5 - infoCount * 1
-  return Math.max(0, Math.min(100, score))
-}
-
 function determineStatus(
   findings: SimulationResult["findings"]
 ): "approved" | "flagged" | "rejected" {
@@ -122,7 +113,7 @@ function generateSummary(
   const criticalIssues = findings.filter((f) => f.severity === "critical")
   const warningIssues = findings.filter((f) => f.severity === "warning")
 
-  const basicInfo = caData.A_basic_information as {
+  const basicInfo = (caData.A_basic_information ?? {}) as {
     group_name?: string
     borrower_names?: string[]
   }
