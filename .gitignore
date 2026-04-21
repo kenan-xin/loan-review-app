@@ -35,5 +35,9 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# proxy
+proxy/node_modules/
+proxy/dist/
+
 # superpowers
 .superpowers/
