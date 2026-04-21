@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import type { SimulationResult } from "@/types/review"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -60,6 +60,69 @@ const CATEGORIES = [
   "Capital",
   "Collateral",
   "Conditions",
+]
+
+const BASIC_INFO_FIELDS: [string, string][] = [
+  ["Group Name", "group_name"],
+  ["Borrower(s)", "borrower_names"],
+  ["CA Reference", "ca_reference_no"],
+  ["CA Date", "ca_date"],
+  ["Application Type", "application_type"],
+  ["Account Status", "account_status"],
+  ["Relationship Since", "relationship_since"],
+  ["Relationship Strategy", "relationship_strategy"],
+  ["Next Review Expiry", "next_review_expiry"],
+  ["ARM Name", "arm_name"],
+  ["GAM Name", "gam_name"],
+  ["Default Currency", "default_currency"],
+  ["BNM Funding", "bnm_funding"],
+  ["CGC/SJPP Guarantee", "cgc_sjpp_guarantee"],
+]
+
+const BORROWER_PROFILE_FIELDS: [string, string][] = [
+  ["Principal Activity", "principal_activity"],
+  ["Industry Sector", "industry_sector"],
+  ["Year Commenced", "year_commenced"],
+  ["SME", "is_sme"],
+  ["CRR Existing", "crr_existing"],
+  ["CRR Proposed", "crr_proposed"],
+  ["ESG Rating Existing", "esg_rating_existing"],
+  ["ESG Rating Proposed", "esg_rating_proposed"],
+  ["Environmental Rating Existing", "environmental_rating_existing"],
+  ["Environmental Rating Proposed", "environmental_rating_proposed"],
+  ["Social Rating Existing", "social_rating_existing"],
+  ["Social Rating Proposed", "social_rating_proposed"],
+  ["BNM Classification Existing", "bnm_classification_existing"],
+  ["BNM Classification Proposed", "bnm_classification_proposed"],
+]
+
+const GROUP_EXPOSURE_FIELDS: [string, string][] = [
+  ["Grand Total", "grand_total_rm"],
+  ["Secured Exposure", "secured_exposure_rm"],
+  ["Unsecured Exposure", "unsecured_exposure_rm"],
+  ["Total FEC/CCS/IRS", "total_fec_ccs_irs_rm"],
+  ["Global Market", "global_market_rm"],
+  ["Overseas Branches", "overseas_branches_rm"],
+  ["PFS Exposure", "pfs_exposure_rm"],
+  ["Related Parties", "related_parties_rm"],
+  ["Total Advised", "total_advised_rm"],
+  ["Total Unadvised", "total_unadvised_rm"],
+  ["Total DFBEP", "total_dfbep_rm"],
+]
+
+const FINANCIAL_PERIOD_FIELDS: [string, string, "currency" | "multiple" | "text"][] = [
+  ["Revenue", "revenue_rm", "currency"],
+  ["PBT", "pbt_rm", "currency"],
+  ["PAT", "pat_rm", "currency"],
+  ["EBITDA", "ebitda_rm", "currency"],
+  ["TNW", "tangible_net_worth_rm", "currency"],
+  ["Total Debt", "total_debt_rm", "currency"],
+  ["Gearing", "gearing_times", "multiple"],
+  ["DSCR", "dscr_times", "multiple"],
+  ["Interest Cover", "interest_cover_times", "multiple"],
+  ["Cash Equivalent", "cash_equivalent_rm", "currency"],
+  ["Paid Up Capital", "paid_up_capital_rm", "currency"],
+  ["Total Assets", "total_assets_rm", "currency"],
 ]
 
 function LeftSection({
@@ -152,6 +215,35 @@ function formatCurrency(value: unknown): string {
   return String(value ?? "-")
 }
 
+function DetailGrid({
+  data,
+  fields,
+  format,
+}: {
+  data: Record<string, unknown>
+  fields: [string, string][]
+  format?: (value: unknown) => string
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+      {fields.map(([label, key]) =>
+        data[key] !== undefined && data[key] !== null ? (
+          <Fragment key={key}>
+            <div className="text-muted-foreground">{label}</div>
+            <div className={format ? "font-mono" : undefined}>
+              {format
+                ? format(data[key])
+                : Array.isArray(data[key])
+                  ? (data[key] as unknown[]).join(", ")
+                  : String(data[key])}
+            </div>
+          </Fragment>
+        ) : null
+      )}
+    </div>
+  )
+}
+
 function formatMultiple(value: unknown): string {
   if (typeof value === "number") {
     return `${value}x`
@@ -188,6 +280,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
   }
 
   const basicInfo = caData.A_basic_information as Record<string, unknown>
+  const caReferenceNo = basicInfo.ca_reference_no as string | undefined
   const borrowerProfile = caData.B_borrower_profile as Record<string, unknown>
   const facilities = caData.E_facilities as Record<string, unknown>
   const securities = caData.F_securities as Record<string, unknown>
@@ -204,7 +297,9 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
     string,
     unknown
   >
-  const mccDecision = caData.N_mcc_decision as Record<string, unknown>
+  const mccDecision = caData.N_mcc_decision as
+    | Record<string, unknown>
+    | undefined
   const applicationRequests = caData.O_application_requests as Record<
     string,
     unknown
@@ -233,8 +328,12 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               {basicInfo.group_name as string}
             </div>
             <div className="mt-0.5 flex items-center gap-2 text-xs opacity-75">
-              <span>{basicInfo.ca_reference_no as string}</span>
-              <span>·</span>
+              {caReferenceNo && (
+                <>
+                  <span>{caReferenceNo}</span>
+                  <span>·</span>
+                </>
+              )}
               <span>{basicInfo.application_type as string}</span>
             </div>
           </div>
@@ -365,14 +464,14 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               </ul>
             </LeftSection>
 
-            {evaluationDecision.required_conditions.length > 0 && (
+            {(evaluationDecision.required_conditions ?? []).length > 0 && (
               <LeftSection
                 title="Required Conditions"
-                count={evaluationDecision.required_conditions.length}
+                count={(evaluationDecision.required_conditions ?? []).length}
                 defaultOpen={false}
               >
                 <ul className="space-y-2">
-                  {evaluationDecision.required_conditions.map((cond, idx) => (
+                  {(evaluationDecision.required_conditions ?? []).map((cond, idx) => (
                     <li
                       key={idx}
                       className="border-l-2 border-amber-400 pl-2.5 text-xs leading-relaxed"
@@ -384,14 +483,14 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               </LeftSection>
             )}
 
-            {evaluationDecision.missing_information.length > 0 && (
+            {(evaluationDecision.missing_information ?? []).length > 0 && (
               <LeftSection
                 title="Missing Information"
-                count={evaluationDecision.missing_information.length}
+                count={(evaluationDecision.missing_information ?? []).length}
                 defaultOpen={false}
               >
                 <ul className="space-y-2">
-                  {evaluationDecision.missing_information.map((item, idx) => (
+                  {(evaluationDecision.missing_information ?? []).map((item, idx) => (
                     <li
                       key={idx}
                       className="border-l-2 border-slate-300 pl-2.5 text-xs leading-relaxed text-muted-foreground dark:border-slate-600"
@@ -569,72 +668,11 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
           {activeTab === "ca-data" && (
             <div role="tabpanel" className="flex-1 overflow-y-auto">
               <CaSection title="Basic Information" defaultOpen>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-                  <div className="text-muted-foreground">Group Name</div>
-                  <div>{(basicInfo.group_name as string) || "-"}</div>
-                  <div className="text-muted-foreground">Borrower(s)</div>
-                  <div>
-                    {Array.isArray(basicInfo.borrower_names)
-                      ? (basicInfo.borrower_names as string[]).join(", ")
-                      : "-"}
-                  </div>
-                  <div className="text-muted-foreground">CA Reference</div>
-                  <div>{(basicInfo.ca_reference_no as string) || "-"}</div>
-                  <div className="text-muted-foreground">CA Date</div>
-                  <div>{(basicInfo.ca_date as string) || "-"}</div>
-                  <div className="text-muted-foreground">Application Type</div>
-                  <div>{(basicInfo.application_type as string) || "-"}</div>
-                  <div className="text-muted-foreground">Account Status</div>
-                  <div>{(basicInfo.account_status as string) || "-"}</div>
-                  <div className="text-muted-foreground">
-                    Relationship Since
-                  </div>
-                  <div>{(basicInfo.relationship_since as string) || "-"}</div>
-                  <div className="text-muted-foreground">
-                    Relationship Strategy
-                  </div>
-                  <div>
-                    {(basicInfo.relationship_strategy as string) || "-"}
-                  </div>
-                  <div className="text-muted-foreground">
-                    Next Review Expiry
-                  </div>
-                  <div>{(basicInfo.next_review_expiry as string) || "-"}</div>
-                </div>
+                <DetailGrid data={basicInfo} fields={BASIC_INFO_FIELDS} />
               </CaSection>
 
               <CaSection title="Borrower Profile">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-                  <div className="text-muted-foreground">
-                    Principal Activity
-                  </div>
-                  <div>
-                    {(borrowerProfile.principal_activity as string) || "-"}
-                  </div>
-                  <div className="text-muted-foreground">Industry Sector</div>
-                  <div>
-                    {(borrowerProfile.industry_sector as string) || "-"}
-                  </div>
-                  <div className="text-muted-foreground">Year Commenced</div>
-                  <div>{(borrowerProfile.year_commenced as number) || "-"}</div>
-                  <div className="text-muted-foreground">SME</div>
-                  <div>{String(borrowerProfile.is_sme) || "-"}</div>
-                  <div className="text-muted-foreground">CRR Existing</div>
-                  <div>{(borrowerProfile.crr_existing as string) || "-"}</div>
-                  <div className="text-muted-foreground">CRR Proposed</div>
-                  <div>{(borrowerProfile.crr_proposed as string) || "-"}</div>
-                  <div className="text-muted-foreground">ESG Rating</div>
-                  <div>
-                    {(borrowerProfile.esg_rating_proposed as string) || "-"}
-                  </div>
-                  <div className="text-muted-foreground">
-                    BNM Classification
-                  </div>
-                  <div>
-                    {(borrowerProfile.bnm_classification_proposed as string) ||
-                      "-"}
-                  </div>
-                </div>
+                <DetailGrid data={borrowerProfile} fields={BORROWER_PROFILE_FIELDS} />
               </CaSection>
 
               <CaSection title="Application Requests">
@@ -691,7 +729,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Secured</span>
                     <span className="font-mono">
-                      {formatCurrency(facilities.total_security_value_rm)}
+                      {formatCurrency(securities.total_security_value_rm)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -699,7 +737,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                       Total Unsecured
                     </span>
                     <span className="font-mono">
-                      {formatCurrency(facilities.total_unsecured_rm)}
+                      {formatCurrency(securities.total_unsecured_exposure_rm)}
                     </span>
                   </div>
                 </div>
@@ -734,26 +772,7 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               </CaSection>
 
               <CaSection title="Group Exposure">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-                  <div className="text-muted-foreground">Grand Total</div>
-                  <div className="font-mono font-medium">
-                    {formatCurrency(groupExposure.grand_total_rm)}
-                  </div>
-                  <div className="text-muted-foreground">Secured Exposure</div>
-                  <div className="font-mono">
-                    {formatCurrency(groupExposure.secured_exposure_rm)}
-                  </div>
-                  <div className="text-muted-foreground">
-                    Unsecured Exposure
-                  </div>
-                  <div className="font-mono">
-                    {formatCurrency(groupExposure.unsecured_exposure_rm)}
-                  </div>
-                  <div className="text-muted-foreground">Total FEC/CCS/IRS</div>
-                  <div className="font-mono">
-                    {formatCurrency(groupExposure.total_fec_ccs_irs_rm)}
-                  </div>
-                </div>
+                <DetailGrid data={groupExposure} fields={GROUP_EXPOSURE_FIELDS} format={formatCurrency} />
               </CaSection>
 
               <CaSection title="Financial Summary">
@@ -777,46 +796,20 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                             {period.account_status as string})
                           </div>
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                            <div className="text-muted-foreground">Revenue</div>
-                            <div className="font-mono">
-                              {formatCurrency(period.revenue_rm)}
-                            </div>
-                            <div className="text-muted-foreground">PBT</div>
-                            <div className="font-mono">
-                              {formatCurrency(period.pbt_rm)}
-                            </div>
-                            <div className="text-muted-foreground">PAT</div>
-                            <div className="font-mono">
-                              {formatCurrency(period.pat_rm)}
-                            </div>
-                            <div className="text-muted-foreground">EBITDA</div>
-                            <div className="font-mono">
-                              {formatCurrency(period.ebitda_rm)}
-                            </div>
-                            <div className="text-muted-foreground">TNW</div>
-                            <div className="font-mono">
-                              {formatCurrency(period.tangible_net_worth_rm)}
-                            </div>
-                            <div className="text-muted-foreground">
-                              Total Debt
-                            </div>
-                            <div className="font-mono">
-                              {formatCurrency(period.total_debt_rm)}
-                            </div>
-                            <div className="text-muted-foreground">Gearing</div>
-                            <div className="font-mono">
-                              {formatMultiple(period.gearing_times)}
-                            </div>
-                            <div className="text-muted-foreground">DSCR</div>
-                            <div className="font-mono">
-                              {formatMultiple(period.dscr_times)}
-                            </div>
-                            <div className="text-muted-foreground">
-                              Interest Cover
-                            </div>
-                            <div className="font-mono">
-                              {formatMultiple(period.interest_cover_times)}
-                            </div>
+                            {FINANCIAL_PERIOD_FIELDS.map(([label, key, fmt]) =>
+                              period[key] !== undefined && period[key] !== null ? (
+                                <Fragment key={key}>
+                                  <div className="text-muted-foreground">{label}</div>
+                                  <div className="font-mono">
+                                    {fmt === "currency"
+                                      ? formatCurrency(period[key])
+                                      : fmt === "multiple"
+                                        ? formatMultiple(period[key])
+                                        : String(period[key])}
+                                  </div>
+                                </Fragment>
+                              ) : null
+                            )}
                           </div>
                         </div>
                       ))}
@@ -853,14 +846,8 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
 
               <CaSection title="Terms & Conditions">
                 <div className="space-y-4">
-                  {[
-                    "existing_pre_drawdown",
-                    "existing_post_drawdown",
-                    "internal_conditions",
-                  ].map((category) => {
-                    const items = termsAndConditions[category] as
-                      | Record<string, unknown>[]
-                      | null
+                  {Object.entries(termsAndConditions).map(([category, raw]) => {
+                    const items = raw as Record<string, unknown>[] | null
                     if (!items?.length) return null
                     return (
                       <div key={category}>
@@ -903,26 +890,28 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                 </div>
               </CaSection>
 
-              <CaSection title="MCC Decision">
-                <div className="py-2 text-center">
-                  <div
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium",
-                      mccDecision.decision === "Approved"
-                        ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
-                        : "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
-                    )}
-                  >
-                    {mccDecision.decision as string}
+              {typeof mccDecision?.decision === "string" && mccDecision.decision && (
+                <CaSection title="MCC Decision">
+                  <div className="py-2 text-center">
+                    <div
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium",
+                        mccDecision.decision === "Approved"
+                          ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
+                          : "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
+                      )}
+                    >
+                      {mccDecision.decision as string}
+                    </div>
+                    {typeof mccDecision.decision_remarks === "string" &&
+                      mccDecision.decision_remarks && (
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {mccDecision.decision_remarks}
+                        </p>
+                      )}
                   </div>
-                  {typeof mccDecision.decision_remarks === "string" &&
-                    mccDecision.decision_remarks && (
-                      <p className="mt-2 text-xs text-muted-foreground">
-                        {mccDecision.decision_remarks}
-                      </p>
-                    )}
-                </div>
-              </CaSection>
+                </CaSection>
+              )}
             </div>
           )}
         </div>

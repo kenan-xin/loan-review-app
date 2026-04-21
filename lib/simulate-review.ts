@@ -5,27 +5,6 @@ import type {
   EvaluationSummary,
   EvaluationDecision,
 } from "@/types/review"
-import caExtractedData from "@/app/data/ca_extracted_rh_group.json"
-import evaluationData from "@/app/data/evaluation_report_rh_group.json"
-
-export function loadSimulationData(): {
-  caData: CaData
-  evaluationResults: EvaluationRuleResult[]
-  evaluationSummary: EvaluationSummary
-  evaluationDecision: EvaluationDecision
-} {
-  const typed = evaluationData as {
-    evaluation_results: EvaluationRuleResult[]
-    summary: EvaluationSummary
-    decision: EvaluationDecision
-  }
-  return {
-    caData: caExtractedData as CaData,
-    evaluationResults: typed.evaluation_results,
-    evaluationSummary: typed.summary,
-    evaluationDecision: typed.decision,
-  }
-}
 
 export function transformToReviewResult(
   caData: CaData,

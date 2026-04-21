@@ -51,16 +51,16 @@ export interface EvaluationDecision {
   recommendation: string
   key_strengths: string[]
   key_concerns: string[]
-  required_conditions: string[]
-  missing_information: string[]
+  required_conditions: string[] | null
+  missing_information: string[] | null
   reasoning: string
 }
 
 export interface CaData {
   A_basic_information: Record<string, unknown>
   B_borrower_profile: Record<string, unknown>
-  C_key_persons: Record<string, unknown>[]
-  D_shareholding_changes: unknown
+  C_key_persons?: Record<string, unknown>[]
+  D_shareholding_changes?: unknown
   E_facilities: Record<string, unknown>
   F_securities: Record<string, unknown>
   G_group_exposure: Record<string, unknown>
@@ -70,7 +70,7 @@ export interface CaData {
   K_key_credit_issues: Record<string, unknown>[]
   L_recommendations: Record<string, unknown>
   M_terms_and_conditions: Record<string, unknown>
-  N_mcc_decision: Record<string, unknown>
+  N_mcc_decision?: Record<string, unknown>
   O_application_requests: Record<string, unknown>[]
 }
 

@@ -1,7 +1,6 @@
 "use client"
 
-import { Suspense, useEffect } from "react"
-import { useQueryState } from "nuqs"
+import { Suspense } from "react"
 import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
@@ -19,36 +18,18 @@ export default function Page() {
 }
 
 function LoanReviewWizard() {
-  const [urlJobId, setUrlJobId] = useQueryState("jobId")
-
   const {
     step,
     applicationFile,
-    jobId,
     result,
     error,
     isSubmitting,
-    processingProgress,
+    stage,
+    completedStages,
     setApplicationFile,
     submit,
     reset,
-    resumeJob,
   } = useLoanReviewStore()
-
-  useEffect(() => {
-    if (urlJobId && !jobId) {
-      resumeJob(urlJobId)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (jobId && jobId !== urlJobId) {
-      setUrlJobId(jobId)
-    }
-    if (!jobId && urlJobId) {
-      setUrlJobId(null)
-    }
-  }, [jobId, urlJobId, setUrlJobId])
 
   const handleNext = () => {
     if (step === 1 && applicationFile) submit()
@@ -56,13 +37,12 @@ function LoanReviewWizard() {
 
   const handleRetry = () => {
     useLoanReviewStore.setState({
-      jobId: null,
       error: null,
       result: null,
       step: 1,
-      processingProgress: 0,
+      stage: "idle",
+      completedStages: new Set(),
     })
-    setUrlJobId(null)
   }
 
   const canGoNext = step === 1 && !!applicationFile
@@ -90,7 +70,8 @@ function LoanReviewWizard() {
             <ProcessingStep
               isSubmitting={isSubmitting}
               error={error}
-              processingProgress={processingProgress}
+              stage={stage}
+              completedStages={completedStages}
               onRetry={handleRetry}
             />
           )}
