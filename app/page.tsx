@@ -1,7 +1,6 @@
 "use client"
 
-import { Suspense, useEffect } from "react"
-import { useQueryState } from "nuqs"
+import { Suspense } from "react"
 import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
@@ -11,13 +10,6 @@ import { ResultsStep } from "@/components/results-step"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LayoutSwitcher } from "@/components/layout-switcher"
 import { ChatBubble } from "@/components/chat-bubble"
-import {
-  loadSimulationData,
-  transformToReviewResult,
-} from "@/lib/simulate-review"
-
-// Set to true to skip processing delay and go straight to results after upload
-const DEBUG_SKIP_PROCESSING = true
 
 export default function Page() {
   return (
@@ -28,61 +20,16 @@ export default function Page() {
 }
 
 function LoanReviewWizard() {
-  const [urlJobId, setUrlJobId] = useQueryState("jobId")
-
   const {
     step,
     applicationFile,
-    jobId,
     result,
     error,
     isSubmitting,
-    processingProgress,
     setApplicationFile,
     submit,
     reset,
-    resumeJob,
   } = useLoanReviewStore()
-
-  useEffect(() => {
-    if (urlJobId && !jobId) {
-      resumeJob(urlJobId)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (jobId && jobId !== urlJobId) {
-      setUrlJobId(jobId)
-    }
-    if (!jobId && urlJobId) {
-      setUrlJobId(null)
-    }
-  }, [jobId, urlJobId, setUrlJobId])
-
-  // Debug: skip processing delay, load results instantly after upload
-  useEffect(() => {
-    if (DEBUG_SKIP_PROCESSING && isSubmitting && !result) {
-      const {
-        caData,
-        evaluationResults,
-        evaluationSummary,
-        evaluationDecision,
-      } = loadSimulationData()
-      const r = transformToReviewResult(
-        caData,
-        evaluationResults,
-        evaluationSummary,
-        evaluationDecision
-      )
-      useLoanReviewStore.setState({
-        result: r,
-        step: 3,
-        isSubmitting: false,
-        processingProgress: 100,
-        jobId: `debug-${Date.now()}`,
-      })
-    }
-  }, [isSubmitting, result])
 
   const handleNext = () => {
     if (step === 1 && applicationFile) submit()
@@ -90,13 +37,10 @@ function LoanReviewWizard() {
 
   const handleRetry = () => {
     useLoanReviewStore.setState({
-      jobId: null,
       error: null,
       result: null,
       step: 1,
-      processingProgress: 0,
     })
-    setUrlJobId(null)
   }
 
   const canGoNext = step === 1 && !!applicationFile
@@ -111,7 +55,7 @@ function LoanReviewWizard() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6">
         <div className="mb-6">
           <StepIndicator currentStep={step} />
         </div>
@@ -125,9 +69,7 @@ function LoanReviewWizard() {
           )}
           {step === 2 && (
             <ProcessingStep
-              isSubmitting={isSubmitting}
               error={error}
-              processingProgress={processingProgress}
               onRetry={handleRetry}
             />
           )}
