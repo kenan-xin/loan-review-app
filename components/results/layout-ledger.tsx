@@ -155,7 +155,7 @@ function LedgerRow({
     )
     .sort((a, b) => {
       const orderDiff =
-        RULE_STATUS_ORDER[a.rule.result] - RULE_STATUS_ORDER[b.rule.result]
+        (RULE_STATUS_ORDER[a.rule.result as keyof typeof RULE_STATUS_ORDER] ?? 9) - (RULE_STATUS_ORDER[b.rule.result as keyof typeof RULE_STATUS_ORDER] ?? 9)
       return orderDiff !== 0 ? orderDiff : a.index - b.index
     })
 

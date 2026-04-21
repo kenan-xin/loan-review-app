@@ -68,7 +68,7 @@ function getSuggestions(
       text: "Summarise the overall decision",
     })
   }
-  if (decision.required_conditions.length > 0) {
+  if (decision.required_conditions && decision.required_conditions.length > 0) {
     suggestions.push({
       badge: "UNVERIFIABLE",
       badgeColor: "text-slate-500",

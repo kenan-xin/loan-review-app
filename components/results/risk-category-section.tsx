@@ -53,7 +53,7 @@ export function RiskCategorySection({
     )
     .sort((a, b) => {
       const orderDiff =
-        RULE_STATUS_ORDER[a.rule.result] - RULE_STATUS_ORDER[b.rule.result]
+        (RULE_STATUS_ORDER[a.rule.result as keyof typeof RULE_STATUS_ORDER] ?? 9) - (RULE_STATUS_ORDER[b.rule.result as keyof typeof RULE_STATUS_ORDER] ?? 9)
 
       return orderDiff !== 0 ? orderDiff : a.index - b.index
     })
@@ -161,13 +161,11 @@ export function RiskCategorySection({
             <div>
               {filteredRules.map(({ rule, index }, itemIndex) => {
                 const ruleKey = `${index}:${getRuleKey(rule)}`
-                const itemNumber = `${categoryIndex}.${itemIndex + 1}`
 
                 return (
                   <RiskItem
                     key={ruleKey}
                     rule={rule}
-                    itemNumber={itemNumber}
                     isExpanded={expandedRules.has(ruleKey)}
                     onToggle={() => toggleRule(ruleKey)}
                   />
