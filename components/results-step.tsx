@@ -38,6 +38,8 @@ export function ResultsStep({ result }: ResultsStepProps) {
             basicInfo={basicInfo}
             evaluationSummary={evaluationSummary}
             evaluationDecision={evaluationDecision}
+            riskScore={result.riskScore}
+            riskBand={result.riskBand}
           />
 
           <div className="flex min-h-0 flex-col overflow-hidden rounded-xl border">

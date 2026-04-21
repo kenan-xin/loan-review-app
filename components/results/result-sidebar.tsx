@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight, Sparkles } from "lucide-react"
-import { RESULT_CONFIG, RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RESULT_CONFIG, RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 import type { EvaluationSummary, EvaluationDecision } from "@/types/review"
 import { RiskMeter } from "./risk-meter"
 
@@ -11,6 +11,8 @@ interface ResultSidebarProps {
   readonly basicInfo: Record<string, unknown>
   readonly evaluationSummary: EvaluationSummary
   readonly evaluationDecision: EvaluationDecision
+  readonly riskScore: number
+  readonly riskBand: "low" | "medium" | "high"
 }
 
 function LeftSection({
@@ -62,12 +64,11 @@ export function ResultSidebar({
   basicInfo,
   evaluationSummary,
   evaluationDecision,
+  riskScore,
+  riskBand,
 }: ResultSidebarProps) {
   const uniqueConcerns = [...new Set(evaluationDecision.key_concerns)]
   const uniqueStrengths = [...new Set(evaluationDecision.key_strengths)]
-  const byRiskCategory = evaluationSummary.by_risk_category
-  const riskScore = evaluationSummary.risk_score ?? 0
-  const riskBand = evaluationSummary.risk_band ?? "medium"
 
   return (
     <div className="flex min-h-0 flex-col overflow-hidden rounded-xl border lg:max-h-full">
@@ -157,9 +158,13 @@ export function ResultSidebar({
           </div>
           <div className="space-y-2.5">
             {RISK_CATEGORIES.map((cat) => {
-              const stats = byRiskCategory[cat.id]
-              if (!stats || stats.total === 0) return null
-              const total = stats.total
+              const byCatEntry = Object.entries(evaluationSummary.by_category).find(
+                ([key]) => riskCategoryToId(key) === cat.id
+              )
+              if (!byCatEntry) return null
+              const stats = byCatEntry[1]
+              const total = stats.fail + stats.warning + stats.pass + stats.missing
+              if (total === 0) return null
               return (
                 <div key={cat.id}>
                   <div className="mb-1">
