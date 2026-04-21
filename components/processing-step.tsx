@@ -13,16 +13,8 @@ interface ProcessingStepProps {
 
 const STAGES: Array<{ id: SseStage; label: string }> = [
   { id: "processing_document", label: "Processing document" },
-  { id: "extracting", label: "Extracting" },
-  { id: "checking", label: "Checking" },
-  { id: "completed", label: "Completed" },
-]
-
-const STAGE_ORDER: SseStage[] = [
-  "processing_document",
-  "extracting",
-  "checking",
-  "completed",
+  { id: "extracting", label: "Extracting CA data" },
+  { id: "checking", label: "Running evaluation rules" },
 ]
 
 function AnimatedDots() {
@@ -86,8 +78,7 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
     )
   }
 
-  const currentStageIndex = stage === "idle" ? -1 : STAGE_ORDER.indexOf(stage)
-  const activeStageIndex = Math.max(0, currentStageIndex)
+  const activeStageIndex = STAGES.findIndex((s) => s.id === stage)
 
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -97,7 +88,7 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
       </p>
 
       <div className="mt-6 w-full max-w-md rounded-lg border p-4 text-left shadow-sm">
-        {currentStageIndex >= 0 && currentStageIndex < STAGES.length - 1 && (
+        {activeStageIndex >= 0 && (
           <div className="flex items-center gap-3">
             <Loader2 className="size-5 shrink-0 animate-spin text-primary" />
             <span className="text-sm font-medium">
@@ -107,14 +98,9 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
           </div>
         )}
 
-        {completedStages.size > 0 && (
+        {activeStageIndex > 0 && (
           <div className="mt-3 space-y-1.5 border-t pt-3">
-            {STAGES.filter(
-              (s) =>
-                s.id !== "completed" &&
-                completedStages.has(s.id) &&
-                STAGE_ORDER.indexOf(s.id) < activeStageIndex
-            ).map((s) => (
+            {STAGES.slice(0, activeStageIndex).map((s) => (
               <div
                 key={s.id}
                 className="flex items-center gap-2 text-xs text-muted-foreground"
@@ -125,16 +111,11 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
             ))}
           </div>
         )}
-
-        <div className="mt-3 text-xs text-muted-foreground">
-          Step {Math.min(activeStageIndex + 1, STAGES.length)} of {STAGES.length}
-        </div>
       </div>
 
-      <div className="mt-4 font-mono text-sm">
-        <span className="text-muted-foreground">Elapsed: </span>
-        <span className="font-medium">{formatTime(elapsed)}</span>
-      </div>
+      <p className="mt-4 text-xs text-muted-foreground">
+        Elapsed: {formatTime(elapsed)}
+      </p>
     </div>
   )
 }
