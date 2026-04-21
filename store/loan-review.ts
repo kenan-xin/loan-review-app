@@ -15,6 +15,14 @@ const NODE_TO_STAGE: Record<string, SseStage> = {
   response_2: "checking",
 }
 
+const STAGE_INDEX: Record<SseStage, number> = {
+  idle: -1,
+  processing_document: 0,
+  extracting: 1,
+  checking: 2,
+  completed: 3,
+}
+
 type ResultLayout = "sidebar" | "briefing" | "ledger"
 
 let abortController: AbortController | null = null
@@ -128,8 +136,19 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
               const nodeID = event.nodeID as string | undefined
 
+              if (event.eventType === "error" && event.errorMessage && !get().error) {
+                const msg = event.errorMessage as string
+                console.error("[SSE] backend error:", msg)
+                set({ error: msg.includes("openrouter") ? "AI provider error — please retry" : msg, isSubmitting: false })
+              }
+
               if (nodeID && NODE_TO_STAGE[nodeID]) {
-                set({ stage: NODE_TO_STAGE[nodeID] })
+                const newStage = NODE_TO_STAGE[nodeID]
+                const currentStage = get().stage
+                if (STAGE_INDEX[newStage] > STAGE_INDEX[currentStage]) {
+                  console.debug("[SSE] stage →", newStage, { from: currentStage, nodeID })
+                  set({ stage: newStage })
+                }
               }
 
               if (nodeID === "end" || event.status === "completed") {

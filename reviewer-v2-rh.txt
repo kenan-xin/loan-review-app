@@ -1,0 +1,147 @@
+retry: 2147483647
+
+data: {"codeStatus":200,"completionTokens":0,"eventType":"response","nodeID":"response_3","output":{"status":"processing the document"},"promptTokens":0,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":0,"eventType":"response","nodeID":"response_1","output":{"index":0,"status":"extracting"},"promptTokens":0,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":0,"eventType":"response","nodeID":"response_1","output":{"index":1,"status":"extracting"},"promptTokens":0,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":0,"eventType":"response","nodeID":"response_1","output":{"index":2,"status":"extracting"},"promptTokens":0,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":2948,"eventType":"response","nodeID":"response_1","output":{"index":3,"status":"extracting"},"promptTokens":6449,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":2948,"eventType":"response","nodeID":"response_1","output":{"index":4,"status":"extracting"},"promptTokens":6449,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":2948,"eventType":"response","nodeID":"response_1","output":{"index":5,"status":"extracting"},"promptTokens":6449,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":4944,"eventType":"response","nodeID":"response_1","output":{"index":6,"status":"extracting"},"promptTokens":12410,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":4944,"eventType":"response","nodeID":"response_1","output":{"index":7,"status":"extracting"},"promptTokens":12410,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":4944,"eventType":"response","nodeID":"response_1","output":{"index":8,"status":"extracting"},"promptTokens":12410,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":10102,"eventType":"response","nodeID":"response_1","output":{"index":9,"status":"extracting"},"promptTokens":19518,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":10102,"eventType":"response","nodeID":"response_1","output":{"index":10,"status":"extracting"},"promptTokens":19518,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":10102,"eventType":"response","nodeID":"response_1","output":{"index":11,"status":"extracting"},"promptTokens":19518,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":11883,"eventType":"response","nodeID":"response_1","output":{"index":12,"status":"extracting"},"promptTokens":25208,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":11883,"eventType":"response","nodeID":"response_1","output":{"index":13,"status":"extracting"},"promptTokens":25208,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":11883,"eventType":"response","nodeID":"response_1","output":{"index":14,"status":"extracting"},"promptTokens":25208,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":13264,"eventType":"response","nodeID":"response_1","output":{"index":15,"status":"extracting"},"promptTokens":30667,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":13264,"eventType":"response","nodeID":"response_1","output":{"index":16,"status":"extracting"},"promptTokens":30667,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":13264,"eventType":"response","nodeID":"response_1","output":{"index":17,"status":"extracting"},"promptTokens":30667,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":14459,"eventType":"response","nodeID":"response_1","output":{"index":18,"status":"extracting"},"promptTokens":36907,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":14459,"eventType":"response","nodeID":"response_1","output":{"index":19,"status":"extracting"},"promptTokens":36907,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":14459,"eventType":"response","nodeID":"response_1","output":{"index":20,"status":"extracting"},"promptTokens":36907,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":15492,"eventType":"response","nodeID":"response_1","output":{"index":21,"status":"extracting"},"promptTokens":42914,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":15492,"eventType":"response","nodeID":"response_1","output":{"index":22,"status":"extracting"},"promptTokens":42914,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":15492,"eventType":"response","nodeID":"response_1","output":{"index":23,"status":"extracting"},"promptTokens":42914,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":16271,"eventType":"response","nodeID":"response_1","output":{"index":24,"status":"extracting"},"promptTokens":48662,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":16271,"eventType":"response","nodeID":"response_1","output":{"index":25,"status":"extracting"},"promptTokens":48662,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":16271,"eventType":"response","nodeID":"response_1","output":{"index":26,"status":"extracting"},"promptTokens":48662,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":17210,"eventType":"response","nodeID":"response_1","output":{"index":27,"status":"extracting"},"promptTokens":56196,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":17210,"eventType":"response","nodeID":"response_1","output":{"index":28,"status":"extracting"},"promptTokens":56196,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":17210,"eventType":"response","nodeID":"response_1","output":{"index":29,"status":"extracting"},"promptTokens":56196,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":18078,"eventType":"response","nodeID":"response_1","output":{"index":30,"status":"extracting"},"promptTokens":63247,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":18078,"eventType":"response","nodeID":"response_1","output":{"index":31,"status":"extracting"},"promptTokens":63247,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":19027,"eventType":"response","nodeID":"response_2","output":{"index":0,"status":"checking"},"promptTokens":68283,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+data: {"codeStatus":200,"completionTokens":19027,"eventType":"response","nodeID":"response_2","output":{"index":1,"status":"checking"},"promptTokens":68283,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":19027,"eventType":"response","nodeID":"response_2","output":{"index":2,"status":"checking"},"promptTokens":68283,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":19027,"eventType":"response","nodeID":"response_2","output":{"index":3,"status":"checking"},"promptTokens":68283,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":200,"completionTokens":19027,"eventType":"response","nodeID":"response_2","output":{"index":4,"status":"checking"},"promptTokens":68283,"requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","userTokens":0,"uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+: heartbeat
+
+data: {"codeStatus":400,"errorMessage":"Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item","eventType":"error","requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"failed","uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":400,"errorMessage":"Error triggering children nodes for root node 'Iterator Start (iterator_2_iterator_start_3wCK)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 6 (code_interpreter_6): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 2 (response_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Logic Condition 2 (logic_condition_2): 1 of 2 child nodes failed:\n  1. error in child subtree of node LLM 1 (llm_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 4 (code_interpreter_4): 1 of 1 child nodes failed:\n  1. Error executing child node Variable Assigner 2 (variable_assigner_2): Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item\n\n\n\n\n\n","eventType":"error","requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"failed","uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":400,"errorMessage":"Error triggering children nodes for root node 'Iterator Start (iterator_2_iterator_start_3wCK)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 6 (code_interpreter_6): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 2 (response_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Logic Condition 2 (logic_condition_2): 1 of 2 child nodes failed:\n  1. error in child subtree of node LLM 1 (llm_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 4 (code_interpreter_4): 1 of 1 child nodes failed:\n  1. Error executing child node Variable Assigner 2 (variable_assigner_2): Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item\n\n\n\n\n\n","eventType":"error","requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"processing","uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":400,"errorMessage":"Error processing node iterator_2: Error in 'Executing Iteration Index 4 of 132': Error triggering children nodes for root node 'Iterator Start (iterator_2_iterator_start_3wCK)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 6 (code_interpreter_6): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 2 (response_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Logic Condition 2 (logic_condition_2): 1 of 2 child nodes failed:\n  1. error in child subtree of node LLM 1 (llm_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 4 (code_interpreter_4): 1 of 1 child nodes failed:\n  1. Error executing child node Variable Assigner 2 (variable_assigner_2): Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item\n\n\n\n\n\n","eventType":"error","requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"failed","uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+data: {"codeStatus":400,"errorMessage":"Error triggering children nodes for root node 'Root (root)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Start (start): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 3 (response_3): 1 of 1 child nodes failed:\n  1. error in child subtree of node Document Reader 2 (document_reader_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 2 (database_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 3 (database_3): 1 of 1 child nodes failed:\n  1. error in child subtree of node Iterator 1 (iterator_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 1 (database_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 1 (code_interpreter_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 4 (database_4): 1 of 1 child nodes failed:\n  1. Error executing child node Iterator 2 (iterator_2): Error processing node iterator_2: Error in 'Executing Iteration Index 4 of 132': Error triggering children nodes for root node 'Iterator Start (iterator_2_iterator_start_3wCK)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 6 (code_interpreter_6): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 2 (response_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Logic Condition 2 (logic_condition_2): 1 of 2 child nodes failed:\n  1. error in child subtree of node LLM 1 (llm_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 4 (code_interpreter_4): 1 of 1 child nodes failed:\n  1. Error executing child node Variable Assigner 2 (variable_assigner_2): Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n","eventType":"error","requestMessageID":"69e7810cd81a384c089c9e07","startTime":"2026-04-21T13:52:12.601198999Z","status":"failed","uuid":"e9301739-0d1f-477d-9a23-60bbf715bcbf"}
+
+{"name":"Error executing smartAPI workflow","code":0,"message":"Error executing smartAPI workflow","detail":"Error triggering children nodes for root node 'Root (root)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Start (start): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 3 (response_3): 1 of 1 child nodes failed:\n  1. error in child subtree of node Document Reader 2 (document_reader_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 2 (database_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 3 (database_3): 1 of 1 child nodes failed:\n  1. error in child subtree of node Iterator 1 (iterator_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 1 (database_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 1 (code_interpreter_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Database 4 (database_4): 1 of 1 child nodes failed:\n  1. Error executing child node Iterator 2 (iterator_2): Error processing node iterator_2: Error in 'Executing Iteration Index 4 of 132': Error triggering children nodes for root node 'Iterator Start (iterator_2_iterator_start_3wCK)': 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 6 (code_interpreter_6): 1 of 1 child nodes failed:\n  1. error in child subtree of node Response 2 (response_2): 1 of 1 child nodes failed:\n  1. error in child subtree of node Logic Condition 2 (logic_condition_2): 1 of 2 child nodes failed:\n  1. error in child subtree of node LLM 1 (llm_1): 1 of 1 child nodes failed:\n  1. error in child subtree of node Code Interpreter 4 (code_interpreter_4): 1 of 1 child nodes failed:\n  1. Error executing child node Variable Assigner 2 (variable_assigner_2): Error processing node variable_assigner_2: Error in 'Process WorkflowBase Node Input': failed to resolve reference: code_interpreter_4.result for variable_assigner_item\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"}
