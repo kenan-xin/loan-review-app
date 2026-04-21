@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 import type { EvaluationRuleResult, RiskCategoryId } from "@/types/review"
 import { RiskCategorySection } from "./risk-category-section"
 
@@ -28,7 +28,9 @@ export function RiskPanel({ rules, riskSummaries }: RiskPanelProps) {
 
   const rulesByCategory: Record<string, EvaluationRuleResult[]> = {}
   for (const cat of RISK_CATEGORIES) {
-    rulesByCategory[cat.id] = rules.filter((r) => r.risk_category === cat.id)
+    rulesByCategory[cat.id] = rules.filter(
+      (r) => riskCategoryToId(r.risk_category) === cat.id
+    )
   }
 
   const filteredTotal = rules.filter(
@@ -49,7 +51,7 @@ export function RiskPanel({ rules, riskSummaries }: RiskPanelProps) {
   }
 
   return (
-    <div role="tabpanel" className="flex min-h-0 flex-1 flex-col">
+    <div role="tabpanel" className="flex min-h-0 min-w-0 flex-1 flex-col">
       {/* Status filter chips */}
       <div className="flex shrink-0 items-center gap-2 border-b px-5 py-2.5">
         <div className="flex items-center gap-1">
@@ -88,13 +90,13 @@ export function RiskPanel({ rules, riskSummaries }: RiskPanelProps) {
 
       {/* Category sections */}
       <div className="flex-1 overflow-y-auto">
-        {RISK_CATEGORIES.map((cat) => {
+        {RISK_CATEGORIES.map((cat, catIndex) => {
           const catRules = rulesByCategory[cat.id]
-          if (catRules.length === 0) return null
           return (
             <RiskCategorySection
               key={cat.id}
               categoryId={cat.id as RiskCategoryId}
+              categoryIndex={catIndex + 1}
               rules={catRules}
               activeFilters={activeFilters}
               aiSummary={riskSummaries[cat.id] ?? ""}
