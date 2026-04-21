@@ -75,7 +75,7 @@ function LoanReviewWizard() {
           )}
           {step === 3 && result && (
             <>
-              <ResultsStep result={result} onStartNew={reset} />
+              <ResultsStep result={result} />
               <ChatBubble result={result} />
             </>
           )}

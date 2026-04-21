@@ -164,7 +164,6 @@ export function ResultSidebar({
               if (!byCatEntry) return null
               const stats = byCatEntry[1]
               const total = stats.fail + stats.warning + stats.pass + stats.missing
-              if (total === 0) return null
               return (
                 <div key={cat.id}>
                   <div className="mb-1">

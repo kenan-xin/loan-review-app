@@ -13,13 +13,6 @@ export interface ReviewResult {
   recommendations: string[]
 }
 
-export interface Job {
-  status: "processing" | "complete" | "error"
-  startedAt: number
-  result?: unknown
-  error?: string
-}
-
 export type RiskCategoryId =
   | "management"
   | "collateral"

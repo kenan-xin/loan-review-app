@@ -31,7 +31,7 @@ function AnimatedDots() {
 }
 
 export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
-  const { stage, completedStages, isSubmitting } = useLoanReviewStore()
+  const { stage, isSubmitting } = useLoanReviewStore()
 
   const [elapsed, setElapsed] = useState(0)
 

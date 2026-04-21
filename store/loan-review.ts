@@ -15,12 +15,6 @@ const NODE_TO_STAGE: Record<string, SseStage> = {
   response_2: "checking",
 }
 
-const STAGE_ORDER: SseStage[] = [
-  "processing_document",
-  "extracting",
-  "checking",
-]
-
 type ResultLayout = "sidebar" | "briefing" | "ledger"
 
 let abortController: AbortController | null = null
@@ -32,7 +26,6 @@ interface LoanReviewState {
   error: string | null
   isSubmitting: boolean
   stage: SseStage
-  completedStages: Set<SseStage>
   resultLayout: ResultLayout
 
   setStep: (step: 1 | 2 | 3) => void
@@ -49,7 +42,6 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   error: null,
   isSubmitting: false,
   stage: "idle",
-  completedStages: new Set(),
   resultLayout: "sidebar",
 
   setStep: (step) => set({ step }),
@@ -70,7 +62,6 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       error: null,
       step: 2,
       stage: "idle",
-      completedStages: new Set(),
     })
 
     const formData = new FormData()
@@ -78,18 +69,11 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
     let buffer = ""
 
-    const markStagesUpTo = (stage: SseStage) => {
-      const completed = new Set<SseStage>()
-      for (const s of STAGE_ORDER) {
-        completed.add(s)
-        if (s === stage) break
-      }
-      set((state) => ({
-        completedStages: new Set([...state.completedStages, ...completed]),
-      }))
-    }
-
     const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL_V2 ?? ""
+    if (!PROXY_BASE) {
+      set({ error: "Proxy URL not configured (NEXT_PUBLIC_PROXY_URL_V2)", isSubmitting: false })
+      return
+    }
     const MAX_RETRIES = 3
     const doFetch = async (attempt = 0): Promise<Response> => {
       try {
@@ -145,9 +129,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
               const nodeID = event.nodeID as string | undefined
 
               if (nodeID && NODE_TO_STAGE[nodeID]) {
-                const stage = NODE_TO_STAGE[nodeID]
-                markStagesUpTo(stage)
-                set({ stage })
+                set({ stage: NODE_TO_STAGE[nodeID] })
               }
 
               if (nodeID === "end" || event.status === "completed") {
@@ -171,12 +153,16 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
                     step: 3,
                     isSubmitting: false,
                     stage: "completed",
-                    completedStages: new Set(STAGE_ORDER),
                   })
                 }
               }
             }
           }
+        }
+
+        // Stream ended without terminal event
+        if (get().stage !== "completed") {
+          set({ error: "Stream ended without results", isSubmitting: false })
         }
       })
       .catch((err) => {
@@ -196,7 +182,6 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       error: null,
       isSubmitting: false,
       stage: "idle",
-      completedStages: new Set(),
       resultLayout: "sidebar",
     })
   },
