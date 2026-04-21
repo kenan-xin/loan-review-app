@@ -81,7 +81,8 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       set((state) => ({ completedStages: new Set([...state.completedStages, ...completed]) }))
     }
 
-    fetch("/api/loan-review", { method: "POST", body: formData, signal })
+    const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL ?? ""
+    fetch(`${PROXY_BASE}/api/loan-review`, { method: "POST", body: formData, signal })
       .then(async (response) => {
         if (!response.ok) {
           const body = await response.text().catch(() => "")

@@ -1,11 +1,28 @@
 import { createWriteStream, readdirSync, statSync, unlinkSync } from "node:fs"
 import path from "node:path"
 
-import { logger } from "@/lib/logger"
+import cors from "cors"
+import express from "express"
+import multer from "multer"
+
+import { logger } from "./logger.js"
+
+const app = express()
+const upload = multer({ storage: multer.memoryStorage() })
 
 const DUMP_DIR = "/tmp"
 const DUMP_PREFIX = "sse-"
 const DUMP_KEEP = 10
+const EXTERNAL_API_URL = process.env.EXTERNAL_API_URL ?? "https://dev-genie.001.gs/smart-api/reviewer"
+
+const SSE_HEADERS = {
+  "Content-Type": "text/event-stream",
+  "Cache-Control": "no-cache, no-transform",
+  Connection: "keep-alive",
+  "X-Accel-Buffering": "no",
+}
+
+app.use(cors({ origin: process.env.ALLOWED_ORIGIN ?? "*", credentials: false }))
 
 function pruneOldDumps(context: string): void {
   try {
@@ -23,19 +40,6 @@ function pruneOldDumps(context: string): void {
   } catch (err) {
     logger.warn(context, "Dump prune failed", { error: String(err) })
   }
-}
-
-export const maxDuration = 300
-export const runtime = "nodejs"
-export const dynamic = "force-dynamic"
-
-const EXTERNAL_API_URL = "https://dev-genie.001.gs/smart-api/reviewer"
-
-const SSE_HEADERS = {
-  "Content-Type": "text/event-stream",
-  "Cache-Control": "no-cache, no-transform",
-  Connection: "keep-alive",
-  "X-Accel-Buffering": "no",
 }
 
 interface LogContext {
@@ -152,30 +156,41 @@ async function logSseFrames(stream: ReadableStream<Uint8Array>, ctx: LogContext)
   }
 }
 
-export async function POST(request: Request): Promise<Response> {
+app.get("/healthz", (_req, res) => {
+  res.send("ok")
+})
+
+app.post("/api/loan-review", upload.single("ca"), async (req, res) => {
   const context = "POST /api/loan-review"
 
   try {
-    const formData = await request.formData()
-    const ca = formData.get("ca") as File | null
-
-    if (!ca) {
+    const file = req.file
+    if (!file) {
       logger.warn(context, "Missing ca file")
-      return Response.json(
-        { error: "CA file is required" },
-        { status: 400 }
-      )
+      res.status(400).json({ error: "CA file is required" })
+      return
     }
 
-    logger.info(context, "Proxying SSE request", { file: ca.name })
+    const originalName = file.originalname ?? "upload"
+    logger.info(context, "Proxying SSE request", { file: originalName })
 
     const upstream = new FormData()
-    upstream.append("ca", ca)
+    upstream.append("ca", new Blob([new Uint8Array(file.buffer)]), originalName)
+
+    const abortCtrl = new AbortController()
+    let streaming = false
+    req.on("close", () => {
+      if (streaming) {
+        logger.info(context, "Client disconnected, aborting upstream")
+        abortCtrl.abort()
+      }
+    })
 
     const t0 = Date.now()
     const response = await fetch(EXTERNAL_API_URL, {
       method: "POST",
       body: upstream,
+      signal: abortCtrl.signal,
     })
 
     logger.info(context, "Upstream responded", {
@@ -186,60 +201,61 @@ export async function POST(request: Request): Promise<Response> {
 
     if (!response.ok) {
       const body = await response.text().catch(() => "unable to read body")
-      logger.error(context, "Upstream error", {
-        status: response.status,
-        body,
-      })
-      return Response.json(
-        { error: `Upstream returned ${response.status}` },
-        { status: response.status }
-      )
+      logger.error(context, "Upstream error", { status: response.status, body })
+      res.status(response.status).json({ error: `Upstream returned ${response.status}` })
+      return
     }
 
     if (!response.body) {
       logger.error(context, "Upstream returned no body")
-      return Response.json(
-        { error: "Upstream returned empty response" },
-        { status: 502 }
-      )
+      res.status(502).json({ error: "Upstream returned empty response" })
+      return
     }
+
+    res.writeHead(200, SSE_HEADERS)
+    streaming = true
 
     pruneOldDumps(context)
     const dumpPath = path.join(
       DUMP_DIR,
-      `sse-${new Date().toISOString().replace(/[:.]/g, "-")}-${ca.name.replace(/[^\w.-]/g, "_")}.jsonl`
+      `sse-${new Date().toISOString().replace(/[:.]/g, "-")}-${originalName.replace(/[^\w.-]/g, "_")}.jsonl`
     )
     logger.info(context, "Dumping SSE events", { dumpPath })
 
     const [logBranch, clientBranch] = response.body.tee()
-    logSseFrames(logBranch, { context, startedAt: t0, file: ca.name, dumpPath }).catch(
+    logSseFrames(logBranch, { context, startedAt: t0, file: originalName, dumpPath }).catch(
       (err) => logger.error(context, "log-drain crashed", { error: String(err) })
     )
 
-    const passThrough = new TransformStream({
-      transform(chunk, controller) {
-        controller.enqueue(chunk)
-      },
-      flush() {
-        logger.info(context, "Client stream completed normally")
-      },
-    })
-
-    clientBranch.pipeTo(passThrough.writable).catch((err) => {
+    const reader = clientBranch.getReader()
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) {
+          logger.info(context, "Client stream completed normally")
+          break
+        }
+        res.write(value)
+      }
+    } catch (err) {
       logger.error(context, "Upstream stream error (client branch)", {
         error: String(err),
-        errorMessage: err?.message ?? "unknown",
-        errorCause: String(err?.cause ?? "none"),
+        errorMessage: (err as Error)?.message ?? "unknown",
         ms: Date.now() - t0,
       })
-    })
-
-    return new Response(passThrough.readable, { headers: { ...SSE_HEADERS } })
+    } finally {
+      reader.releaseLock()
+      res.end()
+    }
   } catch (err) {
     logger.error(context, "Failed to process request", { error: String(err) })
-    return Response.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    )
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Internal server error" })
+    }
   }
-}
+})
+
+const PORT = parseInt(process.env.PORT ?? "8080", 10)
+app.listen(PORT, () => {
+  logger.info("server", `Listening on :${PORT}`)
+})
