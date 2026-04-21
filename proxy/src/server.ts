@@ -147,7 +147,7 @@ async function logSseFrames(stream: ReadableStream<Uint8Array>, ctx: LogContext)
     }
   } catch (err) {
     logger.error(ctx.context, "Upstream stream error", {
-      error: String(err),
+      error: err instanceof Error ? err.stack ?? err.message : String(err),
       ms: Date.now() - ctx.startedAt,
     })
   } finally {
@@ -224,7 +224,7 @@ app.post("/api/loan-review", upload.single("ca"), async (req, res) => {
 
     const [logBranch, clientBranch] = response.body.tee()
     logSseFrames(logBranch, { context, startedAt: t0, file: originalName, dumpPath }).catch(
-      (err) => logger.error(context, "log-drain crashed", { error: String(err) })
+      (err) => logger.error(context, "log-drain crashed", { error: err instanceof Error ? err.stack ?? err.message : String(err) })
     )
 
     const reader = clientBranch.getReader()
@@ -239,8 +239,7 @@ app.post("/api/loan-review", upload.single("ca"), async (req, res) => {
       }
     } catch (err) {
       logger.error(context, "Upstream stream error (client branch)", {
-        error: String(err),
-        errorMessage: (err as Error)?.message ?? "unknown",
+        error: err instanceof Error ? err.stack ?? err.message : String(err),
         ms: Date.now() - t0,
       })
     } finally {
@@ -248,7 +247,7 @@ app.post("/api/loan-review", upload.single("ca"), async (req, res) => {
       res.end()
     }
   } catch (err) {
-    logger.error(context, "Failed to process request", { error: String(err) })
+    logger.error(context, "Failed to process request", { error: err instanceof Error ? err.stack ?? err.message : String(err) })
     if (!res.headersSent) {
       res.status(500).json({ error: "Internal server error" })
     }
