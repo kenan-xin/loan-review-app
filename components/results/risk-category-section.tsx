@@ -13,15 +13,15 @@ const RULE_STATUS_ORDER = {
   WARNING: 1,
   PASS: 2,
   MISSING: 3,
-  "N/A": 4,
 } as const
 
 function getRuleKey(rule: EvaluationRuleResult) {
-  return [rule.rule_title, rule.category_5c, rule.result].join("::")
+  return [rule.rule_title, rule.risk_category, rule.result].join("::")
 }
 
 interface RiskCategorySectionProps {
   readonly categoryId: RiskCategoryId
+  readonly categoryIndex: number
   readonly rules: EvaluationRuleResult[]
   readonly activeFilters: Set<string>
   readonly aiSummary: string
@@ -29,6 +29,7 @@ interface RiskCategorySectionProps {
 
 export function RiskCategorySection({
   categoryId,
+  categoryIndex,
   rules,
   activeFilters,
   aiSummary,
@@ -70,7 +71,7 @@ export function RiskCategorySection({
     `${failCount}F`,
     `${warnCount}W`,
     `${passCount}P`,
-    `${missingCount}U`,
+    `${missingCount}UV`,
   ].join(" · ")
 
   return (
@@ -81,7 +82,10 @@ export function RiskCategorySection({
         className="flex w-full items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-muted/30"
       >
         <Icon className="size-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 text-sm font-medium">{cat.label}</span>
+        <span className="flex-1 text-sm font-medium">
+              <span className="mr-1.5 font-mono text-muted-foreground">{categoryIndex}.</span>
+              {cat.label}
+            </span>
         {countsLabel && (
           <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
             {countsLabel}
@@ -155,13 +159,15 @@ export function RiskCategorySection({
 
             {/* Risk items */}
             <div>
-              {filteredRules.map(({ rule, index }) => {
+              {filteredRules.map(({ rule, index }, itemIndex) => {
                 const ruleKey = `${index}:${getRuleKey(rule)}`
+                const itemNumber = `${categoryIndex}.${itemIndex + 1}`
 
                 return (
                   <RiskItem
                     key={ruleKey}
                     rule={rule}
+                    itemNumber={itemNumber}
                     isExpanded={expandedRules.has(ruleKey)}
                     onToggle={() => toggleRule(ruleKey)}
                   />
