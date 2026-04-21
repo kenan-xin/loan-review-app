@@ -19,9 +19,9 @@ const BAND_CONFIG = {
 } as const
 
 const TRACK_DATA = [
-  { name: "low", value: 30, color: "var(--color-emerald-400)" },
-  { name: "medium", value: 30, color: "var(--color-amber-300)" },
   { name: "high", value: 40, color: "var(--color-red-400)" },
+  { name: "medium", value: 30, color: "var(--color-amber-300)" },
+  { name: "low", value: 30, color: "var(--color-emerald-400)" },
 ]
 
 // 220° sweep: 200° (lower-left) → -20° (lower-right).
