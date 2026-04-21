@@ -4,11 +4,10 @@ import { useState } from "react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 import type {
   EvaluationRuleResult,
   RiskCategoryId,
-  RiskCategorySummary,
 } from "@/types/review"
 import { CaDataPanel } from "./ca-data-panel"
 import { RiskItem } from "./risk-item"
@@ -24,11 +23,10 @@ const RULE_STATUS_ORDER = {
   WARNING: 1,
   PASS: 2,
   MISSING: 3,
-  "N/A": 4,
 } as const
 
 function getRuleKey(rule: EvaluationRuleResult) {
-  return [rule.rule_title, rule.category_5c, rule.result].join("::")
+  return [rule.rule_title, rule.risk_category, rule.result].join("::")
 }
 
 /* ── Colour tokens ─────────────────────────────────────── */
@@ -133,7 +131,7 @@ interface CategoryRowProps {
   readonly index: number
   readonly categoryId: RiskCategoryId
   readonly rules: EvaluationRuleResult[]
-  readonly summary: RiskCategorySummary
+  readonly catStats: { fail: number; warning: number; pass: number; missing: number }
   readonly aiSummary: string
   readonly activeFilters: Set<string>
 }
@@ -141,7 +139,7 @@ interface CategoryRowProps {
 function CategoryRow({
   categoryId,
   rules,
-  summary,
+  catStats,
   aiSummary,
   activeFilters,
 }: CategoryRowProps) {
@@ -172,7 +170,8 @@ function CategoryRow({
     })
   }
 
-  const passRatio = summary.total > 0 ? summary.pass / summary.total : 0
+  const catTotal = catStats.fail + catStats.warning + catStats.pass + catStats.missing
+  const passRatio = catTotal > 0 ? catStats.pass / catTotal : 0
   const badgeStyle = getPassRatioBadge(passRatio, c)
 
   return (
@@ -190,10 +189,10 @@ function CategoryRow({
         </span>
         <span className="hidden w-20 sm:block">
           <CategoryStackedBar
-            fail={summary.fail}
-            warning={summary.warning}
-            pass={summary.pass}
-            missing={summary.missing}
+            fail={catStats.fail}
+            warning={catStats.warning}
+            pass={catStats.pass}
+            missing={catStats.missing}
             className="w-full"
           />
         </span>
@@ -205,7 +204,7 @@ function CategoryRow({
             color: badgeStyle.fg,
           }}
         >
-          {summary.pass}/{summary.total}
+          {catStats.pass}/{catTotal}
         </span>
         {open ? (
           <ChevronDown
@@ -296,7 +295,7 @@ export function LayoutBriefing({
   const rulesByCategory: Record<string, EvaluationRuleResult[]> = {}
   for (const cat of RISK_CATEGORIES) {
     rulesByCategory[cat.id] = evaluationResults.filter(
-      (r) => r.risk_category === cat.id
+      (r) => riskCategoryToId(r.risk_category) === cat.id
     )
   }
 
@@ -305,18 +304,20 @@ export function LayoutBriefing({
   ).length
 
   const flagCategories = RISK_CATEGORIES.filter((cat) => {
-    const catSummary = evaluationSummary.by_risk_category[cat.id]
-    return catSummary && (catSummary.fail > 0 || catSummary.warning > 0)
+    const entry = Object.entries(evaluationSummary.by_category).find(
+      ([key]) => riskCategoryToId(key) === cat.id
+    )
+    if (!entry) return false
+    return entry[1].fail > 0 || entry[1].warning > 0
   })
 
   const visibleCategories = RISK_CATEGORIES.filter((cat) => {
-    const catRules = rulesByCategory[cat.id]
-    if (catRules.length === 0) return false
     if (activeFilters.size === 0) return true
+    const catRules = rulesByCategory[cat.id]
     return catRules.some((r) => activeFilters.has(r.result))
   })
 
-  const bandStyle = getRiskBandStyle(evaluationSummary.risk_band, c)
+  const bandStyle = getRiskBandStyle(result.riskBand, c)
 
   return (
     <div
@@ -356,13 +357,13 @@ export function LayoutBriefing({
                 color: c.hdText,
               }}
             >
-              {evaluationSummary.risk_score}
+              {result.riskScore}
             </span>
             <span
               className="rounded px-2 py-0.5 text-[10px] font-semibold uppercase"
               style={{ background: bandStyle.bg, color: bandStyle.fg }}
             >
-              {evaluationSummary.risk_band}
+              {result.riskBand}
             </span>
           </div>
         </div>
@@ -456,9 +457,10 @@ export function LayoutBriefing({
               <div className="px-6 pt-2 pb-1">
                 <div className="flex flex-wrap gap-1.5">
                   {flagCategories.map((cat) => {
-                    const catSummary =
-                      evaluationSummary.by_risk_category[cat.id]
-                    const hasFail = (catSummary?.fail ?? 0) > 0
+                    const entry = Object.entries(evaluationSummary.by_category).find(
+                      ([key]) => riskCategoryToId(key) === cat.id
+                    )
+                    const hasFail = (entry?.[1]?.fail ?? 0) > 0
                     return (
                       <span
                         key={cat.id}
@@ -516,16 +518,18 @@ export function LayoutBriefing({
 
             {/* Category list */}
             {visibleCategories.map((cat) => {
-              const catSummary = evaluationSummary.by_risk_category[cat.id]
-              if (!catSummary) return null
+              const entry = Object.entries(evaluationSummary.by_category).find(
+                ([key]) => riskCategoryToId(key) === cat.id
+              )
+              const catStats = entry?.[1] ?? { fail: 0, warning: 0, pass: 0, missing: 0 }
               return (
                 <CategoryRow
                   key={cat.id}
                   index={RISK_CATEGORIES.indexOf(cat) + 1}
                   categoryId={cat.id as RiskCategoryId}
                   rules={rulesByCategory[cat.id]}
-                  summary={catSummary}
-                  aiSummary={evaluationSummary.risk_summaries[cat.id] ?? ""}
+                  catStats={catStats}
+                  aiSummary="No AI summary available yet."
                   activeFilters={activeFilters}
                 />
               )
