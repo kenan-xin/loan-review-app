@@ -75,7 +75,7 @@ Files:
 - `types/review.ts`
   - `EvaluationRuleResult`: drop `category_5c`; add `risk_level:"High"|"Medium"|"Low"`, `required_fields:string[]`, `source_evidence:string[]`, `source_file:string|null`, `validation_logic:string`. Change `risk_category` from `RiskCategoryId` to `string` (backend delivers full name).
   - `EvaluationSummary`: drop `risk_score`, `risk_band`, `by_risk_category`, `risk_summaries`. Change `by_risk_level` to `{high_fail_count, medium_fail_count, low_fail_count}`. Per-category entries: drop `na`.
-  - `CaData`: mark `D_shareholding_changes` as optional (`D_shareholding_changes?: unknown`) — absent in this sample but backend references it in `decision.missing_information`, so it may appear in other CA files. CA data panel never renders it regardless.
+  - `CaData`: make ALL fields optional (`?`) — every CA application is different and any section may be absent. Guard all reads with optional chaining. CA data panel must handle missing sections gracefully.
   - `ReviewResult.riskScore`: keep (client-computed from summary).
   - Add `riskBand: "low"|"medium"|"high"` to `SimulationResult` (client-derived).
 - `types/sse.ts` (new): SSE envelope + per-node output types for type-safe parsing.
@@ -218,7 +218,7 @@ UI surgery:
 - Gauge + band → **invert gauge track zones** to `0–40 red / 40–70 amber / 70–100 emerald`; band thresholds `≥70 low / 40–69 medium / <40 high`.
 - Empty categories → show all 9 always, even with 0 rules.
 - `decision.required_conditions` → transformer coerces `null` → `[]`. Type stays `string[]`.
-- CA `D_shareholding_changes` absent → mark optional in type (may appear in other CA files).
+- CA data → make ALL `CaData` fields optional (`?`). Every CA application is different; any section may be absent. Guard all reads.
 - Admin page → no change (separate `/api/risk-learning` backend, out of scope).
 - Stream resilience → match v1, no watchdog. Wait indefinitely; user reloads if stuck.
 - Unknown `risk_category` strings → fall back to `probe` silently with `console.warn`.
