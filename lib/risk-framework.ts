@@ -117,7 +117,7 @@ export const RESULT_CONFIG = {
   },
 } as const
 
-export const CATEGORY_STRING_TO_ID: Record<string, RiskCategoryId> = {
+export const CATEGORY_STRING_TO_ID: { [key: string]: RiskCategoryId } = {
   "Management risk": "management",
   "Collateral risk / asset quality": "collateral",
   "Market / Industry news / Bursa announcements": "market",
