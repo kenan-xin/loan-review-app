@@ -4,11 +4,10 @@ import { useState } from "react"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 import type {
   EvaluationRuleResult,
   RiskCategoryId,
-  RiskCategorySummary,
 } from "@/types/review"
 import { CaDataPanel } from "./ca-data-panel"
 import { RiskItem } from "./risk-item"
@@ -24,11 +23,10 @@ const RULE_STATUS_ORDER = {
   WARNING: 1,
   PASS: 2,
   MISSING: 3,
-  "N/A": 4,
 } as const
 
 function getRuleKey(rule: EvaluationRuleResult) {
-  return [rule.rule_title, rule.category_5c, rule.result].join("::")
+  return [rule.rule_title, rule.risk_category, rule.result].join("::")
 }
 
 /* ── Colour tokens ─────────────────────────────────────── */
@@ -117,10 +115,10 @@ function getRiskBandStyle(band: string, c: typeof LIGHT) {
   return getPassRatioColor(band === "low" ? 1 : band === "medium" ? 0.6 : 0, c)
 }
 
-function getRowTint(summary: RiskCategorySummary, c: typeof LIGHT) {
-  if (summary.fail > 0) return c.rowFail
-  if (summary.warning > 0) return c.rowWarn
-  if (summary.missing > 0 && summary.pass === 0) return c.rowEmpty
+function getRowTint(catStats: { fail: number; warning: number; pass: number; missing: number }, c: typeof LIGHT) {
+  if (catStats.fail > 0) return c.rowFail
+  if (catStats.warning > 0) return c.rowWarn
+  if (catStats.missing > 0 && catStats.pass === 0) return c.rowEmpty
   return ""
 }
 
@@ -130,7 +128,7 @@ interface LedgerRowProps {
   readonly index: number
   readonly categoryId: RiskCategoryId
   readonly rules: EvaluationRuleResult[]
-  readonly summary: RiskCategorySummary
+  readonly catStats: { fail: number; warning: number; pass: number; missing: number }
   readonly aiSummary: string
   readonly activeFilters: Set<string>
 }
@@ -139,7 +137,7 @@ function LedgerRow({
   index,
   categoryId,
   rules,
-  summary,
+  catStats,
   aiSummary,
   activeFilters,
 }: LedgerRowProps) {
@@ -170,12 +168,13 @@ function LedgerRow({
     })
   }
 
-  const passRatio = summary.total > 0 ? summary.pass / summary.total : 0
+  const total = catStats.fail + catStats.warning + catStats.pass + catStats.missing
+  const passRatio = total > 0 ? catStats.pass / total : 0
   const ratioColor = getPassRatioColor(passRatio, c)
 
   return (
     <div
-      className={cn("border-b", getRowTint(summary, c))}
+      className={cn("border-b", getRowTint(catStats, c))}
       style={{ borderColor: c.border }}
     >
       <button
@@ -210,16 +209,16 @@ function LedgerRow({
               color: c.textFaint,
             }}
           >
-            {summary.pass}/{summary.total} passed
+            {catStats.pass}/{total} passed
           </span>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
           <CategoryStackedBar
-            fail={summary.fail}
-            warning={summary.warning}
-            pass={summary.pass}
-            missing={summary.missing}
+            fail={catStats.fail}
+            warning={catStats.warning}
+            pass={catStats.pass}
+            missing={catStats.missing}
             className="flex-1"
           />
           <span
@@ -230,7 +229,7 @@ function LedgerRow({
               color: ratioColor.fg,
             }}
           >
-            {summary.pass}/{summary.total}
+            {catStats.pass}/{total}
           </span>
         </div>
 
@@ -329,7 +328,7 @@ export function LayoutLedger({
   const rulesByCategory: Record<string, EvaluationRuleResult[]> = {}
   for (const cat of RISK_CATEGORIES) {
     rulesByCategory[cat.id] = evaluationResults.filter(
-      (r) => r.risk_category === cat.id
+      (r) => riskCategoryToId(r.risk_category) === cat.id
     )
   }
 
@@ -339,12 +338,11 @@ export function LayoutLedger({
 
   const visibleCategories = RISK_CATEGORIES.filter((cat) => {
     const catRules = rulesByCategory[cat.id]
-    if (catRules.length === 0) return false
     if (activeFilters.size === 0) return true
     return catRules.some((r) => activeFilters.has(r.result))
   })
 
-  const bandStyle = getRiskBandStyle(evaluationSummary.risk_band, c)
+  const bandStyle = getRiskBandStyle(result.riskBand, c)
 
   return (
     <div
@@ -386,13 +384,13 @@ export function LayoutLedger({
               color: c.text,
             }}
           >
-            {evaluationSummary.risk_score}
+            {result.riskScore}
           </span>
           <span
             className="rounded px-2 py-0.5 text-[10px] font-semibold uppercase"
             style={{ background: bandStyle.bg, color: bandStyle.fg }}
           >
-            {evaluationSummary.risk_band}
+            {result.riskBand}
           </span>
         </div>
       </div>
@@ -544,16 +542,18 @@ export function LayoutLedger({
 
             {/* Ledger rows */}
             {visibleCategories.map((cat, idx) => {
-              const catSummary = evaluationSummary.by_risk_category[cat.id]
-              if (!catSummary) return null
+              const entry = Object.entries(evaluationSummary.by_category).find(
+                ([key]) => riskCategoryToId(key) === cat.id
+              )
+              const catStats = entry?.[1] ?? { fail: 0, warning: 0, pass: 0, missing: 0 }
               return (
                 <LedgerRow
                   key={cat.id}
                   index={idx + 1}
                   categoryId={cat.id as RiskCategoryId}
                   rules={rulesByCategory[cat.id]}
-                  summary={catSummary}
-                  aiSummary={evaluationSummary.risk_summaries[cat.id] ?? ""}
+                  catStats={catStats}
+                  aiSummary="No AI summary available yet."
                   activeFilters={activeFilters}
                 />
               )
