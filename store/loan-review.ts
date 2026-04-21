@@ -82,7 +82,19 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
     }
 
     const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL ?? ""
-    fetch(`${PROXY_BASE}/api/loan-review`, { method: "POST", body: formData, signal })
+    const MAX_RETRIES = 3
+    const doFetch = async (attempt = 0): Promise<Response> => {
+      try {
+        return await fetch(`${PROXY_BASE}/api/loan-review`, { method: "POST", body: formData, signal })
+      } catch (err) {
+        if (attempt < MAX_RETRIES - 1) {
+          await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)))
+          return doFetch(attempt + 1)
+        }
+        throw err
+      }
+    }
+    doFetch()
       .then(async (response) => {
         if (!response.ok) {
           const body = await response.text().catch(() => "")
