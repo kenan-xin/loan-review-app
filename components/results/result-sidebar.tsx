@@ -169,12 +169,12 @@ export function ResultSidebar({
                   <div className="mb-1">
                     <span className="text-xs text-foreground">{cat.label}</span>
                     <div className="font-mono text-[10px] whitespace-nowrap text-muted-foreground">
-                      {stats.fail}F ({Math.round((stats.fail / total) * 100)}%)
+                      {stats.fail}F ({total ? Math.round((stats.fail / total) * 100) : 0}%)
                       · {stats.warning}W (
-                      {Math.round((stats.warning / total) * 100)}%) ·{" "}
-                      {stats.pass}P ({Math.round((stats.pass / total) * 100)}%)
+                      {total ? Math.round((stats.warning / total) * 100) : 0}%) ·{" "}
+                      {stats.pass}P ({total ? Math.round((stats.pass / total) * 100) : 0}%)
                       · {stats.missing}UV (
-                      {Math.round((stats.missing / total) * 100)}%)
+                      {total ? Math.round((stats.missing / total) * 100) : 0}%)
                     </div>
                   </div>
                   <div className="flex h-1.5 gap-px overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
