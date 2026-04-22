@@ -46,6 +46,7 @@ interface LoanReviewState {
   setResultLayout: (layout: ResultLayout) => void
   fetchReviewHistory: () => Promise<void>
   viewHistoryItem: (item: ReviewHistoryItem) => void
+  loadHistoryById: (id: number) => Promise<void>
 }
 
 export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
@@ -114,6 +115,24 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       isSubmitting: false,
       stage: "completed",
     })
+  },
+
+  loadHistoryById: async (id: number) => {
+    const { reviewHistory, fetchReviewHistory, viewHistoryItem } = get()
+    set({ isLoadingHistory: true, historyError: null })
+
+    if (reviewHistory.length === 0) {
+      await fetchReviewHistory()
+    }
+
+    const item = get().reviewHistory.find((h) => h.id === id)
+    if (!item) {
+      set({ historyError: "Review not found", isLoadingHistory: false })
+      return
+    }
+
+    viewHistoryItem(item)
+    set({ isLoadingHistory: false })
   },
 
   submit: () => {

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { useLoanReviewStore } from "@/store/loan-review"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -19,6 +20,7 @@ function formatDate(iso: string): string {
 }
 
 export function ReviewHistory() {
+  const router = useRouter()
   const {
     reviewHistory,
     isLoadingHistory,
@@ -75,7 +77,7 @@ export function ReviewHistory() {
                   <td className="px-4 py-2.5">{item.filename}</td>
                   <td className="px-4 py-2.5 text-muted-foreground">{formatDate(item.created_at)}</td>
                   <td className="px-4 py-2.5 text-right">
-                    <Button variant="outline" size="sm" onClick={() => viewHistoryItem(item)}>
+                    <Button variant="outline" size="sm" onClick={() => { viewHistoryItem(item); router.push(`/?id=${item.id}`) }}>
                       View
                     </Button>
                   </td>
