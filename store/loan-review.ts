@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { SimulationResult } from "@/types/review"
+import type { SimulationResult, ReviewHistoryItem } from "@/types/review"
 import { transformToReviewResult } from "@/lib/simulate-review"
 
 export type SseStage =
@@ -35,12 +35,17 @@ interface LoanReviewState {
   isSubmitting: boolean
   stage: SseStage
   resultLayout: ResultLayout
+  reviewHistory: ReviewHistoryItem[]
+  isLoadingHistory: boolean
+  historyError: string | null
 
   setStep: (step: 1 | 2 | 3) => void
   setApplicationFile: (file: File | null) => void
   submit: () => void
   reset: () => void
   setResultLayout: (layout: ResultLayout) => void
+  fetchReviewHistory: () => Promise<void>
+  viewHistoryItem: (item: ReviewHistoryItem) => void
 }
 
 export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
@@ -51,12 +56,71 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   isSubmitting: false,
   stage: "idle",
   resultLayout: "sidebar",
+  reviewHistory: [],
+  isLoadingHistory: false,
+  historyError: null,
 
   setStep: (step) => set({ step }),
 
   setApplicationFile: (file) => set({ applicationFile: file }),
 
   setResultLayout: (layout) => set({ resultLayout: layout }),
+
+  fetchReviewHistory: async () => {
+    const { reviewHistory } = get()
+    if (reviewHistory.length > 0) return
+
+    const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL_V2 ?? ""
+    if (!PROXY_BASE) {
+      set({ historyError: "Proxy URL not configured" })
+      return
+    }
+
+    set({ isLoadingHistory: true, historyError: null })
+    try {
+      const response = await fetch(`${PROXY_BASE}/smart-api/hl_retriever`)
+      if (!response.ok) throw new Error(`Server error: ${response.status}`)
+      const data = await response.json()
+      const items: ReviewHistoryItem[] = JSON.parse(data.result)
+      const completed = items.filter(
+        (item) => {
+          try {
+            const parsed = JSON.parse(item.result)
+            return Array.isArray(parsed) && parsed.length > 0
+          } catch {
+            return false
+          }
+        }
+      )
+      set({ reviewHistory: completed, isLoadingHistory: false })
+    } catch (err) {
+      set({
+        historyError: String((err as Error).message ?? err),
+        isLoadingHistory: false,
+      })
+    }
+  },
+
+  viewHistoryItem: (item: ReviewHistoryItem) => {
+    const ca = JSON.parse(item.ca)
+    const result = JSON.parse(item.result)
+    const summary = JSON.parse(item.summary)
+    const decision = JSON.parse(item.decision)
+
+    const reviewResult = transformToReviewResult(
+      ca as SimulationResult["caData"],
+      result as SimulationResult["evaluationResults"],
+      summary as SimulationResult["evaluationSummary"],
+      decision as SimulationResult["evaluationDecision"]
+    )
+
+    set({
+      result: reviewResult,
+      step: 3,
+      isSubmitting: false,
+      stage: "completed",
+    })
+  },
 
   submit: () => {
     const { applicationFile, isSubmitting } = get()
@@ -202,6 +266,9 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       isSubmitting: false,
       stage: "idle",
       resultLayout: "sidebar",
+      reviewHistory: [],
+      isLoadingHistory: false,
+      historyError: null,
     })
   },
 }))
