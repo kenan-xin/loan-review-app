@@ -11,8 +11,6 @@ interface ResultSidebarProps {
   readonly basicInfo: Record<string, unknown>
   readonly evaluationSummary: EvaluationSummary
   readonly evaluationDecision: EvaluationDecision
-  readonly riskScore: number
-  readonly riskBand: "low" | "medium" | "high"
 }
 
 function LeftSection({
@@ -64,8 +62,6 @@ export function ResultSidebar({
   basicInfo,
   evaluationSummary,
   evaluationDecision,
-  riskScore,
-  riskBand,
 }: ResultSidebarProps) {
   const uniqueConcerns = [...new Set(evaluationDecision.key_concerns)]
   const uniqueStrengths = [...new Set(evaluationDecision.key_strengths)]
@@ -101,7 +97,13 @@ export function ResultSidebar({
 
       {/* Risk gauge */}
       <div className="shrink-0 border-b px-5 pt-5 pb-4">
-        <RiskMeter value={riskScore} band={riskBand} size="md" />
+        <RiskMeter
+          fail={evaluationSummary.total_fail}
+          warn={evaluationSummary.total_warning}
+          pass={evaluationSummary.total_pass}
+          missing={evaluationSummary.total_missing}
+          size="md"
+        />
       </div>
 
       {/* Stat strip */}
