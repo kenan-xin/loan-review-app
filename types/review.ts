@@ -90,3 +90,14 @@ export type SimulationResult = ReviewResult & {
   evaluationSummary: EvaluationSummary
   evaluationDecision: EvaluationDecision
 }
+
+export interface ReviewHistoryItem {
+  id: number
+  filename: string
+  created_at: string
+  updated_at: string
+  ca: string
+  result: string
+  summary: string
+  decision: string
+}
