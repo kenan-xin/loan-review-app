@@ -70,15 +70,9 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
     const { reviewHistory } = get()
     if (reviewHistory.length > 0) return
 
-    const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL_V2 ?? ""
-    if (!PROXY_BASE) {
-      set({ historyError: "Proxy URL not configured" })
-      return
-    }
-
     set({ isLoadingHistory: true, historyError: null })
     try {
-      const response = await fetch(`${PROXY_BASE}/smart-api/hl_retriever`)
+      const response = await fetch("https://dev-genie.001.gs/smart-api/hl_retriever")
       if (!response.ok) throw new Error(`Server error: ${response.status}`)
       const data = await response.json()
       const items: ReviewHistoryItem[] = JSON.parse(data.result)
