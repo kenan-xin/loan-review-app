@@ -62,25 +62,25 @@ interface CaDataPanelProps {
 }
 
 export function CaDataPanel({ caData }: CaDataPanelProps) {
-  const basicInfo = caData.A_basic_information as Record<string, unknown>
-  const borrowerProfile = caData.B_borrower_profile as Record<string, unknown>
-  const facilities = caData.E_facilities as Record<string, unknown>
-  const securities = caData.F_securities as Record<string, unknown>
-  const groupExposure = caData.G_group_exposure as Record<string, unknown>
-  const financialSummaries = caData.I_financial_summaries as Record<
+  const basicInfo = (caData.A_basic_information ?? {}) as Record<string, unknown>
+  const borrowerProfile = (caData.B_borrower_profile ?? {}) as Record<string, unknown>
+  const facilities = (caData.E_facilities ?? {}) as Record<string, unknown>
+  const securities = (caData.F_securities ?? {}) as Record<string, unknown>
+  const groupExposure = (caData.G_group_exposure ?? {}) as Record<string, unknown>
+  const financialSummaries = (caData.I_financial_summaries ?? []) as Record<
     string,
     unknown
   >[]
-  const keyCreditIssues = caData.K_key_credit_issues as Record<
+  const keyCreditIssues = (caData.K_key_credit_issues ?? []) as Record<
     string,
     unknown
   >[]
-  const termsAndConditions = caData.M_terms_and_conditions as Record<
+  const termsAndConditions = (caData.M_terms_and_conditions ?? {}) as Record<
     string,
     unknown
   >
-  const mccDecision = caData.N_mcc_decision as Record<string, unknown>
-  const applicationRequests = caData.O_application_requests as Record<
+  const mccDecision = (caData.N_mcc_decision ?? {}) as Record<string, unknown>
+  const applicationRequests = (caData.O_application_requests ?? []) as Record<
     string,
     unknown
   >[]
@@ -344,6 +344,8 @@ export function CaDataPanel({ caData }: CaDataPanelProps) {
           {[
             "existing_pre_drawdown",
             "existing_post_drawdown",
+            "new_pre_drawdown",
+            "new_post_drawdown",
             "internal_conditions",
           ].map((category) => {
             const items = termsAndConditions[category] as
@@ -386,6 +388,27 @@ export function CaDataPanel({ caData }: CaDataPanelProps) {
               </div>
             )
           })}
+          {(() => {
+            const exceptions = termsAndConditions.policy_exceptions as
+              | string[]
+              | null
+            if (!exceptions?.length) return null
+            return (
+              <div>
+                <div className="mb-1.5 text-xs font-medium">
+                  Policy Exceptions
+                </div>
+                {exceptions.map((ex, idx) => (
+                  <div
+                    key={idx}
+                    className="mb-1 rounded bg-muted/30 p-2 text-xs last:mb-0"
+                  >
+                    {ex}
+                  </div>
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </CaSection>
 
