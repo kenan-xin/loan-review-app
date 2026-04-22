@@ -1,167 +1,211 @@
 "use client"
 
-import { Cell, Pie, PieChart } from "recharts"
+import { useId, useState } from "react"
+import { Cell, Pie, PieChart, Tooltip } from "recharts"
 import { cn } from "@/lib/utils"
+import { Info } from "lucide-react"
+
+type RiskLevel = "high" | "medium" | "low"
 
 interface RiskMeterProps {
-  readonly value: number
-  readonly band: "low" | "medium" | "high"
+  readonly fail: number
+  readonly warn: number
+  readonly pass: number
+  readonly missing: number
   readonly size?: "sm" | "md"
 }
 
-const BAND_CONFIG = {
-  low: { label: "Low Risk", color: "text-emerald-500 dark:text-emerald-400" },
-  medium: {
-    label: "Medium Risk",
-    color: "text-amber-500 dark:text-amber-400",
-  },
-  high: { label: "High Risk", color: "text-red-500 dark:text-red-400" },
-} as const
-
-const TRACK_DATA = [
-  { name: "high", value: 40, color: "var(--color-red-400)" },
-  { name: "medium", value: 30, color: "var(--color-amber-300)" },
-  { name: "low", value: 30, color: "var(--color-emerald-400)" },
-]
-
-// 220° sweep: 200° (lower-left) → -20° (lower-right).
-// recharts angle convention: 0° = 3 o'clock, increases counter-clockwise.
-const START_ANGLE = 200
-const END_ANGLE = -20
-const NEEDLE_INSET = 4
-
-const SIZE_CONFIG = {
-  sm: {
-    width: 168,
-    height: 122,
-    outerRadius: 56,
-    innerRadius: 40,
-    hubRadius: 3,
-    centerY: 58,
-    textOffsetX: 4,
-    scoreY: 90,
-    bandY: 108,
-    scoreClassName: "text-base",
-    percentClassName: "text-[10px]",
-    bandClassName: "text-[11px]",
-  },
-  md: {
-    width: 232,
-    height: 166,
-    outerRadius: 78,
-    innerRadius: 56,
-    hubRadius: 4,
-    centerY: 80,
-    textOffsetX: 5,
-    scoreY: 120,
-    bandY: 144,
-    scoreClassName: "text-2xl",
-    percentClassName: "text-xs",
-    bandClassName: "text-xs",
-  },
-} as const
-
-function polarToCartesian(
-  cx: number,
-  cy: number,
-  radius: number,
-  angle: number
-) {
-  const radians = (-Math.PI / 180) * angle
-
-  return {
-    x: cx + Math.cos(radians) * radius,
-    y: cy + Math.sin(radians) * radius,
-  }
+const RISK_LEVEL_STYLES: Record<RiskLevel, { label: string; className: string }> = {
+  high: { label: "HIGH RISK", className: "fill-red-500 dark:fill-red-400" },
+  medium: { label: "MED RISK", className: "fill-amber-500 dark:fill-amber-400" },
+  low: { label: "LOW RISK", className: "fill-emerald-500 dark:fill-emerald-400" },
 }
 
-export function RiskMeter({ value, band, size = "md" }: RiskMeterProps) {
-  const clamped = Math.max(0, Math.min(100, value))
-  const bandInfo = BAND_CONFIG[band]
+function deriveRiskLevel(fail: number, total: number): RiskLevel {
+  if (total === 0) return "low"
+  const ratio = fail / total
+  if (ratio >= 0.3) return "high"
+  if (ratio >= 0.1) return "medium"
+  return "low"
+}
+
+const SIZE_CONFIG = {
+  sm: { width: 140, height: 140, outerRadius: 56, innerRadius: 38, labelY: -6, subY: 8 },
+  md: { width: 190, height: 190, outerRadius: 76, innerRadius: 52, labelY: -6, subY: 10 },
+} as const
+
+function CustomTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean
+  payload?: Array<{ name: string; value: number; payload: { total: number; fill: string } }>
+}) {
+  if (!active || !payload?.length) return null
+  const { name, value, payload: data } = payload[0]
+  const pct = data.total > 0 ? Math.round((value / data.total) * 100) : 0
+  return (
+    <div className="rounded-lg border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md">
+      <span className="font-medium">{name}</span>: {value} ({pct}%)
+    </div>
+  )
+}
+
+function RiskLevelInfo() {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="relative mt-1">
+      <button
+        onClick={() => setOpen(!open)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        className="flex items-center gap-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+        aria-label="Risk level calculation explanation"
+        aria-expanded={open}
+      >
+        <Info className="size-3" />
+        <span>How is this calculated?</span>
+      </button>
+      {open && (
+        <div className="absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-lg border bg-popover px-3 py-2.5 text-[11px] leading-relaxed text-popover-foreground shadow-lg">
+          <p className="font-medium">Risk level is based on the <span className="text-red-500 dark:text-red-400">fail ratio</span>:</p>
+          <ul className="mt-1.5 space-y-1">
+            <li><span className="font-medium text-red-500 dark:text-red-400">High</span> — fail ratio ≥ 30%</li>
+            <li><span className="font-medium text-amber-500 dark:text-amber-400">Medium</span> — fail ratio ≥ 10%</li>
+            <li><span className="font-medium text-emerald-500 dark:text-emerald-400">Low</span> — fail ratio &lt; 10%</li>
+          </ul>
+          <p className="mt-1.5 text-muted-foreground">
+            Fail ratio = failed checks ÷ total checks
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function RiskMeter({
+  fail,
+  warn,
+  pass,
+  missing,
+  size = "md",
+}: RiskMeterProps) {
+  const chartId = useId()
+  const total = fail + warn + pass + missing
   const config = SIZE_CONFIG[size]
+  const riskLevel = deriveRiskLevel(fail, total)
+  const levelStyle = RISK_LEVEL_STYLES[riskLevel]
 
-  // Fixed pixel dimensions. Make SVG generously large so recharts
-  // won't shift cx/cy to fit the arc (it does that when the arc
-  // is too close to the SVG edge).
-  const r = config.outerRadius
-  const ir = config.innerRadius
-  const hubR = config.hubRadius
-  const w = config.width
-  const cx = w / 2
-  const cy = config.centerY
-  const h = config.height
-  const textX = cx + config.textOffsetX
+  const data = [
+    { name: "Fail", value: fail, total },
+    { name: "Warn", value: warn, total },
+    { name: "Pass", value: pass, total },
+    { name: "Unverifiable", value: missing, total },
+  ].filter((d) => d.value > 0)
 
-  // Needle: interpolate directly across the same sweep the Pie uses.
-  // 0% => START_ANGLE (lower-left), 50% => top, 100% => END_ANGLE (lower-right).
-  const needleAngleDeg =
-    START_ANGLE + (END_ANGLE - START_ANGLE) * (clamped / 100)
-  const tip = polarToCartesian(cx, cy, ir - NEEDLE_INSET, needleAngleDeg)
+  const ariaLabel = [
+    `Risk level: ${levelStyle.label}`,
+    `Fail: ${fail}`,
+    `Warn: ${warn}`,
+    `Pass: ${pass}`,
+    `Unverifiable: ${missing}`,
+    `Total: ${total}`,
+  ].join(". ")
+
+  if (total === 0) {
+    return (
+      <div
+        className="flex items-center justify-center text-sm text-muted-foreground"
+        style={{ width: config.width, height: config.height }}
+      >
+        No data
+      </div>
+    )
+  }
 
   return (
-    <div className="flex justify-center">
-      <PieChart width={w} height={h}>
-        <Pie
-          data={TRACK_DATA}
-          dataKey="value"
-          nameKey="name"
-          cx={cx}
-          cy={cy}
-          startAngle={START_ANGLE}
-          endAngle={END_ANGLE}
-          outerRadius={r}
-          innerRadius={ir}
-          stroke="none"
-          isAnimationActive={false}
-        >
-          {TRACK_DATA.map((entry) => (
-            <Cell key={entry.name} fill={entry.color} />
+    <div className="flex flex-col items-center">
+      {/* Accessible table for screen readers */}
+      <table className="sr-only">
+        <caption>Risk evaluation summary</caption>
+        <thead>
+          <tr>
+            <th>Category</th><th>Count</th><th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((d) => (
+            <tr key={d.name}>
+              <td>{d.name}</td>
+              <td>{d.value}</td>
+              <td>{Math.round((d.value / total) * 100)}%</td>
+            </tr>
           ))}
-        </Pie>
-        {/* Needle — same coordinate space as the Pie */}
-        <line
-          x1={cx}
-          y1={cy}
-          x2={tip.x}
-          y2={tip.y}
-          strokeWidth={2}
-          strokeLinecap="round"
-          className="stroke-foreground"
-        />
-        <circle cx={cx} cy={cy} r={hubR} className="fill-foreground" />
-        <text
-          x={textX}
-          y={config.scoreY}
-          textAnchor="middle"
-          className={cn(
-            "fill-foreground font-semibold tabular-nums",
-            config.scoreClassName
-          )}
-        >
-          <tspan>{Math.round(clamped)}</tspan>
-          <tspan
-            dx="1"
-            className={cn(
-              "fill-muted-foreground font-medium",
-              config.percentClassName
-            )}
+        </tbody>
+      </table>
+
+      <div
+        role="img"
+        aria-label={ariaLabel}
+        aria-describedby={`chart-desc-${chartId}`}
+      >
+        <span id={`chart-desc-${chartId}`} className="sr-only">
+          Donut chart showing evaluation result proportions.
+        </span>
+        <PieChart width={config.width} height={config.height}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={config.outerRadius}
+            innerRadius={config.innerRadius}
+            strokeWidth={2}
+            stroke="var(--background)"
+            isAnimationActive
+            animationBegin={0}
+            animationDuration={200}
+            animationEasing="ease-out"
           >
-            %
-          </tspan>
-        </text>
-        <text
-          x={textX}
-          y={config.bandY}
-          textAnchor="middle"
-          className={cn(
-            "fill-current font-medium",
-            config.bandClassName,
-            bandInfo.color
-          )}
-        >
-          {bandInfo.label}
-        </text>
-      </PieChart>
+            {data.map((entry) => (
+              <Cell
+                key={entry.name}
+                fill={
+                  entry.name === "Fail" ? "var(--chart-fail)" :
+                  entry.name === "Warn" ? "var(--chart-warn)" :
+                  entry.name === "Pass" ? "var(--chart-pass)" :
+                  "var(--chart-missing)"
+                }
+              />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          {/* Risk level label */}
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dominantBaseline="central"
+            dy={config.labelY}
+            className={cn("text-[11px] font-bold tracking-widest", levelStyle.className)}
+          >
+            {levelStyle.label}
+          </text>
+          {/* Total count below risk label */}
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dominantBaseline="central"
+            dy={config.subY}
+            className="fill-muted-foreground text-[11px] font-medium tabular-nums"
+          >
+            {total} checks
+          </text>
+        </PieChart>
+      </div>
+
+      <RiskLevelInfo />
     </div>
   )
 }
