@@ -124,25 +124,6 @@ export function RiskMeter({
 
   return (
     <div className="flex flex-col items-center">
-      {/* Accessible table for screen readers */}
-      <table className="sr-only">
-        <caption>Risk evaluation summary</caption>
-        <thead>
-          <tr>
-            <th>Category</th><th>Count</th><th>Percentage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d) => (
-            <tr key={d.name}>
-              <td>{d.name}</td>
-              <td>{d.value}</td>
-              <td>{Math.round((d.value / total) * 100)}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
       <div
         role="img"
         aria-label={ariaLabel}
