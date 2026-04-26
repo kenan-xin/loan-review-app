@@ -10,7 +10,7 @@ import { ResultHeader } from "./results/result-header"
 import { ResultSidebar } from "./results/result-sidebar"
 import { RiskPanel } from "./results/risk-panel"
 import { CaDataPanel } from "./results/ca-data-panel"
-import { RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 
 interface ResultsStepProps {
   readonly result: SimulationResult
@@ -26,7 +26,9 @@ export function ResultsStep({ result }: ResultsStepProps) {
 
   const basicInfo = caData.A_basic_information as Record<string, unknown>
   const riskSummaries = Object.fromEntries(
-    RISK_CATEGORIES.map((c) => [c.id, "No AI summary available yet."])
+    Object.entries(evaluationSummary.by_category)
+      .filter(([, v]) => v.summary)
+      .map(([key, v]) => [riskCategoryToId(key), v.summary!])
   )
 
   const layoutProps = { result, activeTab, onTabChange: setActiveTab }

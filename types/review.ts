@@ -47,7 +47,7 @@ export interface EvaluationSummary {
   total_na: number
   by_category: Record<
     string,
-    { pass: number; warning: number; fail: number; missing: number }
+    { pass: number; warning: number; fail: number; missing: number; summary?: string }
   >
   by_risk_level: {
     high_fail_count: number

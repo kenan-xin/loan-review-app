@@ -529,7 +529,7 @@ export function LayoutBriefing({
                   categoryId={cat.id as RiskCategoryId}
                   rules={rulesByCategory[cat.id]}
                   catStats={catStats}
-                  aiSummary="No AI summary available yet."
+                  aiSummary={catStats.summary ?? ""}
                   activeFilters={activeFilters}
                 />
               )
