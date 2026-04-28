@@ -87,7 +87,14 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
           }
         }
       )
-      set({ reviewHistory: completed, isLoadingHistory: false })
+      const sorted = completed.sort(
+        (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
+      )
+      const byFilename = new Map<string, ReviewHistoryItem>()
+      for (const item of sorted) {
+        if (!byFilename.has(item.filename)) byFilename.set(item.filename, item)
+      }
+      set({ reviewHistory: Array.from(byFilename.values()), isLoadingHistory: false })
     } catch (err) {
       set({
         historyError: String((err as Error).message ?? err),
