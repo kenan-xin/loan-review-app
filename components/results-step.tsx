@@ -110,7 +110,11 @@ const GROUP_EXPOSURE_FIELDS: [string, string][] = [
   ["Total DFBEP", "total_dfbep_rm"],
 ]
 
-const FINANCIAL_PERIOD_FIELDS: [string, string, "currency" | "multiple" | "text"][] = [
+const FINANCIAL_PERIOD_FIELDS: [
+  string,
+  string,
+  "currency" | "multiple" | "text",
+][] = [
   ["Revenue", "revenue_rm", "currency"],
   ["PBT", "pbt_rm", "currency"],
   ["PAT", "pat_rm", "currency"],
@@ -279,28 +283,37 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
     })
   }
 
-  const basicInfo = caData.A_basic_information as Record<string, unknown>
+  const basicInfo = (caData.A_basic_information ?? {}) as Record<
+    string,
+    unknown
+  >
   const caReferenceNo = basicInfo.ca_reference_no as string | undefined
-  const borrowerProfile = caData.B_borrower_profile as Record<string, unknown>
-  const facilities = caData.E_facilities as Record<string, unknown>
-  const securities = caData.F_securities as Record<string, unknown>
-  const groupExposure = caData.G_group_exposure as Record<string, unknown>
-  const financialSummaries = caData.I_financial_summaries as Record<
+  const borrowerProfile = (caData.B_borrower_profile ?? {}) as Record<
+    string,
+    unknown
+  >
+  const facilities = (caData.E_facilities ?? {}) as Record<string, unknown>
+  const securities = (caData.F_securities ?? {}) as Record<string, unknown>
+  const groupExposure = (caData.G_group_exposure ?? {}) as Record<
+    string,
+    unknown
+  >
+  const financialSummaries = (caData.I_financial_summaries ?? []) as Record<
     string,
     unknown
   >[]
-  const keyCreditIssues = caData.K_key_credit_issues as Record<
+  const keyCreditIssues = (caData.K_key_credit_issues ?? []) as Record<
     string,
     unknown
   >[]
-  const termsAndConditions = caData.M_terms_and_conditions as Record<
+  const termsAndConditions = (caData.M_terms_and_conditions ?? {}) as Record<
     string,
     unknown
   >
   const mccDecision = caData.N_mcc_decision as
     | Record<string, unknown>
     | undefined
-  const applicationRequests = caData.O_application_requests as Record<
+  const applicationRequests = (caData.O_application_requests ?? []) as Record<
     string,
     unknown
   >[]
@@ -471,14 +484,16 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                 defaultOpen={false}
               >
                 <ul className="space-y-2">
-                  {(evaluationDecision.required_conditions ?? []).map((cond, idx) => (
-                    <li
-                      key={idx}
-                      className="border-l-2 border-amber-400 pl-2.5 text-xs leading-relaxed"
-                    >
-                      {cond}
-                    </li>
-                  ))}
+                  {(evaluationDecision.required_conditions ?? []).map(
+                    (cond, idx) => (
+                      <li
+                        key={idx}
+                        className="border-l-2 border-amber-400 pl-2.5 text-xs leading-relaxed"
+                      >
+                        {cond}
+                      </li>
+                    )
+                  )}
                 </ul>
               </LeftSection>
             )}
@@ -490,14 +505,16 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                 defaultOpen={false}
               >
                 <ul className="space-y-2">
-                  {(evaluationDecision.missing_information ?? []).map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="border-l-2 border-slate-300 pl-2.5 text-xs leading-relaxed text-muted-foreground dark:border-slate-600"
-                    >
-                      {item}
-                    </li>
-                  ))}
+                  {(evaluationDecision.missing_information ?? []).map(
+                    (item, idx) => (
+                      <li
+                        key={idx}
+                        className="border-l-2 border-slate-300 pl-2.5 text-xs leading-relaxed text-muted-foreground dark:border-slate-600"
+                      >
+                        {item}
+                      </li>
+                    )
+                  )}
                 </ul>
               </LeftSection>
             )}
@@ -672,7 +689,10 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               </CaSection>
 
               <CaSection title="Borrower Profile">
-                <DetailGrid data={borrowerProfile} fields={BORROWER_PROFILE_FIELDS} />
+                <DetailGrid
+                  data={borrowerProfile}
+                  fields={BORROWER_PROFILE_FIELDS}
+                />
               </CaSection>
 
               <CaSection title="Application Requests">
@@ -772,7 +792,11 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
               </CaSection>
 
               <CaSection title="Group Exposure">
-                <DetailGrid data={groupExposure} fields={GROUP_EXPOSURE_FIELDS} format={formatCurrency} />
+                <DetailGrid
+                  data={groupExposure}
+                  fields={GROUP_EXPOSURE_FIELDS}
+                  format={formatCurrency}
+                />
               </CaSection>
 
               <CaSection title="Financial Summary">
@@ -797,9 +821,12 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
                           </div>
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                             {FINANCIAL_PERIOD_FIELDS.map(([label, key, fmt]) =>
-                              period[key] !== undefined && period[key] !== null ? (
+                              period[key] !== undefined &&
+                              period[key] !== null ? (
                                 <Fragment key={key}>
-                                  <div className="text-muted-foreground">{label}</div>
+                                  <div className="text-muted-foreground">
+                                    {label}
+                                  </div>
                                   <div className="font-mono">
                                     {fmt === "currency"
                                       ? formatCurrency(period[key])
@@ -846,72 +873,75 @@ export function ResultsStep({ result, onStartNew }: ResultsStepProps) {
 
               <CaSection title="Terms & Conditions">
                 <div className="space-y-4">
-                  {Object.entries(termsAndConditions).map(([category, raw]) => {
-                    const items = raw as Record<string, unknown>[] | null
-                    if (!items?.length) return null
-                    return (
-                      <div key={category}>
-                        <div className="mb-1.5 text-xs font-medium capitalize">
-                          {category.replace(/_/g, " ")}
-                        </div>
-                        {items.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="mb-1 rounded bg-muted/30 p-2 text-xs last:mb-0"
-                          >
-                            <div className="flex items-start justify-between gap-2">
-                              <span className="flex-1">
-                                {item.condition as string}
-                              </span>
-                              <span
-                                className={cn(
-                                  "shrink-0 rounded px-1.5 py-0.5 text-[10px]",
-                                  item.status === "Complied"
-                                    ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
-                                    : item.status === "Breached"
-                                      ? "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
-                                      : "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
-                                )}
-                              >
-                                {item.status as string}
-                              </span>
-                            </div>
-                            {typeof item.applicable_facility === "string" &&
-                              item.applicable_facility && (
-                                <p className="mt-0.5 text-[10px] text-muted-foreground">
-                                  Facility: {item.applicable_facility}
-                                </p>
-                              )}
+                  {Object.entries(termsAndConditions ?? {}).map(
+                    ([category, raw]) => {
+                      const items = raw as Record<string, unknown>[] | null
+                      if (!items?.length) return null
+                      return (
+                        <div key={category}>
+                          <div className="mb-1.5 text-xs font-medium capitalize">
+                            {category.replace(/_/g, " ")}
                           </div>
-                        ))}
-                      </div>
-                    )
-                  })}
+                          {items.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="mb-1 rounded bg-muted/30 p-2 text-xs last:mb-0"
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <span className="flex-1">
+                                  {item.condition as string}
+                                </span>
+                                <span
+                                  className={cn(
+                                    "shrink-0 rounded px-1.5 py-0.5 text-[10px]",
+                                    item.status === "Complied"
+                                      ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
+                                      : item.status === "Breached"
+                                        ? "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
+                                        : "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
+                                  )}
+                                >
+                                  {item.status as string}
+                                </span>
+                              </div>
+                              {typeof item.applicable_facility === "string" &&
+                                item.applicable_facility && (
+                                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                                    Facility: {item.applicable_facility}
+                                  </p>
+                                )}
+                            </div>
+                          ))}
+                        </div>
+                      )
+                    }
+                  )}
                 </div>
               </CaSection>
 
-              {typeof mccDecision?.decision === "string" && mccDecision.decision && (
-                <CaSection title="MCC Decision">
-                  <div className="py-2 text-center">
-                    <div
-                      className={cn(
-                        "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium",
-                        mccDecision.decision === "Approved"
-                          ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
-                          : "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
-                      )}
-                    >
-                      {mccDecision.decision as string}
+              {typeof mccDecision?.decision === "string" &&
+                mccDecision.decision && (
+                  <CaSection title="MCC Decision">
+                    <div className="py-2 text-center">
+                      <div
+                        className={cn(
+                          "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium",
+                          mccDecision.decision === "Approved"
+                            ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
+                            : "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
+                        )}
+                      >
+                        {mccDecision.decision as string}
+                      </div>
+                      {typeof mccDecision.decision_remarks === "string" &&
+                        mccDecision.decision_remarks && (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            {mccDecision.decision_remarks}
+                          </p>
+                        )}
                     </div>
-                    {typeof mccDecision.decision_remarks === "string" &&
-                      mccDecision.decision_remarks && (
-                        <p className="mt-2 text-xs text-muted-foreground">
-                          {mccDecision.decision_remarks}
-                        </p>
-                      )}
-                  </div>
-                </CaSection>
-              )}
+                  </CaSection>
+                )}
             </div>
           )}
         </div>
