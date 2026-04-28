@@ -146,10 +146,12 @@ async function logSseFrames(stream: ReadableStream<Uint8Array>, ctx: LogContext)
       }
     }
   } catch (err) {
-    logger.error(ctx.context, "Upstream stream error", {
+    const fields: Record<string, unknown> = {
       error: err instanceof Error ? err.stack ?? err.message : String(err),
       ms: Date.now() - ctx.startedAt,
-    })
+    }
+    if (err instanceof Error && err.cause) fields.cause = String(err.cause)
+    logger.error(ctx.context, "Upstream stream error", fields)
   } finally {
     reader.releaseLock()
     dump.end()
@@ -214,6 +216,7 @@ app.post("/api/loan-review-v2", upload.single("ca"), async (req, res) => {
 
     res.writeHead(200, SSE_HEADERS)
     streaming = true
+    const upstreamStatus = response.status
 
     pruneOldDumps(context)
     const dumpPath = path.join(
@@ -238,10 +241,17 @@ app.post("/api/loan-review-v2", upload.single("ca"), async (req, res) => {
         res.write(value)
       }
     } catch (err) {
-      logger.error(context, "Upstream stream error (client branch)", {
+      const aborted = abortCtrl.signal.aborted
+      const cause = aborted ? "client disconnect" : "upstream dropped"
+      const fields: Record<string, unknown> = {
         error: err instanceof Error ? err.stack ?? err.message : String(err),
+        cause,
+        aborted,
+        upstreamStatus,
         ms: Date.now() - t0,
-      })
+      }
+      if (err instanceof Error && err.cause) fields.errCause = String(err.cause)
+      logger.error(context, `Upstream stream error (${cause})`, fields)
     } finally {
       reader.releaseLock()
       res.end()
