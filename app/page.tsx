@@ -8,8 +8,6 @@ import { WizardFooter } from "@/components/wizard-footer"
 import { UploadStep } from "@/components/upload-step"
 import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { LayoutSwitcher } from "@/components/layout-switcher"
 import { ChatBubble } from "@/components/chat-bubble"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -70,9 +68,8 @@ function LoanReviewWizard() {
   if (idParam && !result && isLoadingHistory) {
     return (
       <div className="flex min-h-svh flex-col">
-        <header className="flex items-center justify-between border-b px-6 py-4">
+        <header className="flex items-center border-b px-6 py-4">
           <h1 className="text-lg font-semibold">Loan Review</h1>
-          <ThemeToggle />
         </header>
         <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -88,9 +85,8 @@ function LoanReviewWizard() {
   if (idParam && !result && historyError) {
     return (
       <div className="flex min-h-svh flex-col">
-        <header className="flex items-center justify-between border-b px-6 py-4">
+        <header className="flex items-center border-b px-6 py-4">
           <h1 className="text-lg font-semibold">Loan Review</h1>
-          <ThemeToggle />
         </header>
         <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6">
           <p className="text-sm text-muted-foreground">{historyError}</p>
@@ -109,12 +105,8 @@ function LoanReviewWizard() {
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="flex items-center justify-between border-b px-6 py-4">
+      <header className="flex items-center border-b px-6 py-4">
         <h1 className="text-lg font-semibold">Loan Review</h1>
-        <div className="flex items-center gap-0.5">
-          {step === 3 && <LayoutSwitcher />}
-          <ThemeToggle />
-        </div>
       </header>
 
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6">
