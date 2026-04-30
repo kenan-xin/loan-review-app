@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect } from "react"
+import { ArrowLeft } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
@@ -45,6 +46,33 @@ function LoanReviewWizard() {
     // Only load if we don't already have a result for this id
     loadHistoryById(id)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Push browser history entries for step 2 & 3 so back button works
+  useEffect(() => {
+    if (step === 2) {
+      window.history.pushState({ step: 2 }, "")
+    } else if (step === 3) {
+      window.history.pushState({ step: 3 }, "")
+    }
+  }, [step])
+
+  // Handle browser back button
+  useEffect(() => {
+    const onPopState = () => {
+      const s = useLoanReviewStore.getState().step
+      if (s > 1) {
+        useLoanReviewStore.setState({
+          step: 1,
+          error: null,
+          result: null,
+          isSubmitting: false,
+          stage: "idle",
+        })
+      }
+    }
+    window.addEventListener("popstate", onPopState)
+    return () => window.removeEventListener("popstate", onPopState)
+  }, [])
 
   const handleNext = () => {
     if (step === 1 && applicationFile) submit()
@@ -110,7 +138,16 @@ function LoanReviewWizard() {
       </header>
 
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6">
-        <div className="mb-6">
+        <div className="relative mb-6 flex w-full items-center justify-center">
+          {step === 3 && (
+            <button
+              onClick={handleReset}
+              className="absolute left-0 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </button>
+          )}
           <StepIndicator currentStep={step} />
         </div>
 

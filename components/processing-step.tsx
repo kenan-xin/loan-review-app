@@ -31,7 +31,7 @@ function AnimatedDots() {
 }
 
 export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
-  const { stage, isSubmitting } = useLoanReviewStore()
+  const { stage, isSubmitting, ruleIndex } = useLoanReviewStore()
 
   const [elapsed, setElapsed] = useState(0)
 
@@ -92,7 +92,9 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
           <div className="flex items-center gap-3">
             <Loader2 className="size-5 shrink-0 animate-spin text-primary" />
             <span className="text-sm font-medium">
-              {STAGES[activeStageIndex].label}
+              {stage === "checking"
+                ? `Evaluating rule ${ruleIndex + 1}`
+                : STAGES[activeStageIndex].label}
               <AnimatedDots />
             </span>
           </div>

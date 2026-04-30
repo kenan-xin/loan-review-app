@@ -34,6 +34,7 @@ interface LoanReviewState {
   error: string | null
   isSubmitting: boolean
   stage: SseStage
+  ruleIndex: number
   resultLayout: ResultLayout
   reviewHistory: ReviewHistoryItem[]
   isLoadingHistory: boolean
@@ -56,6 +57,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   error: null,
   isSubmitting: false,
   stage: "idle",
+  ruleIndex: 0,
   resultLayout: "sidebar",
   reviewHistory: [],
   isLoadingHistory: false,
@@ -154,6 +156,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       error: null,
       step: 2,
       stage: "idle",
+      ruleIndex: 0,
     })
 
     const formData = new FormData()
@@ -231,7 +234,9 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
                 const currentStage = get().stage
                 if (STAGE_INDEX[newStage] > STAGE_INDEX[currentStage]) {
                   console.debug("[SSE] stage →", newStage, { from: currentStage, nodeID })
-                  set({ stage: newStage })
+                  const output = event.output as Record<string, unknown> | undefined
+                  const idx = output && "index" in output ? (output.index as number) : 0
+                  set({ stage: newStage, ruleIndex: idx })
                 }
               }
 
@@ -285,6 +290,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       error: null,
       isSubmitting: false,
       stage: "idle",
+      ruleIndex: 0,
       resultLayout: "sidebar",
       reviewHistory: [],
       isLoadingHistory: false,
