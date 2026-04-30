@@ -232,11 +232,13 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
               if (nodeID && NODE_TO_STAGE[nodeID]) {
                 const newStage = NODE_TO_STAGE[nodeID]
                 const currentStage = get().stage
+                const output = event.output as Record<string, unknown> | undefined
+                const idx = output && "index" in output ? (output.index as number) : 0
                 if (STAGE_INDEX[newStage] > STAGE_INDEX[currentStage]) {
-                  console.debug("[SSE] stage →", newStage, { from: currentStage, nodeID })
-                  const output = event.output as Record<string, unknown> | undefined
-                  const idx = output && "index" in output ? (output.index as number) : 0
+                  console.debug("[SSE] stage →", newStage, { from: currentStage, nodeID, idx })
                   set({ stage: newStage, ruleIndex: idx })
+                } else if (newStage === currentStage && newStage === "checking") {
+                  set({ ruleIndex: idx })
                 }
               }
 
