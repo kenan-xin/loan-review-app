@@ -1,9 +1,12 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { useLoanReviewStore } from "@/store/loan-review"
+import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverDescription, PopoverTitle, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -19,14 +22,52 @@ function formatDate(iso: string): string {
   })
 }
 
+function DeleteButton({ itemId, filename, onConfirm }: { itemId: number; filename: string; onConfirm: (id: number) => Promise<void> }) {
+  const [open, setOpen] = useState(false)
+
+  const handleDelete = useCallback(async () => {
+    setOpen(false)
+    try {
+      await onConfirm(itemId)
+      toast.success(`"${filename}" deleted`)
+    } catch (err) {
+      toast.error((err as Error).message)
+    }
+  }, [itemId, filename, onConfirm])
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        render={<Button variant="ghost" size="icon-sm" aria-label={`Delete ${filename}`} />}
+      >
+        <Trash2 className="h-4 w-4 text-muted-foreground" />
+      </PopoverTrigger>
+      <PopoverContent className="w-auto min-w-48 rounded-lg p-3" align="end">
+        <PopoverTitle>Delete &quot;{filename}&quot;?</PopoverTitle>
+        <PopoverDescription>This action cannot be undone.</PopoverDescription>
+        <div className="mt-3 flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="destructive" size="sm" onClick={handleDelete}>
+            Delete
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export function ReviewHistory() {
   const router = useRouter()
   const {
     reviewHistory,
+    deletingIds,
     isLoadingHistory,
     historyError,
     fetchReviewHistory,
     viewHistoryItem,
+    deleteHistoryItem,
   } = useLoanReviewStore()
 
   useEffect(() => {
@@ -72,14 +113,21 @@ export function ReviewHistory() {
             </thead>
             <tbody>
               {reviewHistory.map((item, index) => (
-                <tr key={item.id} className="border-b last:border-b-0">
+                <tr
+                  key={item.id}
+                  className="border-b last:border-b-0 transition-opacity duration-200 data-[deleting]:opacity-40"
+                  data-deleting={deletingIds.includes(item.id) || undefined}
+                >
                   <td className="px-4 py-2.5 text-muted-foreground">{index + 1}</td>
                   <td className="px-4 py-2.5">{item.filename}</td>
                   <td className="px-4 py-2.5 text-muted-foreground">{formatDate(item.created_at)}</td>
                   <td className="px-4 py-2.5 text-right">
-                    <Button variant="outline" size="sm" onClick={() => { viewHistoryItem(item); router.push(`/?id=${item.id}`) }}>
-                      View
-                    </Button>
+                    <div className="flex items-center justify-end gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { viewHistoryItem(item); router.push(`/?id=${item.id}`) }}>
+                        View
+                      </Button>
+                      <DeleteButton itemId={item.id} filename={item.filename} onConfirm={deleteHistoryItem} />
+                    </div>
                   </td>
                 </tr>
               ))}

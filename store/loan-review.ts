@@ -39,6 +39,7 @@ interface LoanReviewState {
   reviewHistory: ReviewHistoryItem[]
   isLoadingHistory: boolean
   historyError: string | null
+  deletingIds: number[]
 
   setStep: (step: 1 | 2 | 3) => void
   setApplicationFile: (file: File | null) => void
@@ -48,6 +49,7 @@ interface LoanReviewState {
   fetchReviewHistory: () => Promise<void>
   viewHistoryItem: (item: ReviewHistoryItem) => void
   loadHistoryById: (id: number) => Promise<void>
+  deleteHistoryItem: (id: number) => Promise<void>
 }
 
 export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
@@ -62,6 +64,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
   reviewHistory: [],
   isLoadingHistory: false,
   historyError: null,
+  deletingIds: [],
 
   setStep: (step) => set({ step }),
 
@@ -142,6 +145,32 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
     viewHistoryItem(item)
     set({ isLoadingHistory: false })
+  },
+
+  deleteHistoryItem: async (id: number) => {
+    const { reviewHistory, deletingIds } = get()
+    if (deletingIds.includes(id)) return
+
+    const item = reviewHistory.find((h) => h.id === id)
+    const backup = reviewHistory
+
+    set({
+      reviewHistory: reviewHistory.filter((i) => i.id !== id),
+      deletingIds: [...deletingIds, id],
+    })
+
+    try {
+      const response = await fetch("https://dev-genie.001.gs/smart-api/mbl_delete_s2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      })
+      if (!response.ok) throw new Error(`Server error: ${response.status}`)
+      set({ deletingIds: deletingIds.filter((d) => d !== id) })
+    } catch {
+      set({ reviewHistory: backup, deletingIds: deletingIds.filter((d) => d !== id) })
+      throw new Error(item ? `Failed to delete "${item.filename}"` : "Failed to delete")
+    }
   },
 
   submit: () => {
@@ -297,6 +326,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       reviewHistory: [],
       isLoadingHistory: false,
       historyError: null,
+      deletingIds: [],
     })
   },
 }))
