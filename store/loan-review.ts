@@ -163,7 +163,7 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       const response = await fetch("https://dev-genie.001.gs/smart-api/mbl_delete_s2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id: String(id) }),
       })
       if (!response.ok) throw new Error(`Server error: ${response.status}`)
       set({ deletingIds: deletingIds.filter((d) => d !== id) })
