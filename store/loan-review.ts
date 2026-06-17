@@ -78,20 +78,20 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
     set({ isLoadingHistory: true, historyError: null })
     try {
-      const response = await fetch("https://dev-genie.001.gs/smart-api/hl_retriever")
+      const response = await fetch(
+        "https://dev-genie.001.gs/smart-api/hl_retriever"
+      )
       if (!response.ok) throw new Error(`Server error: ${response.status}`)
       const data = await response.json()
       const items: ReviewHistoryItem[] = JSON.parse(data.result)
-      const completed = items.filter(
-        (item) => {
-          try {
-            const parsed = JSON.parse(item.result)
-            return Array.isArray(parsed) && parsed.length > 0
-          } catch {
-            return false
-          }
+      const completed = items.filter((item) => {
+        try {
+          const parsed = JSON.parse(item.result)
+          return Array.isArray(parsed) && parsed.length > 0
+        } catch {
+          return false
         }
-      )
+      })
       const sorted = completed.sort(
         (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
       )
@@ -99,7 +99,10 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
       for (const item of sorted) {
         if (!byFilename.has(item.filename)) byFilename.set(item.filename, item)
       }
-      set({ reviewHistory: Array.from(byFilename.values()), isLoadingHistory: false })
+      set({
+        reviewHistory: Array.from(byFilename.values()),
+        isLoadingHistory: false,
+      })
     } catch (err) {
       set({
         historyError: String((err as Error).message ?? err),
@@ -160,16 +163,24 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
     })
 
     try {
-      const response = await fetch("https://dev-genie.001.gs/smart-api/mbl_delete_s2", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: String(id) }),
-      })
+      const response = await fetch(
+        "https://dev-genie.001.gs/smart-api/mbl_delete_s2",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: String(id) }),
+        }
+      )
       if (!response.ok) throw new Error(`Server error: ${response.status}`)
       set({ deletingIds: deletingIds.filter((d) => d !== id) })
     } catch {
-      set({ reviewHistory: backup, deletingIds: deletingIds.filter((d) => d !== id) })
-      throw new Error(item ? `Failed to delete "${item.filename}"` : "Failed to delete")
+      set({
+        reviewHistory: backup,
+        deletingIds: deletingIds.filter((d) => d !== id),
+      })
+      throw new Error(
+        item ? `Failed to delete "${item.filename}"` : "Failed to delete"
+      )
     }
   },
 
@@ -180,6 +191,8 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
     abortController = new AbortController()
     const { signal } = abortController
 
+    console.time("[loan-review] step2→step3")
+    console.log("[loan-review] Review started at:", new Date().toISOString())
     set({
       isSubmitting: true,
       error: null,
@@ -195,7 +208,10 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
     const PROXY_BASE = process.env.NEXT_PUBLIC_PROXY_URL_V2 ?? ""
     if (!PROXY_BASE) {
-      set({ error: "Proxy URL not configured (NEXT_PUBLIC_PROXY_URL_V2)", isSubmitting: false })
+      set({
+        error: "Proxy URL not configured (NEXT_PUBLIC_PROXY_URL_V2)",
+        isSubmitting: false,
+      })
       return
     }
     const MAX_RETRIES = 3
@@ -252,21 +268,40 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
 
               const nodeID = event.nodeID as string | undefined
 
-              if (event.eventType === "error" && event.errorMessage && !get().error) {
+              if (
+                event.eventType === "error" &&
+                event.errorMessage &&
+                !get().error
+              ) {
                 const msg = event.errorMessage as string
                 console.error("[SSE] backend error:", msg)
-                set({ error: msg.includes("openrouter") ? "AI provider error — please retry" : msg, isSubmitting: false })
+                set({
+                  error: msg.includes("openrouter")
+                    ? "AI provider error — please retry"
+                    : msg,
+                  isSubmitting: false,
+                })
               }
 
               if (nodeID && NODE_TO_STAGE[nodeID]) {
                 const newStage = NODE_TO_STAGE[nodeID]
                 const currentStage = get().stage
-                const output = event.output as Record<string, unknown> | undefined
-                const idx = output && "index" in output ? (output.index as number) : 0
+                const output = event.output as
+                  | Record<string, unknown>
+                  | undefined
+                const idx =
+                  output && "index" in output ? (output.index as number) : 0
                 if (STAGE_INDEX[newStage] > STAGE_INDEX[currentStage]) {
-                  console.debug("[SSE] stage →", newStage, { from: currentStage, nodeID, idx })
+                  console.debug("[SSE] stage →", newStage, {
+                    from: currentStage,
+                    nodeID,
+                    idx,
+                  })
                   set({ stage: newStage, ruleIndex: idx })
-                } else if (newStage === currentStage && newStage === "checking") {
+                } else if (
+                  newStage === currentStage &&
+                  newStage === "checking"
+                ) {
                   set({ ruleIndex: idx })
                 }
               }
@@ -287,6 +322,11 @@ export const useLoanReviewStore = create<LoanReviewState>((set, get) => ({
                     output.decision as SimulationResult["evaluationDecision"]
                   )
 
+                  console.timeEnd("[loan-review] step2→step3")
+                  console.log(
+                    "[loan-review] Results ready at:",
+                    new Date().toISOString()
+                  )
                   set({
                     result,
                     step: 3,
