@@ -7,15 +7,26 @@ import type {
 } from "@/types/review"
 import { deriveRiskBand } from "@/lib/risk-band"
 
+function normalizeStringArray(val: unknown): string[] {
+  if (Array.isArray(val)) return val as string[]
+  if (typeof val === "string") {
+    try { return JSON.parse(val) as string[] } catch { return [] }
+  }
+  return []
+}
+
 export function transformToReviewResult(
   caData: CaData,
   evaluationResults: EvaluationRuleResult[],
   evaluationSummary: EvaluationSummary,
   evaluationDecision: EvaluationDecision
 ): SimulationResult {
-  const filteredResults = evaluationResults.filter(
-    (r) => r.result !== "N/A"
-  )
+  const filteredResults = evaluationResults
+    .filter((r) => r.result !== "N/A")
+    .map((r) => ({
+      ...r,
+      required_fields: normalizeStringArray(r.required_fields),
+    }))
 
   const { findings, recommendations } =
     transformFindingsAndRecommendations(filteredResults)
