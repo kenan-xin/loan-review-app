@@ -1,23 +1,16 @@
 "use client"
 
 import { Suspense, useEffect } from "react"
-import { useQueryState } from "nuqs"
+import { ArrowLeft } from "lucide-react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { useLoanReviewStore } from "@/store/loan-review"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
 import { UploadStep } from "@/components/upload-step"
 import { ProcessingStep } from "@/components/processing-step"
 import { ResultsStep } from "@/components/results-step"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { LayoutSwitcher } from "@/components/layout-switcher"
 import { ChatBubble } from "@/components/chat-bubble"
-import {
-  loadSimulationData,
-  transformToReviewResult,
-} from "@/lib/simulate-review"
-
-// Set to true to skip processing delay and go straight to results after upload
-const DEBUG_SKIP_PROCESSING = true
+import { Spinner } from "@/components/ui/spinner"
 
 export default function Page() {
   return (
@@ -28,61 +21,58 @@ export default function Page() {
 }
 
 function LoanReviewWizard() {
-  const [urlJobId, setUrlJobId] = useQueryState("jobId")
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const idParam = searchParams.get("id")
 
   const {
     step,
     applicationFile,
-    jobId,
     result,
     error,
     isSubmitting,
-    processingProgress,
+    isLoadingHistory,
+    historyError,
     setApplicationFile,
     submit,
     reset,
-    resumeJob,
+    loadHistoryById,
   } = useLoanReviewStore()
 
   useEffect(() => {
-    if (urlJobId && !jobId) {
-      resumeJob(urlJobId)
+    if (!idParam) return
+    const id = Number(idParam)
+    if (Number.isNaN(id)) return
+    // Only load if we don't already have a result for this id
+    loadHistoryById(id)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Push browser history entries for step 2 & 3 so back button works
+  useEffect(() => {
+    if (step === 2) {
+      window.history.pushState({ step: 2 }, "")
+    } else if (step === 3) {
+      window.history.pushState({ step: 3 }, "")
     }
+  }, [step])
+
+  // Handle browser back button
+  useEffect(() => {
+    const onPopState = () => {
+      const s = useLoanReviewStore.getState().step
+      if (s > 1) {
+        useLoanReviewStore.setState({
+          step: 1,
+          error: null,
+          result: null,
+          isSubmitting: false,
+          stage: "idle",
+        })
+      }
+    }
+    window.addEventListener("popstate", onPopState)
+    return () => window.removeEventListener("popstate", onPopState)
   }, [])
-
-  useEffect(() => {
-    if (jobId && jobId !== urlJobId) {
-      setUrlJobId(jobId)
-    }
-    if (!jobId && urlJobId) {
-      setUrlJobId(null)
-    }
-  }, [jobId, urlJobId, setUrlJobId])
-
-  // Debug: skip processing delay, load results instantly after upload
-  useEffect(() => {
-    if (DEBUG_SKIP_PROCESSING && isSubmitting && !result) {
-      const {
-        caData,
-        evaluationResults,
-        evaluationSummary,
-        evaluationDecision,
-      } = loadSimulationData()
-      const r = transformToReviewResult(
-        caData,
-        evaluationResults,
-        evaluationSummary,
-        evaluationDecision
-      )
-      useLoanReviewStore.setState({
-        result: r,
-        step: 3,
-        isSubmitting: false,
-        processingProgress: 100,
-        jobId: `debug-${Date.now()}`,
-      })
-    }
-  }, [isSubmitting, result])
 
   const handleNext = () => {
     if (step === 1 && applicationFile) submit()
@@ -90,29 +80,74 @@ function LoanReviewWizard() {
 
   const handleRetry = () => {
     useLoanReviewStore.setState({
-      jobId: null,
       error: null,
       result: null,
       step: 1,
-      processingProgress: 0,
     })
-    setUrlJobId(null)
+    router.replace("/")
+  }
+
+  const handleReset = () => {
+    reset()
+    router.replace("/")
+  }
+
+  // Loading state while fetching history by URL param
+  if (idParam && !result && isLoadingHistory) {
+    return (
+      <div className="flex min-h-svh flex-col">
+        <header className="flex items-center border-b px-6 py-4">
+          <h1 className="text-lg font-semibold">Loan Review</h1>
+        </header>
+        <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Spinner />
+            Loading review...
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // Error state for invalid/missing history ID
+  if (idParam && !result && historyError) {
+    return (
+      <div className="flex min-h-svh flex-col">
+        <header className="flex items-center border-b px-6 py-4">
+          <h1 className="text-lg font-semibold">Loan Review</h1>
+        </header>
+        <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6">
+          <p className="text-sm text-muted-foreground">{historyError}</p>
+          <button
+            onClick={handleReset}
+            className="mt-4 text-sm underline text-primary"
+          >
+            Start New Review
+          </button>
+        </main>
+      </div>
+    )
   }
 
   const canGoNext = step === 1 && !!applicationFile
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="flex items-center justify-between border-b px-6 py-4">
+      <header className="flex items-center border-b px-6 py-4">
         <h1 className="text-lg font-semibold">Loan Review</h1>
-        <div className="flex items-center gap-0.5">
-          {step === 3 && <LayoutSwitcher />}
-          <ThemeToggle />
-        </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6">
-        <div className="mb-6">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6">
+        <div className="relative mb-6 flex w-full items-center justify-center">
+          {step === 3 && (
+            <button
+              onClick={handleReset}
+              className="absolute left-0 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </button>
+          )}
           <StepIndicator currentStep={step} />
         </div>
 
@@ -125,15 +160,13 @@ function LoanReviewWizard() {
           )}
           {step === 2 && (
             <ProcessingStep
-              isSubmitting={isSubmitting}
               error={error}
-              processingProgress={processingProgress}
               onRetry={handleRetry}
             />
           )}
           {step === 3 && result && (
             <>
-              <ResultsStep result={result} onStartNew={reset} />
+              <ResultsStep result={result} />
               <ChatBubble result={result} />
             </>
           )}

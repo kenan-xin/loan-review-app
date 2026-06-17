@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight, Sparkles } from "lucide-react"
-import { RESULT_CONFIG, RISK_CATEGORIES } from "@/lib/risk-framework"
+import { RESULT_CONFIG, RISK_CATEGORIES, riskCategoryToId } from "@/lib/risk-framework"
 import type { EvaluationSummary, EvaluationDecision } from "@/types/review"
 import { RiskMeter } from "./risk-meter"
 
@@ -65,9 +65,6 @@ export function ResultSidebar({
 }: ResultSidebarProps) {
   const uniqueConcerns = [...new Set(evaluationDecision.key_concerns)]
   const uniqueStrengths = [...new Set(evaluationDecision.key_strengths)]
-  const byRiskCategory = evaluationSummary.by_risk_category
-  const riskScore = evaluationSummary.risk_score ?? 0
-  const riskBand = evaluationSummary.risk_band ?? "medium"
 
   return (
     <div className="flex min-h-0 flex-col overflow-hidden rounded-xl border lg:max-h-full">
@@ -100,7 +97,13 @@ export function ResultSidebar({
 
       {/* Risk gauge */}
       <div className="shrink-0 border-b px-5 pt-5 pb-4">
-        <RiskMeter value={riskScore} band={riskBand} size="md" />
+        <RiskMeter
+          fail={evaluationSummary.total_fail}
+          warn={evaluationSummary.total_warning}
+          pass={evaluationSummary.total_pass}
+          missing={evaluationSummary.total_missing}
+          size="md"
+        />
       </div>
 
       {/* Stat strip */}
@@ -157,20 +160,23 @@ export function ResultSidebar({
           </div>
           <div className="space-y-2.5">
             {RISK_CATEGORIES.map((cat) => {
-              const stats = byRiskCategory[cat.id]
-              if (!stats || stats.total === 0) return null
-              const total = stats.total
+              const byCatEntry = Object.entries(evaluationSummary.by_category).find(
+                ([key]) => riskCategoryToId(key) === cat.id
+              )
+              if (!byCatEntry) return null
+              const stats = byCatEntry[1]
+              const total = stats.fail + stats.warning + stats.pass + stats.missing
               return (
                 <div key={cat.id}>
                   <div className="mb-1">
                     <span className="text-xs text-foreground">{cat.label}</span>
                     <div className="font-mono text-[10px] whitespace-nowrap text-muted-foreground">
-                      {stats.fail}F ({Math.round((stats.fail / total) * 100)}%)
+                      {stats.fail}F ({total ? Math.round((stats.fail / total) * 100) : 0}%)
                       · {stats.warning}W (
-                      {Math.round((stats.warning / total) * 100)}%) ·{" "}
-                      {stats.pass}P ({Math.round((stats.pass / total) * 100)}%)
+                      {total ? Math.round((stats.warning / total) * 100) : 0}%) ·{" "}
+                      {stats.pass}P ({total ? Math.round((stats.pass / total) * 100) : 0}%)
                       · {stats.missing}UV (
-                      {Math.round((stats.missing / total) * 100)}%)
+                      {total ? Math.round((stats.missing / total) * 100) : 0}%)
                     </div>
                   </div>
                   <div className="flex h-1.5 gap-px overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">

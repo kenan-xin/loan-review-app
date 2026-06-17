@@ -12,6 +12,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "sonner"
 import { cn } from "@/lib/utils"
 
 const interHeading = Inter({ subsets: ["latin"], variable: "--font-heading" })
@@ -72,6 +73,7 @@ export default function RootLayout({
         <NuqsAdapter>
           <ThemeProvider>{children}</ThemeProvider>
         </NuqsAdapter>
+        <Toaster richColors closeButton />
       </body>
     </html>
   )

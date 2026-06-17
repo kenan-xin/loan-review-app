@@ -1,6 +1,7 @@
 "use client"
 
 import { FileUpload } from "@/components/file-upload"
+import { ReviewHistory } from "@/components/review-history"
 
 interface UploadStepProps {
   file: File | null
@@ -22,6 +23,7 @@ export function UploadStep({ file, onFileChange }: UploadStepProps) {
         label="Drop your PDF here or click to browse"
         description="PDF only, up to 10MB"
       />
+      <ReviewHistory />
     </div>
   )
 }

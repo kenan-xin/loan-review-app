@@ -12,7 +12,7 @@ interface RiskItemProps {
 }
 
 export function RiskItem({ rule, isExpanded, onToggle }: RiskItemProps) {
-  const cfg = RESULT_CONFIG[rule.result]
+  const cfg = RESULT_CONFIG[rule.result as keyof typeof RESULT_CONFIG] ?? RESULT_CONFIG["PASS"]
   return (
     <div className="border-b border-border last:border-b-0">
       <button
@@ -29,9 +29,6 @@ export function RiskItem({ rule, isExpanded, onToggle }: RiskItemProps) {
               )}
             >
               {cfg.label}
-            </span>
-            <span className="truncate text-[10px] text-muted-foreground">
-              {rule.category_5c}
             </span>
           </div>
           <span className="text-xs font-medium text-foreground">
@@ -61,6 +58,42 @@ export function RiskItem({ rule, isExpanded, onToggle }: RiskItemProps) {
                   Action
                 </span>
                 <p className="mt-0.5 text-xs text-foreground">{rule.action}</p>
+              </div>
+            )}
+            {rule.required_fields.length > 0 && (
+              <div className="mt-2 rounded bg-muted/50 px-2.5 py-1.5">
+                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                  Required Fields
+                </span>
+                <ul className="mt-1 space-y-0.5">
+                  {rule.required_fields.map((field, i) => (
+                    <li key={i} className="font-mono text-[10px] text-muted-foreground">
+                      {field}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {rule.source_evidence.length > 0 && (
+              <div className="mt-2 rounded bg-muted/50 px-2.5 py-1.5">
+                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                  Source Evidence
+                </span>
+                <ul className="mt-1 space-y-0.5">
+                  {rule.source_evidence.map((evidence, i) => (
+                    <li key={i} className="text-[10px] leading-relaxed text-muted-foreground">
+                      {evidence}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {rule.source_file && (
+              <div className="mt-2 rounded bg-muted/50 px-2.5 py-1.5">
+                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                  Source File
+                </span>
+                <p className="mt-0.5 text-xs text-foreground">{rule.source_file}</p>
               </div>
             )}
           </div>
