@@ -10,7 +10,11 @@ import { deriveRiskBand } from "@/lib/risk-band"
 function normalizeStringArray(val: unknown): string[] {
   if (Array.isArray(val)) return val as string[]
   if (typeof val === "string") {
-    try { return JSON.parse(val) as string[] } catch { return [] }
+    try {
+      return JSON.parse(val) as string[]
+    } catch {
+      return []
+    }
   }
   return []
 }
@@ -44,10 +48,19 @@ export function transformToReviewResult(
   const status = determineStatus(findings)
   const summary = generateSummary(caData, findings)
 
-  const safeDecision: EvaluationDecision = {
-    ...evaluationDecision,
-    required_conditions: evaluationDecision.required_conditions ?? [],
-  }
+  const safeDecision: EvaluationDecision = evaluationDecision
+    ? {
+        ...evaluationDecision,
+        required_conditions: evaluationDecision.required_conditions ?? [],
+      }
+    : {
+        recommendation: "",
+        key_strengths: [],
+        key_concerns: [],
+        required_conditions: [],
+        missing_information: [],
+        reasoning: "",
+      }
 
   return {
     summary,
