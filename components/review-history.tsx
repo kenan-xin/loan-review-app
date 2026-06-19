@@ -30,24 +30,29 @@ function formatDate(iso: string): string {
   })
 }
 
+// History statuses are completed milestones (initial → extracted → checked →
+// done); the label describes the work currently in flight. A row only exists
+// once the DB record is created, by which point document reading is done and CA
+// extraction is underway — so `initial` is "Extracting CA data", not "Queued".
 const STATUS_LABEL: Record<ResultStatus["status"], string> = {
-  initial: "Queued",
-  extracted: "Extracting",
-  checked: "Checking",
+  initial: "Extracting CA data",
+  extracted: "Evaluating Rules",
+  checked: "Finalising review",
   done: "Done",
 }
 
 const STATUS_CLASS: Record<ResultStatus["status"], string> = {
-  initial: "bg-muted text-muted-foreground",
-  extracted: "bg-blue-100 text-blue-700",
-  checked: "bg-amber-100 text-amber-700",
+  initial: "bg-blue-100 text-blue-700",
+  extracted: "bg-amber-100 text-amber-700",
+  checked: "bg-violet-100 text-violet-700",
   done: "bg-green-100 text-green-700",
 }
 
 function StatusBadge({ status }: { status: ResultStatus["status"] }) {
+  const inProgress = status !== "done"
   return (
     <span
-      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[status]}`}
+      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[status]} ${inProgress ? "shimmer" : ""}`}
     >
       {STATUS_LABEL[status]}
     </span>
@@ -79,7 +84,11 @@ function DeleteButton({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
-          <Button variant="ghost" size="icon-sm" aria-label={`Delete ${filename}`} />
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label={`Delete ${filename}`}
+          />
         }
       >
         <Trash2 className="h-4 w-4 text-muted-foreground" />
@@ -133,7 +142,9 @@ export function ReviewHistory() {
       )}
 
       {!isLoading && !isError && rows.length === 0 && (
-        <p className="py-4 text-sm text-muted-foreground">No previous reviews.</p>
+        <p className="py-4 text-sm text-muted-foreground">
+          No previous reviews.
+        </p>
       )}
 
       {!isLoading && rows.length > 0 && (
@@ -144,7 +155,9 @@ export function ReviewHistory() {
                 <th className="px-4 py-2.5 text-left font-medium">#</th>
                 <th className="px-4 py-2.5 text-left font-medium">Filename</th>
                 <th className="px-4 py-2.5 text-left font-medium">Status</th>
-                <th className="px-4 py-2.5 text-left font-medium">Created At</th>
+                <th className="px-4 py-2.5 text-left font-medium">
+                  Created At
+                </th>
                 <th className="px-4 py-2.5 text-right font-medium">Action</th>
               </tr>
             </thead>
@@ -153,7 +166,9 @@ export function ReviewHistory() {
                 const isDone = item.status === "done"
                 return (
                   <tr key={item.id} className="border-b last:border-b-0">
-                    <td className="px-4 py-2.5 text-muted-foreground">{index + 1}</td>
+                    <td className="px-4 py-2.5 text-muted-foreground">
+                      {index + 1}
+                    </td>
                     <td className="px-4 py-2.5">{item.filename}</td>
                     <td className="px-4 py-2.5">
                       <StatusBadge status={item.status} />
@@ -167,7 +182,9 @@ export function ReviewHistory() {
                           variant="outline"
                           size="sm"
                           disabled={!isDone}
-                          title={isDone ? undefined : "Review still in progress"}
+                          title={
+                            isDone ? undefined : "Review still in progress"
+                          }
                           onClick={() => {
                             setViewingId(item.id)
                             // Advance to results here: navigating to ?id= via

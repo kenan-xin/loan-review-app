@@ -145,7 +145,39 @@
   }
 }
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @layer components {
+  /* Sweeps a translucent sheen across an element to signal in-progress work.
+     The host clips the pseudo-element, so apply to a rounded/overflow-hidden
+     pill. Honors prefers-reduced-motion. */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, white 55%, transparent),
+      transparent
+    );
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shimmer::after {
+      animation: none;
+    }
+  }
+
   .chat-markdown {
     & p {
       max-width: 65ch;
