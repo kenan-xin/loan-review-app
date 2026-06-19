@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect } from "react"
+import { Suspense, useEffect, useRef } from "react"
 import { ArrowLeft } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -53,14 +53,18 @@ function LoanReviewWizard() {
   } = useTaskStatus(taskId)
   const historyItem = useHistoryItem(viewingId)
 
+  // Timestamp (ms) of the moment the user submitted, used to log how long the
+  // review took once results are shown. Null between runs / for resumed sessions.
+  const reviewStartRef = useRef<number | null>(null)
+
   // The result to render: a viewed history item takes precedence, else the live run.
   const result = viewingId != null ? (historyItem.data ?? null) : liveResult
   const error =
     taskError ?? (submitMut.error ? String(submitMut.error.message) : null)
 
-  // On mount: open a shared link (?id=) or resume a still-in-flight review.
-  // A completed review is never persisted, so a bare visit to "/" always lands
-  // on Upload instead of resurfacing the previous result.
+  // On mount: open a shared review link (?id=). Nothing is persisted, so any
+  // other load (including a mid-run refresh) lands on Upload — the in-flight
+  // task keeps running server-side and resurfaces in history once it finishes.
   useEffect(() => {
     if (idParam) {
       const id = Number(idParam)
@@ -68,15 +72,22 @@ function LoanReviewWizard() {
         setViewingId(id)
         setStep(3)
       }
-      return
     }
-    if (useLoanReviewStore.getState().taskId) setStep(2)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Advance to results once a live run completes.
   useEffect(() => {
-    if (liveResult && viewingId == null && step === 2) setStep(3)
+    if (liveResult && viewingId == null && step === 2) {
+      if (reviewStartRef.current != null) {
+        const minutes = (Date.now() - reviewStartRef.current) / 60000
+        console.log(
+          `[loan-review] Review took ${minutes.toFixed(2)} min (submit → results)`
+        )
+        reviewStartRef.current = null
+      }
+      setStep(3)
+    }
   }, [liveResult, viewingId, step, setStep])
 
   // Browser history entries so the back button works.
@@ -99,6 +110,7 @@ function LoanReviewWizard() {
 
   const handleNext = () => {
     if (step !== 1 || !applicationFile) return
+    reviewStartRef.current = Date.now()
     submitMut.mutate(applicationFile, {
       onSuccess: (res) => {
         setTaskId(res.taskID)

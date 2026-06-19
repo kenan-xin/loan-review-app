@@ -33,9 +33,9 @@ function formatDate(iso: string): string {
 // History statuses are completed milestones (initial → extracted → checked →
 // done); the label describes the work currently in flight. A row only exists
 // once the DB record is created, by which point document reading is done and CA
-// extraction is underway — so `initial` is "Extracting CA data", not "Queued".
+// extraction is underway — so `initial` is "Extracting CA", not "Queued".
 const STATUS_LABEL: Record<ResultStatus["status"], string> = {
-  initial: "Extracting CA data",
+  initial: "Extracting CA",
   extracted: "Evaluating Rules",
   checked: "Finalising review",
   done: "Done",

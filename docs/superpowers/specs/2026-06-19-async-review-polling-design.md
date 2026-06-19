@@ -172,9 +172,11 @@ Remove: `submit()` SSE logic, `SseStage`/`NODE_TO_STAGE`/`STAGE_INDEX`, `ruleInd
 - Empty/parse-failure on `hl-get-status` `result` string: treat as empty list, keep last good data, log.
 - Delete failure: optimistic rollback + toast.
 
-## 8. Resume after refresh (included)
+## 8. Refresh during a run (drops to Upload)
 
-Persist `taskId` to `localStorage` (e.g. via zustand `persist` on that field, or manual). On mount, if a `taskId` exists and the app is at step 2, `useTaskStatus` resumes polling automatically — a mid-run refresh continues instead of losing the review. Cleared on `reset()` and on terminal completion handling.
+Nothing is persisted. A mid-run refresh lands on **Upload** so the user can immediately submit another application; the review is *not* lost — `reviewer_v2` is async and server-side, so the task keeps running and resurfaces in the review history (`hl_retriever`) once it finishes. Shared/history items still load directly via the `?id=` URL, which survives a reload on its own.
+
+(Earlier iterations persisted `taskId` and resumed polling at step 2 on mount; that was dropped in favour of returning to Upload.)
 
 ## 9. Testing
 
@@ -187,7 +189,7 @@ Unit tests for the pure functions (use the real captured snapshots `~/Desktop/sa
 ## 10. Defaults
 
 - Review poll **3 s**; History poll **5 s**; hard timeout **20 min**.
-- Resume-on-refresh: **included**.
+- Resume-on-refresh: **not included** — a mid-run refresh drops to Upload; the task finishes server-side and appears in history.
 - Per-item progress counters (extraction chunks + rule batches): **included**, shown as live "done" counts (denominator best-effort only).
 - TanStack Query: **v5**, `retry: 2`, `refetchOnWindowFocus: false`.
 

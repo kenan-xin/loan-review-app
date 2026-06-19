@@ -40,7 +40,7 @@ const HARD_TIMEOUT_MS = 20 * 60 * 1000
 
 // Poll cadences. A full review runs ~20 min, so we poll gently to keep load on
 // the public dev-genie backend low while still surfacing per-chunk progress.
-const STATUS_POLL_MS = 10000
+const STATUS_POLL_MS = 15000
 // The history list never stops polling: a brand-new row (status "initial")
 // can appear at any time, so we keep checking even when every known row is
 // already "done". Poll faster while something is in progress, slower when idle.

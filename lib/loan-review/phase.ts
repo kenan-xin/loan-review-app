@@ -96,7 +96,7 @@ const RULES_PER_CHUNK = 5
 const PHASE_LABEL: Record<ReviewPhase, string> = {
   processing: "Processing",
   reading: "Reading document",
-  extracting: "Extracting CA data",
+  extracting: "Extracting CA",
   checking: "Evaluating rules",
   finalising: "Finalising review",
   completed: "Completed",

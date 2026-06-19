@@ -16,7 +16,7 @@ interface ProcessingStepProps {
 
 const STAGES: Array<{ id: ReviewPhase; label: string }> = [
   { id: "reading", label: "Reading document" },
-  { id: "extracting", label: "Extracting CA data" },
+  { id: "extracting", label: "Extracting CA" },
   { id: "checking", label: "Evaluating rules" },
   { id: "finalising", label: "Finalising review" },
 ]

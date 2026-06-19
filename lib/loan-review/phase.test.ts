@@ -129,7 +129,7 @@ describe("describePhase", () => {
   it("shows the current extraction batch's page range (3 pages/chunk)", () => {
     // 2 chunks done → current batch is pages 7..9, regardless of in-flight count.
     const label = describePhase("extracting", progress({ done: 2, inProgress: 5 }))
-    expect(label).toBe("Extracting CA data — pages 7-9")
+    expect(label).toBe("Extracting CA — pages 7-9")
   })
 
   it("shows the current checklist batch's rule range (5 rules/chunk)", () => {
@@ -140,7 +140,7 @@ describe("describePhase", () => {
 
   it("says 'almost done' once a loop has drained its last in-flight batch", () => {
     expect(describePhase("extracting", progress({ done: 43, inProgress: 0 }))).toBe(
-      "Extracting CA data — almost done"
+      "Extracting CA — almost done"
     )
     expect(describePhase("checking", progress({}, { done: 19, inProgress: 0 }))).toBe(
       "Evaluating rules — almost done"
@@ -149,7 +149,7 @@ describe("describePhase", () => {
 
   it("shows the bare stage label before a loop has produced any work", () => {
     expect(describePhase("extracting", progress({ done: 0, inProgress: 0 }))).toBe(
-      "Extracting CA data"
+      "Extracting CA"
     )
   })
 
@@ -174,14 +174,14 @@ describe("describePhase with real reviewer_v2 snapshots", () => {
     expect(derivePhase(nodesA, snapshotA.status)).toBe("extracting")
     expect(deriveProgress(nodesA).extract).toEqual({ done: 17, inProgress: 5, seen: 22 })
     expect(describePhase("extracting", deriveProgress(nodesA))).toBe(
-      "Extracting CA data — pages 52-54"
+      "Extracting CA — pages 52-54"
     )
   })
 
   it("advances the window one batch forward on the next poll (20 done)", () => {
     expect(deriveProgress(nodesB).extract).toEqual({ done: 20, inProgress: 5, seen: 25 })
     expect(describePhase("extracting", deriveProgress(nodesB))).toBe(
-      "Extracting CA data — pages 61-63"
+      "Extracting CA — pages 61-63"
     )
   })
 })
