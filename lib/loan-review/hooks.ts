@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   submitReview,
@@ -55,31 +56,38 @@ export interface UseTaskStatus {
 }
 
 export function useTaskStatus(taskId: string | null): UseTaskStatus {
+  const [timedOutForTask, setTimedOutForTask] = useState<string | null>(null)
+
   const query = useQuery({
     queryKey: ["taskStatus", taskId],
     queryFn: () => getTaskStatus(taskId!),
     enabled: !!taskId,
-    refetchInterval: (q) => {
-      const d = q.state.data
-      if (isTerminal(d?.status)) return false
-      const started = d?.startedAt ? Date.parse(d.startedAt) : q.state.dataUpdatedAt
-      if (started && Date.now() - started > HARD_TIMEOUT_MS) return false
-      return 3000
-    },
+    refetchInterval: (q) =>
+      isTerminal(q.state.data?.status) || timedOutForTask === taskId
+        ? false
+        : 3000,
   })
 
   const data = query.data
   const nodeInfos = data?.nodeInfos ?? []
-
-  const started = data?.startedAt ? Date.parse(data.startedAt) : query.dataUpdatedAt
-  const timedOut =
-    data?.status === "running" &&
-    !!started &&
-    !Number.isNaN(started) &&
-    Date.now() - started > HARD_TIMEOUT_MS
+  const status = data?.status
 
   const phase: ReviewPhase = data ? derivePhase(nodeInfos, data.status) : "processing"
   const progress = data ? deriveProgress(nodeInfos) : null
+
+  // Stuck-task guard: if no item completes for HARD_TIMEOUT_MS while still
+  // running, stop polling and surface a timeout. The timer resets on every
+  // completed chunk/batch (or new taskId), so healthy long-running reviews
+  // are unaffected.
+  const completed = progress ? progress.extract.done + progress.rules.done : 0
+  const timedOut = timedOutForTask === taskId
+  useEffect(() => {
+    if (!taskId || isTerminal(status) || timedOut) return
+    const timer = setTimeout(() => setTimedOutForTask(taskId), HARD_TIMEOUT_MS)
+    return () => clearTimeout(timer)
+  }, [taskId, status, completed, timedOut])
+
+  const isTimedOut = timedOut && status !== "success"
   const result =
     data?.status === "success" && data.output ? buildResult(data.output) : null
   const taskError =
@@ -87,8 +95,8 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
       ? data.errorMessage ||
         nodeInfos.find((n) => n.status === "failed")?.error ||
         "Review failed"
-      : timedOut
-        ? "Review timed out after 20 minutes — please retry."
+      : isTimedOut
+        ? `Review timed out after ${HARD_TIMEOUT_MS / 60000} minutes with no progress — please retry.`
         : null
 
   return {
@@ -96,7 +104,7 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
     progress,
     result,
     taskError,
-    isTerminal: isTerminal(data?.status) || timedOut,
+    isTerminal: isTerminal(data?.status) || isTimedOut,
     isLoading: query.isPending && !!taskId,
   }
 }
