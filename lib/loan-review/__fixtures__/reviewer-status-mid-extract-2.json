@@ -1,0 +1,754 @@
+{
+  "taskID": "6a34fad582ae176ad682e499",
+  "startedAt": "2026-06-19T08:16:21.321Z",
+  "status": "running",
+  "nodeInfos": [
+    {
+      "nodeId": "root",
+      "nodeName": "Root",
+      "nodeType": "root",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:16:22.518806667Z",
+      "endTime": "2026-06-19T08:16:22.51883346Z"
+    },
+    {
+      "nodeId": "start",
+      "nodeName": "Start",
+      "nodeType": "smartAPIStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:16:22.518986713Z",
+      "endTime": "2026-06-19T08:16:22.519169109Z"
+    },
+    {
+      "nodeId": "response_3",
+      "nodeName": "Response 3",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:16:22.519529669Z",
+      "endTime": "2026-06-19T08:16:22.521200744Z"
+    },
+    {
+      "nodeId": "document_reader_1",
+      "nodeName": "Document Reader 1",
+      "nodeType": "smartAPIDocumentReader",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:16:22.521669847Z",
+      "endTime": "2026-06-19T08:26:01.851968404Z"
+    },
+    {
+      "nodeId": "database_2",
+      "nodeName": "Database 2",
+      "nodeType": "database",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:01.855116397Z",
+      "endTime": "2026-06-19T08:26:01.868561344Z"
+    },
+    {
+      "nodeId": "database_3",
+      "nodeName": "Database 3",
+      "nodeType": "database",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:01.870579364Z",
+      "endTime": "2026-06-19T08:26:01.877613129Z"
+    },
+    {
+      "nodeId": "code_interpreter_9",
+      "nodeName": "Chunk pages",
+      "nodeType": "plugin",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:01.880426384Z",
+      "endTime": "2026-06-19T08:26:22.557546113Z"
+    },
+    {
+      "nodeId": "iterator_1",
+      "nodeName": "Iterator 1",
+      "nodeType": "iterator",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.572333151Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    },
+    {
+      "nodeId": "iterator_1[3].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.662924949Z",
+      "endTime": "2026-06-19T08:26:22.68820344Z"
+    },
+    {
+      "nodeId": "iterator_1[4].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.666126942Z",
+      "endTime": "2026-06-19T08:26:22.691922043Z"
+    },
+    {
+      "nodeId": "iterator_1[1].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.688851684Z",
+      "endTime": "2026-06-19T08:26:22.730078702Z"
+    },
+    {
+      "nodeId": "iterator_1[0].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.688932179Z",
+      "endTime": "2026-06-19T08:26:22.730613246Z"
+    },
+    {
+      "nodeId": "iterator_1[2].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.689741074Z",
+      "endTime": "2026-06-19T08:26:22.730320665Z"
+    },
+    {
+      "nodeId": "iterator_1[3].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.716778601Z",
+      "endTime": "2026-06-19T08:26:22.744780073Z"
+    },
+    {
+      "nodeId": "iterator_1[4].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.721261483Z",
+      "endTime": "2026-06-19T08:26:22.749134031Z"
+    },
+    {
+      "nodeId": "iterator_1[1].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.74307202Z",
+      "endTime": "2026-06-19T08:26:22.773353323Z"
+    },
+    {
+      "nodeId": "iterator_1[2].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.745002116Z",
+      "endTime": "2026-06-19T08:26:22.779990488Z"
+    },
+    {
+      "nodeId": "iterator_1[0].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.747195509Z",
+      "endTime": "2026-06-19T08:26:22.779158874Z"
+    },
+    {
+      "nodeId": "iterator_1[3].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.759134025Z",
+      "endTime": "2026-06-19T08:28:01.961403758Z"
+    },
+    {
+      "nodeId": "iterator_1[4].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.76531665Z",
+      "endTime": "2026-06-19T08:28:15.183196485Z"
+    },
+    {
+      "nodeId": "iterator_1[0].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.790649423Z",
+      "endTime": "2026-06-19T08:26:45.939622682Z"
+    },
+    {
+      "nodeId": "iterator_1[2].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.791729279Z",
+      "endTime": "2026-06-19T08:27:00.136964032Z"
+    },
+    {
+      "nodeId": "iterator_1[1].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:22.792042834Z",
+      "endTime": "2026-06-19T08:27:07.969328284Z"
+    },
+    {
+      "nodeId": "iterator_1[5].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:46.010523452Z",
+      "endTime": "2026-06-19T08:26:46.030857478Z"
+    },
+    {
+      "nodeId": "iterator_1[5].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:46.041729043Z",
+      "endTime": "2026-06-19T08:26:46.06630971Z"
+    },
+    {
+      "nodeId": "iterator_1[5].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:26:46.075956391Z",
+      "endTime": "2026-06-19T08:27:43.34635215Z"
+    },
+    {
+      "nodeId": "iterator_1[6].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:00.207434571Z",
+      "endTime": "2026-06-19T08:27:00.231451248Z"
+    },
+    {
+      "nodeId": "iterator_1[6].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:00.244766728Z",
+      "endTime": "2026-06-19T08:27:00.272749377Z"
+    },
+    {
+      "nodeId": "iterator_1[6].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:00.285263322Z",
+      "endTime": "2026-06-19T08:28:00.708465083Z"
+    },
+    {
+      "nodeId": "iterator_1[7].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:08.041572465Z",
+      "endTime": "2026-06-19T08:27:08.065090848Z"
+    },
+    {
+      "nodeId": "iterator_1[7].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:08.079407722Z",
+      "endTime": "2026-06-19T08:27:08.110266218Z"
+    },
+    {
+      "nodeId": "iterator_1[7].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:08.120862231Z",
+      "endTime": "2026-06-19T08:27:53.312321253Z"
+    },
+    {
+      "nodeId": "iterator_1[8].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:43.41816038Z",
+      "endTime": "2026-06-19T08:27:43.444151402Z"
+    },
+    {
+      "nodeId": "iterator_1[8].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:43.457841248Z",
+      "endTime": "2026-06-19T08:27:43.488852552Z"
+    },
+    {
+      "nodeId": "iterator_1[8].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:43.500882574Z",
+      "endTime": "2026-06-19T08:28:16.343187349Z"
+    },
+    {
+      "nodeId": "iterator_1[9].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:53.384423366Z",
+      "endTime": "2026-06-19T08:27:53.410798992Z"
+    },
+    {
+      "nodeId": "iterator_1[9].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:53.425647204Z",
+      "endTime": "2026-06-19T08:27:53.456593782Z"
+    },
+    {
+      "nodeId": "iterator_1[9].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:27:53.469480963Z",
+      "endTime": "2026-06-19T08:28:40.741999496Z"
+    },
+    {
+      "nodeId": "iterator_1[10].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:00.791112907Z",
+      "endTime": "2026-06-19T08:28:00.823147416Z"
+    },
+    {
+      "nodeId": "iterator_1[10].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:00.837620708Z",
+      "endTime": "2026-06-19T08:28:00.871491581Z"
+    },
+    {
+      "nodeId": "iterator_1[10].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:00.887587184Z",
+      "endTime": "2026-06-19T08:28:40.90022626Z"
+    },
+    {
+      "nodeId": "iterator_1[11].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:02.053551765Z",
+      "endTime": "2026-06-19T08:28:02.082026286Z"
+    },
+    {
+      "nodeId": "iterator_1[11].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:02.097298469Z",
+      "endTime": "2026-06-19T08:28:02.132405005Z"
+    },
+    {
+      "nodeId": "iterator_1[11].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:02.14988742Z",
+      "endTime": "2026-06-19T08:28:51.756797703Z"
+    },
+    {
+      "nodeId": "iterator_1[12].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:15.261036779Z",
+      "endTime": "2026-06-19T08:28:15.294908406Z"
+    },
+    {
+      "nodeId": "iterator_1[12].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:15.312532915Z",
+      "endTime": "2026-06-19T08:28:15.351045187Z"
+    },
+    {
+      "nodeId": "iterator_1[12].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:15.368856579Z",
+      "endTime": "2026-06-19T08:29:10.148459553Z"
+    },
+    {
+      "nodeId": "iterator_1[13].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:16.422526972Z",
+      "endTime": "2026-06-19T08:28:16.455128715Z"
+    },
+    {
+      "nodeId": "iterator_1[13].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:16.488911777Z",
+      "endTime": "2026-06-19T08:28:16.527215912Z"
+    },
+    {
+      "nodeId": "iterator_1[13].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:16.546202443Z",
+      "endTime": "2026-06-19T08:28:53.505863791Z"
+    },
+    {
+      "nodeId": "iterator_1[14].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:40.826058992Z",
+      "endTime": "2026-06-19T08:28:40.865046952Z"
+    },
+    {
+      "nodeId": "iterator_1[14].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:40.884745452Z",
+      "endTime": "2026-06-19T08:28:40.928633882Z"
+    },
+    {
+      "nodeId": "iterator_1[14].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:40.9525136Z",
+      "endTime": "2026-06-19T08:29:12.549377938Z"
+    },
+    {
+      "nodeId": "iterator_1[15].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:40.991370075Z",
+      "endTime": "2026-06-19T08:28:41.040835156Z"
+    },
+    {
+      "nodeId": "iterator_1[15].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:41.060571828Z",
+      "endTime": "2026-06-19T08:28:41.100002612Z"
+    },
+    {
+      "nodeId": "iterator_1[15].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:41.119093134Z",
+      "endTime": "2026-06-19T08:29:27.02617426Z"
+    },
+    {
+      "nodeId": "iterator_1[16].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:51.846300089Z",
+      "endTime": "2026-06-19T08:28:51.885950089Z"
+    },
+    {
+      "nodeId": "iterator_1[16].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:51.905714574Z",
+      "endTime": "2026-06-19T08:28:51.947461095Z"
+    },
+    {
+      "nodeId": "iterator_1[16].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:51.968949622Z",
+      "endTime": "2026-06-19T08:29:40.44095027Z"
+    },
+    {
+      "nodeId": "iterator_1[17].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:53.600675499Z",
+      "endTime": "2026-06-19T08:28:53.642518358Z"
+    },
+    {
+      "nodeId": "iterator_1[17].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:53.663402003Z",
+      "endTime": "2026-06-19T08:28:53.704781024Z"
+    },
+    {
+      "nodeId": "iterator_1[17].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:28:53.723226131Z",
+      "endTime": "2026-06-19T08:29:28.040272793Z"
+    },
+    {
+      "nodeId": "iterator_1[18].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:10.240113443Z",
+      "endTime": "2026-06-19T08:29:10.279730173Z"
+    },
+    {
+      "nodeId": "iterator_1[18].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:10.30124715Z",
+      "endTime": "2026-06-19T08:29:10.347817031Z"
+    },
+    {
+      "nodeId": "iterator_1[18].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:10.366602213Z",
+      "endTime": "2026-06-19T08:29:43.026842602Z"
+    },
+    {
+      "nodeId": "iterator_1[19].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:12.635323775Z",
+      "endTime": "2026-06-19T08:29:12.676208442Z"
+    },
+    {
+      "nodeId": "iterator_1[19].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:12.696081565Z",
+      "endTime": "2026-06-19T08:29:12.742824309Z"
+    },
+    {
+      "nodeId": "iterator_1[19].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:12.765760966Z",
+      "endTime": "2026-06-19T08:29:41.950735848Z"
+    },
+    {
+      "nodeId": "iterator_1[20].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:27.119006125Z",
+      "endTime": "2026-06-19T08:29:27.164726851Z"
+    },
+    {
+      "nodeId": "iterator_1[20].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:27.186535305Z",
+      "endTime": "2026-06-19T08:29:27.239396295Z"
+    },
+    {
+      "nodeId": "iterator_1[20].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:27.261031873Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    },
+    {
+      "nodeId": "iterator_1[21].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:28.140432636Z",
+      "endTime": "2026-06-19T08:29:28.191097515Z"
+    },
+    {
+      "nodeId": "iterator_1[21].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:28.212730726Z",
+      "endTime": "2026-06-19T08:29:28.267473078Z"
+    },
+    {
+      "nodeId": "iterator_1[21].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:28.289179531Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    },
+    {
+      "nodeId": "iterator_1[22].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:40.542177741Z",
+      "endTime": "2026-06-19T08:29:40.588661046Z"
+    },
+    {
+      "nodeId": "iterator_1[22].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:40.613663883Z",
+      "endTime": "2026-06-19T08:29:40.667905097Z"
+    },
+    {
+      "nodeId": "iterator_1[22].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:40.689974348Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    },
+    {
+      "nodeId": "iterator_1[23].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:42.041765329Z",
+      "endTime": "2026-06-19T08:29:42.107458828Z"
+    },
+    {
+      "nodeId": "iterator_1[23].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:42.131393734Z",
+      "endTime": "2026-06-19T08:29:42.195856299Z"
+    },
+    {
+      "nodeId": "iterator_1[23].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:42.218148111Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    },
+    {
+      "nodeId": "iterator_1[24].iterator_start_RytI",
+      "nodeName": "Iterator Start",
+      "nodeType": "iteratorStart",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:43.114249325Z",
+      "endTime": "2026-06-19T08:29:43.165406184Z"
+    },
+    {
+      "nodeId": "iterator_1[24].response_1",
+      "nodeName": "Response 1",
+      "nodeType": "smartAPIResponse",
+      "status": "success",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:43.187576207Z",
+      "endTime": "2026-06-19T08:29:43.241228974Z"
+    },
+    {
+      "nodeId": "iterator_1[24].llm_2",
+      "nodeName": "LLM 2",
+      "nodeType": "llm",
+      "status": "processing",
+      "logs": [],
+      "startTime": "2026-06-19T08:29:43.265805358Z",
+      "endTime": "0001-01-01T00:00:00Z"
+    }
+  ]
+}

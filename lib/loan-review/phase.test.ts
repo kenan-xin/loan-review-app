@@ -8,6 +8,8 @@ import {
 } from "./phase"
 import type { ReviewProgress } from "./phase"
 import type { NodeInfo, ResultStatus } from "./api"
+import snapshotA from "./__fixtures__/reviewer-status-mid-extract-1.json"
+import snapshotB from "./__fixtures__/reviewer-status-mid-extract-2.json"
 
 describe("adaptOutput", () => {
   it("converts a [{Key,Value}] array into a plain object", () => {
@@ -124,16 +126,16 @@ function progress(
 }
 
 describe("describePhase", () => {
-  it("shows the page range of the in-flight extraction batches (3 pages/chunk)", () => {
-    // 2 chunks done, 5 in flight → pages 7..(7*3) = 7-21.
+  it("shows the current extraction batch's page range (3 pages/chunk)", () => {
+    // 2 chunks done → current batch is pages 7..9, regardless of in-flight count.
     const label = describePhase("extracting", progress({ done: 2, inProgress: 5 }))
-    expect(label).toBe("Extracting CA data — pages 7-21")
+    expect(label).toBe("Extracting CA data — pages 7-9")
   })
 
-  it("shows the rule range of the in-flight checklist batches (5 rules/chunk)", () => {
-    // 3 chunks done, 2 in flight → rules 16..(5*5) = 16-25.
+  it("shows the current checklist batch's rule range (5 rules/chunk)", () => {
+    // 3 chunks done → current batch is rules 16..20, regardless of in-flight count.
     const label = describePhase("checking", progress({}, { done: 3, inProgress: 2 }))
-    expect(label).toBe("Evaluating rules — rules 16-25")
+    expect(label).toBe("Evaluating rules — rules 16-20")
   })
 
   it("says 'almost done' once a loop has drained its last in-flight batch", () => {
@@ -155,6 +157,32 @@ describe("describePhase", () => {
     expect(describePhase("reading", null)).toBe("Reading document")
     expect(describePhase("finalising", null)).toBe("Finalising review")
     expect(describePhase("processing", null)).toBe("Processing")
+  })
+})
+
+// Two real reviewer_v2/status/:id payloads captured ~15s apart from a single
+// live review, mid-extraction (~5 chunks always in flight). The verbose `logs`
+// were trimmed; the node graph (ids + statuses) the derivations read is
+// verbatim. These lock the single-batch page window against real API output:
+// the old `done + inProgress` span rendered "pages 52-66" here, which must not
+// regress.
+describe("describePhase with real reviewer_v2 snapshots", () => {
+  const nodesA = snapshotA.nodeInfos as NodeInfo[]
+  const nodesB = snapshotB.nodeInfos as NodeInfo[]
+
+  it("renders a single 3-page batch while extraction runs (17 done, 5 in flight)", () => {
+    expect(derivePhase(nodesA, snapshotA.status)).toBe("extracting")
+    expect(deriveProgress(nodesA).extract).toEqual({ done: 17, inProgress: 5, seen: 22 })
+    expect(describePhase("extracting", deriveProgress(nodesA))).toBe(
+      "Extracting CA data — pages 52-54"
+    )
+  })
+
+  it("advances the window one batch forward on the next poll (20 done)", () => {
+    expect(deriveProgress(nodesB).extract).toEqual({ done: 20, inProgress: 5, seen: 25 })
+    expect(describePhase("extracting", deriveProgress(nodesB))).toBe(
+      "Extracting CA data — pages 61-63"
+    )
   })
 })
 

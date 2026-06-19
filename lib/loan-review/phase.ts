@@ -107,16 +107,17 @@ const PHASE_LABEL: Record<ReviewPhase, string> = {
  *
  * The status API never reports the total chunk count (chunks are created
  * incrementally as the iterator runs), so we can't know which batch is the
- * literal last one. Instead we show the page/rule range of the in-flight
- * batch(es), and fall back to "almost done" once the loop has drained its last
- * in-flight batch — i.e. work has been done but nothing is currently running,
- * which in practice only happens as the loop wraps up.
+ * literal last one. Instead we show the page/rule range of the current batch,
+ * anchored on the number completed so it ticks forward one batch at a time, and
+ * fall back to "almost done" once the loop has drained its last in-flight batch
+ * — i.e. work has been done but nothing is currently running, which in practice
+ * only happens as the loop wraps up.
  */
 function loopSuffix(loop: LoopProgress, unit: string, perChunk: number): string {
   if (loop.done === 0 && loop.inProgress === 0) return ""
   if (loop.inProgress === 0) return " — almost done"
   const start = perChunk * loop.done + 1
-  const end = perChunk * (loop.done + loop.inProgress)
+  const end = perChunk * (loop.done + 1)
   return ` — ${unit} ${start}-${end}`
 }
 
