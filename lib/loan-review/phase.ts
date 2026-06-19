@@ -1,4 +1,4 @@
-import type { KV, NodeInfo } from "./api"
+import type { KV, NodeInfo, ResultStatus } from "./api"
 
 function isKV(x: unknown): x is KV {
   return (
@@ -86,4 +86,19 @@ export function deriveProgress(nodeInfos: NodeInfo[]): ReviewProgress {
     extract: loopProgress(nodeInfos, /^iterator_1\[(\d+)\]\.llm_2$/),
     rules: loopProgress(nodeInfos, /^iterator_2\[(\d+)\]\.llm_1$/),
   }
+}
+
+export function dedupeNewestByFilename(rows: ResultStatus[]): ResultStatus[] {
+  const sorted = [...rows].sort(
+    (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
+  )
+  const seen = new Map<string, ResultStatus>()
+  for (const row of sorted) {
+    if (!seen.has(row.filename)) seen.set(row.filename, row)
+  }
+  return Array.from(seen.values())
+}
+
+export function hasNonTerminalStatus(rows: ResultStatus[]): boolean {
+  return rows.some((r) => r.status !== "done")
 }

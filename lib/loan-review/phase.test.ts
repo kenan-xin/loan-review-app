@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { adaptOutput, derivePhase, deriveProgress } from "./phase"
-import type { NodeInfo } from "./api"
+import { adaptOutput, derivePhase, deriveProgress, dedupeNewestByFilename } from "./phase"
+import type { NodeInfo, ResultStatus } from "./api"
 
 describe("adaptOutput", () => {
   it("converts a [{Key,Value}] array into a plain object", () => {
@@ -103,5 +103,33 @@ describe("deriveProgress", () => {
     const p = deriveProgress([node("document_reader_1", "processing")])
     expect(p.extract.done).toBe(0)
     expect(p.rules.done).toBe(0)
+  })
+})
+
+function status(id: number, filename: string, created_at: string, s: ResultStatus["status"]): ResultStatus {
+  return { id, filename, status: s, created_at, updated_at: created_at }
+}
+
+describe("dedupeNewestByFilename", () => {
+  it("keeps only the newest row per filename", () => {
+    const rows = [
+      status(1, "a.pdf", "2026-06-01T00:00:00Z", "done"),
+      status(2, "a.pdf", "2026-06-03T00:00:00Z", "initial"),
+      status(3, "b.pdf", "2026-06-02T00:00:00Z", "checked"),
+    ]
+    const out = dedupeNewestByFilename(rows)
+    expect(out).toHaveLength(2)
+    const a = out.find((r) => r.filename === "a.pdf")!
+    expect(a.id).toBe(2)
+    expect(a.status).toBe("initial")
+  })
+
+  it("returns newest-first ordering", () => {
+    const rows = [
+      status(1, "old.pdf", "2026-06-01T00:00:00Z", "done"),
+      status(2, "new.pdf", "2026-06-05T00:00:00Z", "done"),
+    ]
+    const out = dedupeNewestByFilename(rows)
+    expect(out[0].filename).toBe("new.pdf")
   })
 })
