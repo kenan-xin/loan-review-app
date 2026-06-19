@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local Claude worktrees/build caches (gitignored) — never lint these.
+    ".claude/**",
   ]),
 ]);
 
