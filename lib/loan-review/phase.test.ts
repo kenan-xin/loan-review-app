@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { adaptOutput, derivePhase } from "./phase"
+import { adaptOutput, derivePhase, deriveProgress } from "./phase"
 import type { NodeInfo } from "./api"
 
 describe("adaptOutput", () => {
@@ -72,5 +72,36 @@ describe("derivePhase", () => {
   it("returns finalising once llm_3 is present", () => {
     const nodes = [node("iterator_2", "success"), node("database_7", "success"), node("llm_3", "processing")]
     expect(derivePhase(nodes, "running")).toBe("finalising")
+  })
+})
+
+describe("deriveProgress", () => {
+  it("counts completed extraction chunks and rule batches", () => {
+    const nodes: NodeInfo[] = []
+    for (let i = 0; i < 43; i++) nodes.push(node(`iterator_1[${i}].llm_2`, "success"))
+    for (let i = 0; i < 19; i++) nodes.push(node(`iterator_2[${i}].llm_1`, "success"))
+    const p = deriveProgress(nodes)
+    expect(p.extract.done).toBe(43)
+    expect(p.extract.seen).toBe(43)
+    expect(p.rules.done).toBe(19)
+  })
+
+  it("separates done from in-progress and uses distinct indices for seen", () => {
+    const nodes = [
+      node("iterator_1[0].llm_2", "success"),
+      node("iterator_1[1].llm_2", "success"),
+      node("iterator_1[2].llm_2", "processing"),
+    ]
+    const p = deriveProgress(nodes)
+    expect(p.extract.done).toBe(2)
+    expect(p.extract.inProgress).toBe(1)
+    expect(p.extract.seen).toBe(3)
+    expect(p.extract.done).toBeLessThan(p.extract.seen)
+  })
+
+  it("ignores non-matching nodes", () => {
+    const p = deriveProgress([node("document_reader_1", "processing")])
+    expect(p.extract.done).toBe(0)
+    expect(p.rules.done).toBe(0)
   })
 })

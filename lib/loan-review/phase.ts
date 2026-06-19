@@ -55,3 +55,35 @@ export function derivePhase(nodeInfos: NodeInfo[], status: string): ReviewPhase 
   if (present("document_reader_1")) return "reading"
   return "processing"
 }
+
+export interface LoopProgress {
+  done: number
+  inProgress: number
+  seen: number
+}
+
+export interface ReviewProgress {
+  extract: LoopProgress
+  rules: LoopProgress
+}
+
+function loopProgress(nodeInfos: NodeInfo[], re: RegExp): LoopProgress {
+  const indices = new Set<number>()
+  let done = 0
+  let inProgress = 0
+  for (const n of nodeInfos) {
+    const m = re.exec(n.nodeId)
+    if (!m) continue
+    indices.add(Number(m[1]))
+    if (n.status === "success") done++
+    else if (n.status === "processing" || n.status === "running") inProgress++
+  }
+  return { done, inProgress, seen: indices.size }
+}
+
+export function deriveProgress(nodeInfos: NodeInfo[]): ReviewProgress {
+  return {
+    extract: loopProgress(nodeInfos, /^iterator_1\[(\d+)\]\.llm_2$/),
+    rules: loopProgress(nodeInfos, /^iterator_2\[(\d+)\]\.llm_1$/),
+  }
+}
