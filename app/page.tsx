@@ -3,7 +3,13 @@
 import { Suspense, useEffect } from "react"
 import { ArrowLeft } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { useLoanReviewStore } from "@/store/loan-review"
+import {
+  useSubmitReview,
+  useTaskStatus,
+  useHistoryItem,
+} from "@/lib/loan-review/hooks"
 import { StepIndicator } from "@/components/step-indicator"
 import { WizardFooter } from "@/components/wizard-footer"
 import { UploadStep } from "@/components/upload-step"
@@ -28,62 +34,79 @@ function LoanReviewWizard() {
   const {
     step,
     applicationFile,
-    result,
-    error,
-    isSubmitting,
-    isLoadingHistory,
-    historyError,
+    taskId,
+    viewingId,
+    setStep,
     setApplicationFile,
-    submit,
+    setTaskId,
+    setViewingId,
     reset,
-    loadHistoryById,
   } = useLoanReviewStore()
 
-  useEffect(() => {
-    if (!idParam) return
-    const id = Number(idParam)
-    if (Number.isNaN(id)) return
-    // Only load if we don't already have a result for this id
-    loadHistoryById(id)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const submitMut = useSubmitReview()
+  const { phase, progress, result: liveResult, taskError, isLoading: statusLoading } =
+    useTaskStatus(taskId)
+  const historyItem = useHistoryItem(viewingId)
 
-  // Push browser history entries for step 2 & 3 so back button works
+  // The result to render: a viewed history item takes precedence, else the live run.
+  const result = viewingId != null ? (historyItem.data ?? null) : liveResult
+  const error = taskError ?? (submitMut.error ? String(submitMut.error.message) : null)
+
+  // On mount: open a shared link (?id=) or resume a persisted in-flight task.
   useEffect(() => {
-    if (step === 2) {
-      window.history.pushState({ step: 2 }, "")
-    } else if (step === 3) {
-      window.history.pushState({ step: 3 }, "")
+    if (idParam) {
+      const id = Number(idParam)
+      if (!Number.isNaN(id)) {
+        setViewingId(id)
+        setStep(3)
+      }
+      return
     }
+    const persisted = useLoanReviewStore.getState()
+    if (persisted.viewingId != null) setStep(3)
+    else if (persisted.taskId) setStep(2)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Advance to results once a live run completes.
+  useEffect(() => {
+    if (liveResult && viewingId == null && step === 2) setStep(3)
+  }, [liveResult, viewingId, step, setStep])
+
+  // Browser history entries so the back button works.
+  useEffect(() => {
+    if (step === 2 || step === 3) window.history.pushState({ step }, "")
   }, [step])
 
-  // Handle browser back button
+  // Back button → return to upload, clearing the active run / viewed item.
   useEffect(() => {
     const onPopState = () => {
-      const s = useLoanReviewStore.getState().step
-      if (s > 1) {
-        useLoanReviewStore.setState({
-          step: 1,
-          error: null,
-          result: null,
-          isSubmitting: false,
-          stage: "idle",
-        })
+      if (useLoanReviewStore.getState().step > 1) {
+        setStep(1)
+        setTaskId(null)
+        setViewingId(null)
       }
     }
     window.addEventListener("popstate", onPopState)
     return () => window.removeEventListener("popstate", onPopState)
-  }, [])
+  }, [setStep, setTaskId, setViewingId])
 
   const handleNext = () => {
-    if (step === 1 && applicationFile) submit()
+    if (step !== 1 || !applicationFile) return
+    submitMut.mutate(applicationFile, {
+      onSuccess: (res) => {
+        setTaskId(res.taskID)
+        setStep(2)
+      },
+      onError: (e) => toast.error(`Could not start review: ${e.message}`),
+    })
   }
 
   const handleRetry = () => {
-    useLoanReviewStore.setState({
-      error: null,
-      result: null,
-      step: 1,
-    })
+    submitMut.reset()
+    setTaskId(null)
+    setViewingId(null)
+    setStep(1)
     router.replace("/")
   }
 
@@ -92,8 +115,8 @@ function LoanReviewWizard() {
     router.replace("/")
   }
 
-  // Loading state while fetching history by URL param
-  if (idParam && !result && isLoadingHistory) {
+  // Loading a shared review link.
+  if (idParam && !result && historyItem.isLoading) {
     return (
       <div className="flex min-h-svh flex-col">
         <header className="flex items-center border-b px-6 py-4">
@@ -109,15 +132,17 @@ function LoanReviewWizard() {
     )
   }
 
-  // Error state for invalid/missing history ID
-  if (idParam && !result && historyError) {
+  // Invalid/missing shared review link.
+  if (idParam && !result && historyItem.isError) {
     return (
       <div className="flex min-h-svh flex-col">
         <header className="flex items-center border-b px-6 py-4">
           <h1 className="text-lg font-semibold">Loan Review</h1>
         </header>
         <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6">
-          <p className="text-sm text-muted-foreground">{historyError}</p>
+          <p className="text-sm text-muted-foreground">
+            {String(historyItem.error?.message ?? "Review not found")}
+          </p>
           <button
             onClick={handleReset}
             className="mt-4 text-sm underline text-primary"
@@ -153,14 +178,14 @@ function LoanReviewWizard() {
 
         <div className="min-h-0 flex-1">
           {step === 1 && (
-            <UploadStep
-              file={applicationFile}
-              onFileChange={setApplicationFile}
-            />
+            <UploadStep file={applicationFile} onFileChange={setApplicationFile} />
           )}
           {step === 2 && (
             <ProcessingStep
+              phase={phase}
+              progress={progress}
               error={error}
+              isLoading={statusLoading}
               onRetry={handleRetry}
             />
           )}
@@ -178,7 +203,7 @@ function LoanReviewWizard() {
               onNext={handleNext}
               nextLabel="Submit for Review"
               nextDisabled={!canGoNext}
-              nextLoading={isSubmitting}
+              nextLoading={submitMut.isPending}
             />
           </div>
         )}
