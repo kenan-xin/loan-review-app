@@ -3,43 +3,56 @@
 import { useEffect, useState } from "react"
 import { Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { SseStage } from "@/store/loan-review"
-import { useLoanReviewStore } from "@/store/loan-review"
+import type { ReviewPhase, ReviewProgress } from "@/lib/loan-review/phase"
 
 interface ProcessingStepProps {
+  phase: ReviewPhase
+  progress: ReviewProgress | null
   error: string | null
+  isLoading: boolean
   onRetry: () => void
 }
 
-const STAGES: Array<{ id: SseStage; label: string }> = [
-  { id: "processing_document", label: "Processing document" },
+const STAGES: Array<{ id: ReviewPhase; label: string }> = [
+  { id: "reading", label: "Reading document" },
   { id: "extracting", label: "Extracting CA data" },
-  { id: "checking", label: "Running evaluation rules" },
+  { id: "checking", label: "Evaluating rules" },
+  { id: "finalising", label: "Finalising review" },
 ]
 
 function AnimatedDots() {
   const [dots, setDots] = useState(1)
-
   useEffect(() => {
     const interval = setInterval(() => {
       setDots((prev) => (prev >= 4 ? 1 : prev + 1))
     }, 500)
     return () => clearInterval(interval)
   }, [])
-
   return <span className="inline-block w-6 text-left">{".".repeat(dots)}</span>
 }
 
-export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
-  const { stage, isSubmitting, ruleIndex } = useLoanReviewStore()
+function activeLabel(phase: ReviewPhase, progress: ReviewProgress | null): string {
+  if (phase === "extracting" && progress) {
+    return `Extracting CA data — ${progress.extract.done} chunk${progress.extract.done === 1 ? "" : "s"} done`
+  }
+  if (phase === "checking" && progress) {
+    return `Evaluating rules — ${progress.rules.done} batch${progress.rules.done === 1 ? "" : "es"} done`
+  }
+  return STAGES.find((s) => s.id === phase)?.label ?? "Processing"
+}
 
+export function ProcessingStep({
+  phase,
+  progress,
+  error,
+  isLoading,
+  onRetry,
+}: ProcessingStepProps) {
   const [elapsed, setElapsed] = useState(0)
 
   useEffect(() => {
     if (error) return
-    const interval = setInterval(() => {
-      setElapsed((prev) => prev + 1)
-    }, 1000)
+    const interval = setInterval(() => setElapsed((prev) => prev + 1), 1000)
     return () => clearInterval(interval)
   }, [error])
 
@@ -64,7 +77,8 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
     )
   }
 
-  if (!isSubmitting && stage !== "completed") {
+  // Brief gap before the first poll resolves.
+  if (isLoading && phase === "processing") {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Loader2 className="size-10 animate-spin text-primary" />
@@ -78,7 +92,7 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
     )
   }
 
-  const activeStageIndex = STAGES.findIndex((s) => s.id === stage)
+  const activeIndex = STAGES.findIndex((s) => s.id === phase)
 
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -88,21 +102,17 @@ export function ProcessingStep({ error, onRetry }: ProcessingStepProps) {
       </p>
 
       <div className="mt-6 w-full max-w-md rounded-lg border p-4 text-left shadow-sm">
-        {activeStageIndex >= 0 && (
-          <div className="flex items-center gap-3">
-            <Loader2 className="size-5 shrink-0 animate-spin text-primary" />
-            <span className="text-sm font-medium">
-              {stage === "checking"
-                ? `Evaluating rule ${ruleIndex + 1}`
-                : STAGES[activeStageIndex].label}
-              <AnimatedDots />
-            </span>
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          <Loader2 className="size-5 shrink-0 animate-spin text-primary" />
+          <span className="text-sm font-medium">
+            {activeLabel(phase, progress)}
+            <AnimatedDots />
+          </span>
+        </div>
 
-        {activeStageIndex > 0 && (
+        {activeIndex > 0 && (
           <div className="mt-3 space-y-1.5 border-t pt-3">
-            {STAGES.slice(0, activeStageIndex).map((s) => (
+            {STAGES.slice(0, activeIndex).map((s) => (
               <div
                 key={s.id}
                 className="flex items-center gap-2 text-xs text-muted-foreground"
