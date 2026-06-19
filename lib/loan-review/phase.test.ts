@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { adaptOutput } from "./phase"
+import { adaptOutput, derivePhase } from "./phase"
+import type { NodeInfo } from "./api"
 
 describe("adaptOutput", () => {
   it("converts a [{Key,Value}] array into a plain object", () => {
@@ -34,5 +35,42 @@ describe("adaptOutput", () => {
     expect(adaptOutput([])).toEqual([])
     expect(adaptOutput(5)).toBe(5)
     expect(adaptOutput(null)).toBe(null)
+  })
+})
+
+function node(nodeId: string, status: string): NodeInfo {
+  return { nodeId, nodeName: "", nodeType: "", status, logs: [], startTime: "", endTime: "" }
+}
+
+describe("derivePhase", () => {
+  it("returns completed when overall status is success", () => {
+    expect(derivePhase([], "success")).toBe("completed")
+  })
+
+  it("returns processing when only start/response_3 are present", () => {
+    expect(derivePhase([node("response_3", "success")], "running")).toBe("processing")
+  })
+
+  it("returns reading while the document reader runs", () => {
+    expect(derivePhase([node("document_reader_1", "processing")], "running")).toBe("reading")
+  })
+
+  it("returns extracting while iterator_1 runs", () => {
+    const nodes = [node("document_reader_1", "success"), node("iterator_1", "processing")]
+    expect(derivePhase(nodes, "running")).toBe("extracting")
+  })
+
+  it("returns checking once iterator_2 is present", () => {
+    const nodes = [
+      node("iterator_1", "success"),
+      node("database_8", "success"),
+      node("iterator_2", "processing"),
+    ]
+    expect(derivePhase(nodes, "running")).toBe("checking")
+  })
+
+  it("returns finalising once llm_3 is present", () => {
+    const nodes = [node("iterator_2", "success"), node("database_7", "success"), node("llm_3", "processing")]
+    expect(derivePhase(nodes, "running")).toBe("finalising")
   })
 })

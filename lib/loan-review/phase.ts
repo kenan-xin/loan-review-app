@@ -1,4 +1,4 @@
-import type { KV } from "./api"
+import type { KV, NodeInfo } from "./api"
 
 function isKV(x: unknown): x is KV {
   return (
@@ -31,4 +31,27 @@ export function adaptOutput(value: unknown): unknown {
     return obj
   }
   return value
+}
+
+export type ReviewPhase =
+  | "processing"
+  | "reading"
+  | "extracting"
+  | "checking"
+  | "finalising"
+  | "completed"
+
+export function derivePhase(nodeInfos: NodeInfo[], status: string): ReviewPhase {
+  if (status === "success") return "completed"
+
+  const byId = new Map(nodeInfos.map((n) => [n.nodeId, n]))
+  const present = (id: string) => byId.has(id)
+  const succeeded = (id: string) => byId.get(id)?.status === "success"
+
+  if (succeeded("end")) return "completed"
+  if (present("llm_3")) return "finalising"
+  if (succeeded("database_7") || present("iterator_2")) return "checking"
+  if (succeeded("database_8") || present("iterator_1")) return "extracting"
+  if (present("document_reader_1")) return "reading"
+  return "processing"
 }
