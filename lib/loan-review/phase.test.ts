@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest"
-import { adaptOutput, derivePhase, deriveProgress, dedupeNewestByFilename } from "./phase"
+import {
+  adaptOutput,
+  derivePhase,
+  deriveProgress,
+  describePhase,
+  dedupeNewestByFilename,
+} from "./phase"
+import type { ReviewProgress } from "./phase"
 import type { NodeInfo, ResultStatus } from "./api"
 
 describe("adaptOutput", () => {
@@ -103,6 +110,51 @@ describe("deriveProgress", () => {
     const p = deriveProgress([node("document_reader_1", "processing")])
     expect(p.extract.done).toBe(0)
     expect(p.rules.done).toBe(0)
+  })
+})
+
+function progress(
+  extract: Partial<ReviewProgress["extract"]>,
+  rules: Partial<ReviewProgress["rules"]> = {}
+): ReviewProgress {
+  return {
+    extract: { done: 0, inProgress: 0, seen: 0, ...extract },
+    rules: { done: 0, inProgress: 0, seen: 0, ...rules },
+  }
+}
+
+describe("describePhase", () => {
+  it("shows the page range of the in-flight extraction batches (3 pages/chunk)", () => {
+    // 2 chunks done, 5 in flight → pages 7..(7*3) = 7-21.
+    const label = describePhase("extracting", progress({ done: 2, inProgress: 5 }))
+    expect(label).toBe("Extracting CA data — pages 7-21")
+  })
+
+  it("shows the rule range of the in-flight checklist batches (5 rules/chunk)", () => {
+    // 3 chunks done, 2 in flight → rules 16..(5*5) = 16-25.
+    const label = describePhase("checking", progress({}, { done: 3, inProgress: 2 }))
+    expect(label).toBe("Evaluating rules — rules 16-25")
+  })
+
+  it("says 'almost done' once a loop has drained its last in-flight batch", () => {
+    expect(describePhase("extracting", progress({ done: 43, inProgress: 0 }))).toBe(
+      "Extracting CA data — almost done"
+    )
+    expect(describePhase("checking", progress({}, { done: 19, inProgress: 0 }))).toBe(
+      "Evaluating rules — almost done"
+    )
+  })
+
+  it("shows the bare stage label before a loop has produced any work", () => {
+    expect(describePhase("extracting", progress({ done: 0, inProgress: 0 }))).toBe(
+      "Extracting CA data"
+    )
+  })
+
+  it("falls back to the plain stage label for non-loop phases", () => {
+    expect(describePhase("reading", null)).toBe("Reading document")
+    expect(describePhase("finalising", null)).toBe("Finalising review")
+    expect(describePhase("processing", null)).toBe("Processing")
   })
 })
 

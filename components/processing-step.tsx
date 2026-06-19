@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { describePhase } from "@/lib/loan-review/phase"
 import type { ReviewPhase, ReviewProgress } from "@/lib/loan-review/phase"
 
 interface ProcessingStepProps {
@@ -29,16 +30,6 @@ function AnimatedDots() {
     return () => clearInterval(interval)
   }, [])
   return <span className="inline-block w-6 text-left">{".".repeat(dots)}</span>
-}
-
-function activeLabel(phase: ReviewPhase, progress: ReviewProgress | null): string {
-  if (phase === "extracting" && progress) {
-    return `Extracting CA data — ${progress.extract.done} chunk${progress.extract.done === 1 ? "" : "s"} done`
-  }
-  if (phase === "checking" && progress) {
-    return `Evaluating rules — ${progress.rules.done} batch${progress.rules.done === 1 ? "" : "es"} done`
-  }
-  return STAGES.find((s) => s.id === phase)?.label ?? "Processing"
 }
 
 export function ProcessingStep({
@@ -105,7 +96,7 @@ export function ProcessingStep({
         <div className="flex items-center gap-3">
           <Loader2 className="size-5 shrink-0 animate-spin text-primary" />
           <span className="text-sm font-medium">
-            {activeLabel(phase, progress)}
+            {describePhase(phase, progress)}
             <AnimatedDots />
           </span>
         </div>

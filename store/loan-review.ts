@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 type ResultLayout = "sidebar" | "briefing" | "ledger"
 
@@ -16,6 +16,24 @@ interface LoanReviewState {
   setViewingId: (id: number | null) => void
   setResultLayout: (layout: ResultLayout) => void
   reset: () => void
+}
+
+export interface PersistedLoanReview {
+  taskId: string | null
+}
+
+/**
+ * What survives a reload. We persist a taskId ONLY while a review is still
+ * in-flight (step 2), so an accidental refresh mid-run resumes polling. Once a
+ * review completes (step 3) the taskId is dropped, so reloading or visiting "/"
+ * lands on Upload instead of resurfacing the previous result. A viewed history
+ * item is never persisted — it is reached via the `?id=` URL, which survives a
+ * reload on its own.
+ */
+export function persistedReviewState(
+  s: Pick<LoanReviewState, "step" | "taskId">
+): PersistedLoanReview {
+  return { taskId: s.step === 2 ? s.taskId : null }
 }
 
 export const useLoanReviewStore = create<LoanReviewState>()(
@@ -42,8 +60,8 @@ export const useLoanReviewStore = create<LoanReviewState>()(
     }),
     {
       name: "loan-review",
-      // Only persist what is needed to resume a mid-run review across refresh.
-      partialize: (s) => ({ taskId: s.taskId, viewingId: s.viewingId }),
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (s) => persistedReviewState(s),
     }
   )
 )

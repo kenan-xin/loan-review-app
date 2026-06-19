@@ -44,15 +44,23 @@ function LoanReviewWizard() {
   } = useLoanReviewStore()
 
   const submitMut = useSubmitReview()
-  const { phase, progress, result: liveResult, taskError, isLoading: statusLoading } =
-    useTaskStatus(taskId)
+  const {
+    phase,
+    progress,
+    result: liveResult,
+    taskError,
+    isLoading: statusLoading,
+  } = useTaskStatus(taskId)
   const historyItem = useHistoryItem(viewingId)
 
   // The result to render: a viewed history item takes precedence, else the live run.
   const result = viewingId != null ? (historyItem.data ?? null) : liveResult
-  const error = taskError ?? (submitMut.error ? String(submitMut.error.message) : null)
+  const error =
+    taskError ?? (submitMut.error ? String(submitMut.error.message) : null)
 
-  // On mount: open a shared link (?id=) or resume a persisted in-flight task.
+  // On mount: open a shared link (?id=) or resume a still-in-flight review.
+  // A completed review is never persisted, so a bare visit to "/" always lands
+  // on Upload instead of resurfacing the previous result.
   useEffect(() => {
     if (idParam) {
       const id = Number(idParam)
@@ -62,9 +70,7 @@ function LoanReviewWizard() {
       }
       return
     }
-    const persisted = useLoanReviewStore.getState()
-    if (persisted.viewingId != null) setStep(3)
-    else if (persisted.taskId) setStep(2)
+    if (useLoanReviewStore.getState().taskId) setStep(2)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -145,7 +151,7 @@ function LoanReviewWizard() {
           </p>
           <button
             onClick={handleReset}
-            className="mt-4 text-sm underline text-primary"
+            className="mt-4 text-sm text-primary underline"
           >
             Start New Review
           </button>
@@ -167,7 +173,7 @@ function LoanReviewWizard() {
           {step === 3 && (
             <button
               onClick={handleReset}
-              className="absolute left-0 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute left-0 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="size-4" />
               Back
@@ -178,7 +184,10 @@ function LoanReviewWizard() {
 
         <div className="min-h-0 flex-1">
           {step === 1 && (
-            <UploadStep file={applicationFile} onFileChange={setApplicationFile} />
+            <UploadStep
+              file={applicationFile}
+              onFileChange={setApplicationFile}
+            />
           )}
           {step === 2 && (
             <ProcessingStep

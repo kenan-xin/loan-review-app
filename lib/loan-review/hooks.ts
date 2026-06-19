@@ -1,7 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import {
   submitReview,
   getTaskStatus,
@@ -32,6 +37,15 @@ import type {
 const TERMINAL = new Set(["success", "failed"])
 const isTerminal = (s?: string) => !!s && TERMINAL.has(s)
 const HARD_TIMEOUT_MS = 20 * 60 * 1000
+
+// Poll cadences. A full review runs ~20 min, so we poll gently to keep load on
+// the public dev-genie backend low while still surfacing per-chunk progress.
+const STATUS_POLL_MS = 5000
+// The history list never stops polling: a brand-new row (status "initial")
+// can appear at any time, so we keep checking even when every known row is
+// already "done". Poll faster while something is in progress, slower when idle.
+const HISTORY_ACTIVE_POLL_MS = 5000
+const HISTORY_IDLE_POLL_MS = 10000
 
 function buildResult(output: TaskOutput): SimulationResult {
   return transformToReviewResult(
@@ -65,7 +79,7 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
     refetchInterval: (q) =>
       isTerminal(q.state.data?.status) || timedOutForTask === taskId
         ? false
-        : 3000,
+        : STATUS_POLL_MS,
   })
 
   const data = query.data
@@ -114,10 +128,19 @@ export function useResultStatuses() {
     queryKey: ["resultStatuses"],
     queryFn: getResultStatuses,
     select: dedupeNewestByFilename,
+    // ReviewHistory only mounts on step 1, so it unmounts for the ~20 min a
+    // review runs. Keep the cache alive across unmount (gcTime: Infinity) and
+    // keep showing the last rows during refetches (placeholderData) so the
+    // list silently background-updates instead of flashing a loading spinner
+    // every time the user returns to step 1.
+    gcTime: Infinity,
+    placeholderData: keepPreviousData,
+    // Never returns false — keep polling so newly-created rows are picked up.
     refetchInterval: (q) => {
       const rows = q.state.data
-      if (!rows) return 5000
-      return hasNonTerminalStatus(rows) ? 5000 : false
+      return rows && !hasNonTerminalStatus(rows)
+        ? HISTORY_IDLE_POLL_MS
+        : HISTORY_ACTIVE_POLL_MS
     },
   })
 }

@@ -103,6 +103,7 @@ function DeleteButton({
 export function ReviewHistory() {
   const router = useRouter()
   const setViewingId = useLoanReviewStore((s) => s.setViewingId)
+  const setStep = useLoanReviewStore((s) => s.setStep)
   const { data: rows = [], isLoading, isError } = useResultStatuses()
   const deleteMut = useDeleteHistory()
 
@@ -169,6 +170,10 @@ export function ReviewHistory() {
                           title={isDone ? undefined : "Review still in progress"}
                           onClick={() => {
                             setViewingId(item.id)
+                            // Advance to results here: navigating to ?id= via
+                            // client-side routing does NOT remount the page, so
+                            // page.tsx's mount-only effect won't set the step.
+                            setStep(3)
                             router.push(`/?id=${item.id}`)
                           }}
                         >
