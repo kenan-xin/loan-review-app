@@ -30,6 +30,7 @@ import type {
 
 const TERMINAL = new Set(["success", "failed"])
 const isTerminal = (s?: string) => !!s && TERMINAL.has(s)
+const HARD_TIMEOUT_MS = 20 * 60 * 1000
 
 function buildResult(output: TaskOutput): SimulationResult {
   return transformToReviewResult(
@@ -58,11 +59,24 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
     queryKey: ["taskStatus", taskId],
     queryFn: () => getTaskStatus(taskId!),
     enabled: !!taskId,
-    refetchInterval: (q) => (isTerminal(q.state.data?.status) ? false : 3000),
+    refetchInterval: (q) => {
+      const d = q.state.data
+      if (isTerminal(d?.status)) return false
+      const started = d?.startedAt ? Date.parse(d.startedAt) : q.state.dataUpdatedAt
+      if (started && Date.now() - started > HARD_TIMEOUT_MS) return false
+      return 3000
+    },
   })
 
   const data = query.data
   const nodeInfos = data?.nodeInfos ?? []
+
+  const started = data?.startedAt ? Date.parse(data.startedAt) : query.dataUpdatedAt
+  const timedOut =
+    data?.status === "running" &&
+    !!started &&
+    !Number.isNaN(started) &&
+    Date.now() - started > HARD_TIMEOUT_MS
 
   const phase: ReviewPhase = data ? derivePhase(nodeInfos, data.status) : "processing"
   const progress = data ? deriveProgress(nodeInfos) : null
@@ -73,14 +87,16 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
       ? data.errorMessage ||
         nodeInfos.find((n) => n.status === "failed")?.error ||
         "Review failed"
-      : null
+      : timedOut
+        ? "Review timed out after 20 minutes — please retry."
+        : null
 
   return {
     phase,
     progress,
     result,
     taskError,
-    isTerminal: isTerminal(data?.status),
+    isTerminal: isTerminal(data?.status) || timedOut,
     isLoading: query.isPending && !!taskId,
   }
 }
