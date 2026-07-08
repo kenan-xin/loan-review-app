@@ -48,19 +48,29 @@ export function transformToReviewResult(
   const status = determineStatus(findings)
   const summary = generateSummary(caData, findings)
 
+  const emptyDecision: EvaluationDecision = {
+    recommendation: "",
+    key_strengths: [],
+    key_concerns: [],
+    required_conditions: [],
+    missing_information: [],
+    reasoning: "",
+  }
+
   const safeDecision: EvaluationDecision = evaluationDecision
     ? {
+        ...emptyDecision,
         ...evaluationDecision,
-        required_conditions: evaluationDecision.required_conditions ?? [],
+        key_strengths: normalizeStringArray(evaluationDecision.key_strengths),
+        key_concerns: normalizeStringArray(evaluationDecision.key_concerns),
+        required_conditions: normalizeStringArray(
+          evaluationDecision.required_conditions
+        ),
+        missing_information: normalizeStringArray(
+          evaluationDecision.missing_information
+        ),
       }
-    : {
-        recommendation: "",
-        key_strengths: [],
-        key_concerns: [],
-        required_conditions: [],
-        missing_information: [],
-        reasoning: "",
-      }
+    : emptyDecision
 
   return {
     summary,
