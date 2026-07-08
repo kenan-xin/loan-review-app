@@ -78,6 +78,10 @@ export function useTaskStatus(taskId: string | null): UseTaskStatus {
     enabled: !!taskId,
     refetchInterval: (q) =>
       isTerminal(q.state.data?.status) ? false : STATUS_POLL_MS,
+    // A review runs ~20 min. Keep polling while the tab is hidden so progress
+    // and the terminal result land even if the user switches away — the
+    // history list is left to pause (it polls forever by default).
+    refetchIntervalInBackground: true,
   })
 
   const data = query.data
