@@ -129,11 +129,15 @@ export const CATEGORY_STRING_TO_ID: { [key: string]: RiskCategoryId } = {
   "Areas for probe (others)": "probe",
 }
 
+// Lowercased lookup so category matching is case-insensitive (upstream
+// vary casing, e.g. "Collateral risk / Asset quality"). Risk categories are
+// optional and may not always exist, so unknown values silently fall back.
+const CATEGORY_STRING_TO_ID_LOWER: { [key: string]: RiskCategoryId } =
+  Object.fromEntries(
+    Object.entries(CATEGORY_STRING_TO_ID).map(([k, v]) => [k.toLowerCase(), v])
+  )
+
 export function riskCategoryToId(str: string): RiskCategoryId {
-  const id = CATEGORY_STRING_TO_ID[str]
-  if (!id) {
-    console.warn(`Unknown risk_category: "${str}", falling back to "probe"`)
-    return "probe"
-  }
-  return id
+  if (!str) return "probe"
+  return CATEGORY_STRING_TO_ID_LOWER[str.toLowerCase()] ?? "probe"
 }
